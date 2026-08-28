@@ -6,47 +6,52 @@ export default function ThemeToggle() {
   const [dark, setDark] = useState(true);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem("theme");
+    const savedTheme =
+      localStorage.getItem("theme");
 
-    // Daha önce seçim yapılmadıysa DARK
+    const shouldBeDark =
+      savedTheme !== "light";
+
+    document.documentElement.classList.toggle(
+      "dark",
+      shouldBeDark
+    );
+
+    setDark(shouldBeDark);
+
     if (!savedTheme) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-      setDark(true);
-      return;
+      localStorage.setItem(
+        "theme",
+        shouldBeDark ? "dark" : "light"
+      );
     }
-
-    // Daha önce light seçildiyse light
-    if (savedTheme === "light") {
-      document.documentElement.classList.remove("dark");
-      setDark(false);
-      return;
-    }
-
-    // Daha önce dark seçildiyse dark
-    document.documentElement.classList.add("dark");
-    setDark(true);
   }, []);
 
   const toggleTheme = () => {
-    const isDark = !dark;
+    const nextDark = !dark;
 
-    setDark(isDark);
+    setDark(nextDark);
 
-    if (isDark) {
-      document.documentElement.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    }
+    document.documentElement.classList.toggle(
+      "dark",
+      nextDark
+    );
+
+    localStorage.setItem(
+      "theme",
+      nextDark ? "dark" : "light"
+    );
   };
 
   return (
     <button
       type="button"
       onClick={toggleTheme}
-      aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+      aria-label={
+        dark
+          ? "Switch to light mode"
+          : "Switch to dark mode"
+      }
       className="
         flex h-9 w-9 items-center justify-center
         rounded-full

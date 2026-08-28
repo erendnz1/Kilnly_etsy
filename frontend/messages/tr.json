@@ -16,22 +16,74 @@
     "note": "Ücretsiz başlayın · Kredi kartı gerekmez"
   },
   "dashboard": {
-    "overview": "Mağaza özeti",
-    "greeting": "Günaydın 👋",
-    "credits": "850 kredi",
-    "storeHealth": "Mağaza sağlığı",
-    "listings": "Listelemeler",
-    "opportunities": "Fırsatlar",
-    "aiOpportunity": "Yapay zekâ fırsat tespit etti",
-    "opportunityText": "\"Kişiselleştirilmiş Kolye\" listelemeniz görüntüleniyor ancak başlık ve ana anahtar kelimenizde iyileştirme fırsatı var.",
-    "fixWithAi": "Yapay zekâ ile düzelt",
-    "priority": "Öncelik",
-    "high": "Yüksek",
-    "impact": "Etki",
-    "seo": "SEO",
-    "action": "Aksiyon",
-    "optimize": "Optimize et"
+  "overview": "Mağaza özeti",
+  "greeting": "Günaydın 👋",
+  "credits": "850 kredi",
+  "storeHealth": "Mağaza sağlığı",
+  "listings": "Listelemeler",
+  "opportunities": "Fırsatlar",
+  "aiOpportunity": "Yapay zekâ fırsat tespit etti",
+  "opportunityText": "\"Kişiselleştirilmiş Kolye\" listelemeniz görüntüleniyor ancak başlık ve ana anahtar kelimenizde iyileştirme fırsatı var.",
+  "fixWithAi": "Yapay zekâ ile düzelt",
+  "priority": "Öncelik",
+  "high": "Yüksek",
+  "impact": "Etki",
+  "seo": "SEO",
+  "action": "Aksiyon",
+  "optimize": "Optimize et",
+
+  "navigation": {
+    "menu": "Menü",
+    "dashboard": "Panel",
+    "products": "Ürünler",
+    "analytics": "Analitik",
+    "aiInsights": "AI Önerileri",
+    "notifications": "Bildirimler",
+    "settings": "Ayarlar"
   },
+
+  "store": {
+    "notConnected": "Etsy bağlı değil",
+    "connectDescription": "Mağaza analizlerinizi ve AI önerilerini kullanmak için Etsy mağazanızı bağlayın.",
+    "connect": "Etsy'yi bağla"
+  },
+
+  "user": {
+    "account": "Hesabım",
+    "freePlan": "Ücretsiz plan",
+    "logout": "Çıkış yap"
+  },
+
+  "hero": {
+    "badge": "Mağazanız, AI ile güçleniyor",
+    "title": "Etsy verilerinizi daha akıllı büyüme kararlarına dönüştürün.",
+    "description": "Etsy mağazanızı bağlayarak ürünlerinizi, satışlarınızı ve performansınızı AI destekli analizlerle inceleyin.",
+    "connect": "Etsy mağazamı bağla"
+  },
+
+  "stats": {
+    "sales": "Toplam satış",
+    "orders": "Siparişler",
+    "revenue": "Gelir",
+    "aiInsights": "AI önerileri"
+  },
+
+  "performance": {
+    "title": "Mağaza performansı",
+    "description": "Etsy mağazanızın performansını zaman içinde takip edin."
+  },
+
+  "empty": {
+    "title": "Verilerinizi görmek için Etsy mağazanızı bağlayın",
+    "description": "Satış ve performans verileriniz burada görünecek."
+  },
+
+  "insights": {
+    "title": "AI Önerileri",
+    "emptyTitle": "AI önerileriniz sizi bekliyor",
+    "emptyDescription": "Etsy mağazanızı bağlayın; CraftPilot mağazanızı analiz ederek size özel öneriler oluştursun."
+  }
+},
 "features": {
   "eyebrow": "Büyümek için ihtiyacınız olan her şey",
   "title": "Tüm Etsy büyüme süreciniz için tek bir yapay zekâ platformu.",

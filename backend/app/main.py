@@ -4,7 +4,8 @@ from sqlalchemy import text
 
 from app.database import engine
 from app.routers.auth import router as auth_router
-
+from app.routers.auth import router as auth_router
+from app.routers.etsy import router as etsy_router
 
 app = FastAPI(
     title="CraftPilot AI API",
@@ -28,7 +29,8 @@ app.add_middleware(
 
 # Authentication
 app.include_router(auth_router)
-
+app.include_router(auth_router)
+app.include_router(etsy_router)
 
 @app.get("/")
 def root():

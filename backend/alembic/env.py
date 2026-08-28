@@ -21,7 +21,9 @@ if config.config_file_name is not None:
 # target_metadata = mymodel.Base.metadata
 from app.base import Base
 from app.models.user import User
-
+from app.models.etsy_connection import EtsyConnection
+from app.models.etsy_oauth_state import EtsyOAuthState
+from app.models.etsy_listing import EtsyListing
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
