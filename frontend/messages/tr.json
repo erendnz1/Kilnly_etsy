@@ -32,6 +32,105 @@
   "action": "Aksiyon",
   "optimize": "Optimize et",
 
+  "products": {
+  "title": "Ürünler",
+  "description": "Etsy'den senkronize edilen ürünlerinizi yönetin ve analiz edin.",
+  "refresh": "Yenile",
+
+  "count": {
+    "one": "1 ürün",
+    "other": "{count} ürün"
+  },
+
+  "syncedFromEtsy": "Etsy'den senkronize edildi",
+  "price": "Fiyat",
+  "stock": "Stok",
+  "etsy": "Etsy",
+  "aiAnalyze": "AI ile analiz et",
+
+  "status": {
+    "active": "Aktif"
+  },
+
+  "empty": {
+    "title": "Henüz ürün yok",
+    "description": "Ürünlerinizi burada görmek için Etsy listinglerinizi senkronize edin.",
+    "goToDashboard": "Panele git"
+  },
+
+  "errors": {
+    "loadProducts": "Ürünler yüklenemedi."
+  },
+"optimization": {
+  "eyebrow": "AI Optimizasyonu",
+  "title": "Listing Optimizasyon Önizlemesi",
+  "description": "AI tarafından oluşturulan değişiklikleri Etsy'ye uygulamadan önce inceleyebilirsiniz.",
+  "currentSeo": "Mevcut SEO",
+  "optimizedSeo": "Optimize SEO",
+  "change": "Değişim",
+  "currentTitle": "Mevcut Başlık",
+  "optimizedTitle": "Optimize Başlık",
+  "currentDescription": "Mevcut Açıklama",
+  "optimizedDescription": "Optimize Açıklama",
+  "optimizedTags": "Optimize Etiketler",
+  "changes": "Değişiklikler",
+  "scoreImproved": "AI optimizasyonu SEO skorunu artırıyor. Değişiklikleri Etsy mağazanıza uygulayabilirsiniz.",
+  "scoreSame": "AI optimizasyonu mevcut SEO skorunu değiştirmiyor. Mevcut listing'inizi korumanız önerilir.",
+  "scoreLower": "AI optimizasyonu mevcut SEO skorundan daha düşük. Bu değişiklikleri Etsy'ye uygulamanız önerilmez.",
+  "ctaTitle": "Etsy listing'inizi optimize edin",
+  "ctaDescription": "AI ile başlık, açıklama ve etiketlerinizi Etsy SEO kurallarına göre geliştirin.",
+  "optimizeButton": "Listing'i Optimize Et",
+  "confirmTitle": "Etsy listing'i güncellensin mi?",
+  "confirmDescription": "AI tarafından oluşturulan başlık, açıklama ve etiket değişiklikleri gerçek Etsy listing'inize uygulanacaktır.",
+  "fieldsToUpdate": "Güncellenecek alanlar",
+  "fieldTitle": "Başlık",
+  "fieldDescription": "Açıklama",
+  "fieldTags": "Etsy etiketleri",
+  "apply": "Etsy'ye Uygula",
+  "applying": "Etsy'ye uygulanıyor...",
+  "applied": "Etsy mağazanıza başarıyla uygulandı.",
+  "cancel": "Vazgeç",
+  "optimizeImageButton": "Görseli Optimize Et",
+"loading": "AI görseli hazırlanıyor...",
+"loadingDescription": "Ürün görseliniz AI tarafından optimize ediliyor. Bu işlem biraz zaman alabilir."
+   
+},
+  "analysis": {
+    "eyebrow": "AI Listeleme Analizi",
+    "analyzing": "Listeleme analiz ediliyor...",
+    "analyzingDescription": "CraftPilot ürün başlığını, açıklamasını ve etiketlerini analiz ediyor.",
+
+    "seoScore": "SEO Skoru",
+    "titleScore": "Başlık Skoru",
+    "descriptionScore": "Açıklama Skoru",
+    "tagScore": "Etiket Skoru",
+
+    "strengths": "Güçlü Yönler",
+    "issues": "Problemler",
+    "missingInformation": "Eksik Bilgiler",
+    "recommendations": "Öneriler",
+
+    "visual": {
+      "eyebrow": "AI Görsel Analizi",
+      "title": "Ürün Görsel Analizi",
+      "analyzing": "Ürün görselleri analiz ediliyor...",
+      "visualScore": "Görsel Skoru",
+      "mainImageScore": "Ana Görsel Skoru",
+      "compositionScore": "Kompozisyon Skoru",
+      "visibilityScore": "Ürün Görünürlüğü",
+      "backgroundScore": "Arka Plan Skoru",
+      "strengths": "Görsel Güçlü Yönleri",
+      "issues": "Görsel Problemleri",
+      "recommendations": "Görsel Önerileri"
+    },
+
+    "errors": {
+      "failed": "AI analizi gerçekleştirilemedi.",
+      "visualFailed": "Görsel AI analizi gerçekleştirilemedi."
+    }
+  }
+},
+
   "navigation": {
     "menu": "Menü",
     "dashboard": "Panel",
@@ -82,7 +181,61 @@
     "title": "AI Önerileri",
     "emptyTitle": "AI önerileriniz sizi bekliyor",
     "emptyDescription": "Etsy mağazanızı bağlayın; CraftPilot mağazanızı analiz ederek size özel öneriler oluştursun."
-  }
+  },
+
+  "etsy": {
+    "connected": "Etsy bağlı",
+    "connectedWith": "Etsy bağlı · {shopName}",
+    "description": "Etsy mağazanız {shopName} bağlı. CraftPilot artık ürün listelemelerinizi ve mağaza performansınızı analiz edebilir.",
+    "openShop": "Etsy mağazasını aç",
+    "syncListings": "Listelemeleri senkronize et",
+    "syncing": "Senkronize ediliyor...",
+    "openShopAria": "Etsy mağazasını aç",
+    "checking": "Etsy bağlantısı kontrol ediliyor..."
+  },
+
+  "metrics": {
+    "activeListings": "Aktif listelemeler",
+    "favorites": "Favoriler",
+    "reviews": "Yorumlar"
+  },
+
+  "ai": {
+    "ready": "AI analizi için hazır",
+    "description": "{count} aktif listelemeniz SEO, anahtar kelimeler ve listeleme kalitesi açısından analiz edilebilir.",
+    "analyze": "Listelemeleri analiz et"
+  },
+  "productAnalyzer": {
+  "title": "AI Ürün Hazırlayıcı",
+  "description": "Ürün URL'nizi Etsy'ye hazır bir listelemeye dönüştürün.",
+  "placeholder": "Ürün URL'sini yapıştırın...",
+  "prepareListing": "Listelemeyi Hazırla",
+  "preparing": "Hazırlanıyor...",
+  "etsyListingReady": "Etsy Listelemesi Hazır",
+  "readyDescription": "Ürününüz Etsy için hazırlandı.",
+  "etsyTitle": "Etsy Başlığı",
+  "etsyDescription": "Etsy Açıklaması",
+  "category": "Kategori",
+  "tags": "Etsy Etiketleri",
+  "materials": "Malzemeler",
+  "keywords": "SEO Anahtar Kelimeleri",
+  "price": "Fiyat",
+  "quantity": "Adet",
+  "images": "Görseller",
+  "notAvailable": "Mevcut değil",
+  "informationNeeded": "Yayınlamadan Önce Gerekli Bilgiler",
+  "aiRecommendations": "AI Önerileri",
+  "copy": "Kopyala",
+  "etsyReadiness": "Etsy Hazırlık Skoru",
+  "copied": "Kopyalandı",
+  "copyEntireListing": "Tüm Listelemeyi Kopyala",
+  "noImage": "Görsel yok",
+  "etsyReady": "Etsy Hazır",
+  "available": "mevcut",
+  "urlRequired": "Lütfen ürün URL'si girin.",
+  "analysisFailed": "Ürün analizi başarısız oldu.",
+  "somethingWrong": "Bir hata oluştu."
+}
 },
 "features": {
   "eyebrow": "Büyümek için ihtiyacınız olan her şey",

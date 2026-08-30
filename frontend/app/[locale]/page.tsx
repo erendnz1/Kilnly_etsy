@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { useLocale, useTranslations } from "next-intl";
 
+import { useLocale, useTranslations } from "next-intl";
+import VisualBeforeAfter from "./components/VisualBeforeAfter";
 import LanguageSwitcher from "@/components/LanguageSwitcher";
 import ThemeToggle from "../ThemeToggle";
 
@@ -930,7 +931,7 @@ export default function HomePage() {
 
       {/* TEXT */}
       <div>
-
+<div className="pointer-events-none absolute -left-20 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full bg-[#38d39f]/[0.07] blur-[100px]" />
         <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4b9b83]">
           {t("storeAudit.eyebrow")}
         </p>
@@ -1830,31 +1831,30 @@ export default function HomePage() {
 <section className="relative overflow-hidden bg-white dark:bg-[#0d1b16]">
 
   {/* BACKGROUND GLOW */}
-  <div className="pointer-events-none absolute -left-40 top-20 h-[420px] w-[420px] rounded-full bg-[#e2f4ec]/70 blur-3xl dark:bg-[#174c3b]/30" />
+  <div className="pointer-events-none absolute -right-40 top-1/4 h-[500px] w-[500px] rounded-full bg-[#dff3ea]/60 blur-3xl dark:bg-[#174c3b]/25" />
 
-  <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+  <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8">
 
-    <div className="relative grid gap-12 lg:grid-cols-[0.82fr_1.18fr] lg:items-center">
+    <div className="grid items-center gap-14 lg:grid-cols-[0.82fr_1.18fr]">
 
-      {/* LEFT */}
+      {/* LEFT CONTENT */}
       <div>
-
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4b9b83]">
+<div className="pointer-events-none absolute -left-20 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full bg-[#38d39f]/[0.07] blur-[100px]" />
+        <p className="text-sm font-semibold uppercase tracking-[0.2em] text-[#4b9b83]">
           {t("visualOptimizer.eyebrow")}
         </p>
 
-        <h2 className="mt-4 max-w-xl text-4xl font-semibold leading-tight tracking-tight dark:text-[#f1f7f4] sm:text-5xl">
+        <h2 className="mt-4 max-w-xl text-4xl font-semibold leading-[1.08] tracking-tight text-[#10231d] dark:text-[#f1f7f4] sm:text-5xl">
           {t("visualOptimizer.title")}
         </h2>
 
-        <p className="mt-5 max-w-lg text-lg leading-8 text-[#697671] dark:text-[#9fb4ab]">
+        <p className="mt-6 max-w-lg text-lg leading-8 text-[#697671] dark:text-[#9fb4ab]">
           {t("visualOptimizer.description")}
         </p>
 
-        {/* CTA */}
         <Link
           href={`/${locale}/register`}
-          className="mt-8 inline-flex rounded-full bg-[#143d32] px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#1c5143]"
+          className="mt-8 inline-flex items-center rounded-full bg-[#143d32] px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#1c5143]"
         >
           {t("visualOptimizer.analyzeImage")} →
         </Link>
@@ -1862,247 +1862,8 @@ export default function HomePage() {
       </div>
 
 
-      {/* VISUAL AUDIT CARD */}
-      <div className="relative overflow-hidden rounded-[26px] border border-[#d5e5df] bg-[#f7faf8] p-4 shadow-[0_25px_65px_rgba(20,61,50,0.11)] dark:border-[#29483d] dark:bg-[#12231e] dark:shadow-[0_25px_65px_rgba(0,0,0,0.35)] sm:p-5">
-
-        {/* CARD GLOW */}
-        <div className="pointer-events-none absolute -right-24 -top-24 h-60 w-60 rounded-full bg-[#cfeee1]/60 blur-3xl dark:bg-[#174c3b]/30" />
-
-
-        {/* IMAGE PREVIEW */}
-        <div className="relative overflow-hidden rounded-2xl border border-[#dce7e2] bg-[#e8eeeb] dark:border-[#29483d] dark:bg-[#1a2d27]">
-
-          <div className="flex h-[220px] items-center justify-center bg-[radial-gradient(circle_at_center,#ffffff_0%,#e8eeeb_70%)] dark:bg-[radial-gradient(circle_at_center,#243b34_0%,#172a24_70%)]">
-
-            {/* PRODUCT PLACEHOLDER */}
-            <div className="relative h-32 w-48 rounded-2xl border border-[#d7e1dc] bg-white shadow-lg dark:border-[#3a544b] dark:bg-[#21362f]">
-
-              <div className="absolute left-1/2 top-1/2 h-20 w-24 -translate-x-1/2 -translate-y-1/2 rounded-full border-[8px] border-[#c4a875] bg-[#f5f0e6] shadow-sm">
-
-                <div className="absolute left-1/2 top-1/2 h-7 w-7 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#c4a875]" />
-
-              </div>
-
-            </div>
-
-          </div>
-
-
-          {/* IMAGE LABEL */}
-          <div className="absolute left-3 top-3 rounded-full bg-white/90 px-3 py-1.5 text-xs font-semibold text-[#53625c] shadow-sm backdrop-blur dark:bg-[#172a24]/90 dark:text-[#c8d9d2]">
-            {t("visualOptimizer.mainImage")}
-          </div>
-
-
-          {/* AI LABEL */}
-          <div className="absolute right-3 top-3 flex items-center gap-2 rounded-full bg-[#143d32] px-3 py-1.5 text-xs font-semibold text-white shadow-sm dark:bg-[#15966a]">
-            ✦ AI
-          </div>
-
-        </div>
-
-
-        {/* SCORE */}
-        <div className="relative mt-4 flex items-center justify-between rounded-2xl border border-[#dfe9e4] bg-white p-4 dark:border-[#29483d] dark:bg-[#172a24]">
-
-          <div>
-
-            <p className="text-xs uppercase tracking-wider text-[#929d99] dark:text-[#71877e]">
-              {t("visualOptimizer.visualScore")}
-            </p>
-
-            <div className="mt-1 flex items-end gap-2">
-
-              <span className="text-4xl font-semibold text-[#143d32] dark:text-[#f1f7f4]">
-                72
-              </span>
-
-              <span className="mb-1 text-sm text-[#929d99] dark:text-[#71877e]">
-                /100
-              </span>
-
-            </div>
-
-          </div>
-
-
-          {/* SCORE CIRCLE */}
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border-[5px] border-[#d0b879] bg-[#fffaf0] text-sm font-bold text-[#94772d] dark:bg-[#3b3420] dark:text-[#d8bf68]">
-            72
-          </div>
-
-        </div>
-
-
-        {/* METRICS */}
-        <div className="relative mt-3 grid grid-cols-2 gap-2.5">
-
-          {/* PRODUCT VISIBILITY */}
-          <div className="rounded-2xl bg-white p-3 dark:bg-[#172a24]">
-
-            <p className="text-xs text-[#929d99] dark:text-[#71877e]">
-              {t("visualOptimizer.productVisibility")}
-            </p>
-
-            <div className="mt-2 flex items-center justify-between">
-
-              <span className="text-sm font-semibold dark:text-[#f1f7f4]">
-                88
-              </span>
-
-              <span className="text-xs font-medium text-[#34745f] dark:text-[#79c2a9]">
-                {t("visualOptimizer.strong")}
-              </span>
-
-            </div>
-
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e7ece9] dark:bg-[#294038]">
-              <div className="h-full w-[88%] rounded-full bg-[#55a98d]" />
-            </div>
-
-          </div>
-
-
-          {/* COMPOSITION */}
-          <div className="rounded-2xl bg-white p-3 dark:bg-[#172a24]">
-
-            <p className="text-xs text-[#929d99] dark:text-[#71877e]">
-              {t("visualOptimizer.composition")}
-            </p>
-
-            <div className="mt-2 flex items-center justify-between">
-
-              <span className="text-sm font-semibold dark:text-[#f1f7f4]">
-                71
-              </span>
-
-              <span className="text-xs font-medium text-[#94772d] dark:text-[#d8bf68]">
-                {t("visualOptimizer.needsWork")}
-              </span>
-
-            </div>
-
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e7ece9] dark:bg-[#294038]">
-              <div className="h-full w-[71%] rounded-full bg-[#d0b879]" />
-            </div>
-
-          </div>
-
-
-          {/* BACKGROUND */}
-          <div className="rounded-2xl bg-white p-3 dark:bg-[#172a24]">
-
-            <p className="text-xs text-[#929d99] dark:text-[#71877e]">
-              {t("visualOptimizer.background")}
-            </p>
-
-            <div className="mt-2 flex items-center justify-between">
-
-              <span className="text-sm font-semibold dark:text-[#f1f7f4]">
-                64
-              </span>
-
-              <span className="text-xs font-medium text-[#94772d] dark:text-[#d8bf68]">
-                {t("visualOptimizer.needsWork")}
-              </span>
-
-            </div>
-
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e7ece9] dark:bg-[#294038]">
-              <div className="h-full w-[64%] rounded-full bg-[#d0b879]" />
-            </div>
-
-          </div>
-
-
-          {/* RESOLUTION */}
-          <div className="rounded-2xl bg-white p-3 dark:bg-[#172a24]">
-
-            <p className="text-xs text-[#929d99] dark:text-[#71877e]">
-              {t("visualOptimizer.resolution")}
-            </p>
-
-            <div className="mt-2 flex items-center justify-between">
-
-              <span className="text-sm font-semibold dark:text-[#f1f7f4]">
-                94
-              </span>
-
-              <span className="text-xs font-medium text-[#34745f] dark:text-[#79c2a9]">
-                {t("visualOptimizer.good")}
-              </span>
-
-            </div>
-
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e7ece9] dark:bg-[#294038]">
-              <div className="h-full w-[94%] rounded-full bg-[#55a98d]" />
-            </div>
-
-          </div>
-
-        </div>
-
-
-        {/* RECOMMENDATIONS */}
-        <div className="relative mt-3 overflow-hidden rounded-2xl bg-[#143d32] p-4 text-white shadow-lg shadow-[#143d32]/10">
-
-          {/* AI GLOW */}
-          <div className="pointer-events-none absolute -right-16 -top-16 h-36 w-36 rounded-full bg-[#55a98d]/20 blur-3xl" />
-
-          <div className="relative">
-
-            <div className="flex items-center gap-2">
-
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/10 text-xs">
-                ✦
-              </span>
-
-              <p className="text-sm font-semibold">
-                {t("visualOptimizer.recommendations")}
-              </p>
-
-            </div>
-
-
-            {/* RECOMMENDATION LIST */}
-            <div className="mt-3 space-y-2">
-
-              <div className="rounded-xl bg-white/[0.07] p-2.5 text-sm text-white/80">
-                ✓ {t("visualOptimizer.recommendation1")}
-              </div>
-
-              <div className="rounded-xl bg-white/[0.07] p-2.5 text-sm text-white/80">
-                ✓ {t("visualOptimizer.recommendation2")}
-              </div>
-
-              <div className="rounded-xl bg-white/[0.07] p-2.5 text-sm text-white/80">
-                ✓ {t("visualOptimizer.recommendation3")}
-              </div>
-
-            </div>
-
-
-            {/* CTA */}
-            <div className="mt-4 flex items-center justify-between gap-4">
-
-              <span className="text-xs text-white/50">
-                {t("visualOptimizer.ready")}
-              </span>
-
-              <Link
-                href={`/${locale}/register`}
-                className="rounded-full bg-white px-4 py-2.5 text-xs font-semibold text-[#143d32] transition hover:-translate-y-0.5 hover:bg-[#eef5f2]"
-              >
-                {t("visualOptimizer.optimize")} →
-              </Link>
-
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
+      {/* VISUAL DEMO */}
+      <VisualBeforeAfter />
 
     </div>
 

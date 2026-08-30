@@ -15,7 +15,12 @@ from app.config import settings
 from app.database import SessionLocal
 from app.models.etsy_connection import EtsyConnection
 from app.models.etsy_oauth_state import EtsyOAuthState
-
+from app.schemas.supplier import (
+    SupplierSearchRequest,
+)
+from app.services.supplier_finder_service import (
+    find_suppliers,
+)
 
 router = APIRouter(
     prefix="/etsy",
@@ -149,7 +154,7 @@ def get_etsy_connect_url(
         "response_type": "code",
         "client_id": settings.etsy_api_key,
         "redirect_uri": settings.etsy_redirect_uri,
-        "scope": "shops_r listings_r transactions_r",
+        "scope": "shops_r listings_r listings_w transactions_r",
         "state": state,
         "code_challenge": code_challenge,
         "code_challenge_method": "S256",
@@ -482,7 +487,10 @@ def sync_etsy_listings(
             detail="Etsy shop ID is missing.",
         )
 
-    # Fetch active listings from Etsy
+    # ========================================================
+    # FETCH ACTIVE LISTINGS FROM ETSY
+    # ========================================================
+
     response = requests.get(
         (
             "https://api.etsy.com/v3/application/"
@@ -498,6 +506,10 @@ def sync_etsy_listings(
             "state": "active",
             "limit": 100,
             "offset": 0,
+
+            # IMPORTANT:
+            # Ask Etsy to include listing images.
+            "includes": "Images",
         },
         timeout=15,
     )
@@ -516,25 +528,39 @@ def sync_etsy_listings(
     created_count = 0
     updated_count = 0
 
+    # ========================================================
+    # SYNC LISTINGS
+    # ========================================================
+
     for listing in listings:
+
         listing_id = str(
             listing["listing_id"]
         )
 
+        # ----------------------------------------------------
+        # FIND EXISTING LISTING
+        # ----------------------------------------------------
+
         existing_listing = (
             db.query(EtsyListing)
             .filter(
-                EtsyListing.listing_id == listing_id
+                EtsyListing.listing_id == listing_id,
+                EtsyListing.user_id == user_id,
             )
             .first()
         )
 
-        # Price
+        # ----------------------------------------------------
+        # PRICE
+        # ----------------------------------------------------
+
         price = None
 
         listing_price = listing.get("price")
 
         if isinstance(listing_price, dict):
+
             amount = listing_price.get("amount")
             divisor = listing_price.get("divisor")
 
@@ -548,30 +574,62 @@ def sync_etsy_listings(
                     / float(divisor)
                 )
 
-        # Image
-        image_url = None
+        # ----------------------------------------------------
+        # IMAGES
+        # ----------------------------------------------------
 
         images = listing.get("images") or []
 
-        if images:
-            first_image = images[0]
+        image_urls = []
+
+        for image in images:
+
+            if not isinstance(image, dict):
+                continue
 
             image_url = (
-                first_image.get("url_570xN")
-                or first_image.get(
-                    "url_fullxfull"
-                )
-                or first_image.get(
-                    "url_170x135"
-                )
+                image.get("url_570xN")
+                or image.get("url_fullxfull")
+                or image.get("url_170x135")
             )
 
-        # Tags
+            if image_url:
+                image_urls.append(image_url)
+
+        # Remove duplicates while preserving order
+        image_urls = list(
+            dict.fromkeys(image_urls)
+        )
+
+        image_url = (
+            image_urls[0]
+            if image_urls
+            else None
+        )
+
+        image_count = len(image_urls)
+
+        # Store all images as JSON
+        image_urls_text = None
+
+        if image_urls:
+            import json
+
+            image_urls_text = json.dumps(
+                image_urls,
+                ensure_ascii=False,
+            )
+
+        # ----------------------------------------------------
+        # TAGS
+        # ----------------------------------------------------
+
         tags_text = None
 
         tags = listing.get("tags")
 
         if isinstance(tags, list):
+
             import json
 
             tags_text = json.dumps(
@@ -579,56 +637,100 @@ def sync_etsy_listings(
                 ensure_ascii=False,
             )
 
-        # Update existing listing
+        # ====================================================
+        # UPDATE EXISTING LISTING
+        # ====================================================
+
         if existing_listing:
-            existing_listing.user_id = user_id
+
             existing_listing.shop_id = str(
                 connection.shop_id
             )
+
             existing_listing.title = (
                 listing.get("title")
             )
+
             existing_listing.description = (
                 listing.get("description")
             )
+
             existing_listing.price = price
+
             existing_listing.quantity = (
                 listing.get("quantity")
             )
+
             existing_listing.state = (
                 listing.get("state")
             )
+
             existing_listing.url = (
                 listing.get("url")
             )
+
             existing_listing.image_url = (
                 image_url
             )
+
+            existing_listing.image_count = (
+                image_count
+            )
+
+            existing_listing.image_urls = (
+                image_urls_text
+            )
+
             existing_listing.tags = (
                 tags_text
             )
 
             updated_count += 1
 
-        # Create new listing
+        # ====================================================
+        # CREATE NEW LISTING
+        # ====================================================
+
         else:
+
             new_listing = EtsyListing(
+
                 user_id=user_id,
+
                 shop_id=str(
                     connection.shop_id
                 ),
+
                 listing_id=listing_id,
-                title=listing.get("title"),
+
+                title=listing.get(
+                    "title"
+                ),
+
                 description=listing.get(
                     "description"
                 ),
+
                 price=price,
+
                 quantity=listing.get(
                     "quantity"
                 ),
-                state=listing.get("state"),
-                url=listing.get("url"),
+
+                state=listing.get(
+                    "state"
+                ),
+
+                url=listing.get(
+                    "url"
+                ),
+
                 image_url=image_url,
+
+                image_count=image_count,
+
+                image_urls=image_urls_text,
+
                 tags=tags_text,
             )
 
@@ -637,6 +739,10 @@ def sync_etsy_listings(
             created_count += 1
 
         synced_count += 1
+
+    # ========================================================
+    # COMMIT
+    # ========================================================
 
     db.commit()
 
@@ -648,4 +754,49 @@ def sync_etsy_listings(
         "synced": synced_count,
         "created": created_count,
         "updated": updated_count,
+    }
+
+
+@router.post("/find-supplier")
+def find_supplier(
+    payload: SupplierSearchRequest,
+):
+    """
+    Find potential AliExpress suppliers
+    for an Etsy product.
+    """
+
+    title = payload.title.strip()
+
+    if not title:
+        raise HTTPException(
+            status_code=400,
+            detail="Product title is required.",
+        )
+
+    try:
+        suppliers = find_suppliers(
+            title=title,
+            description=payload.description,
+            image_urls=[
+                str(image)
+                for image in payload.image_urls
+            ],
+        )
+
+    except Exception as error:
+        print(
+            "Supplier finder error:",
+            repr(error),
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Could not find suppliers.",
+        )
+
+    return {
+        "success": True,
+        "count": len(suppliers),
+        "suppliers": suppliers,
     }

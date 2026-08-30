@@ -67,6 +67,16 @@ class EtsyListing(Base):
         Text,
         nullable=True,
     )
+    image_count: Mapped[int] = mapped_column(
+    Integer,
+    default=0,
+    nullable=False,
+)
+
+    image_urls: Mapped[str | None] = mapped_column(
+    Text,
+    nullable=True,
+)
 
     tags: Mapped[str | None] = mapped_column(
         Text,

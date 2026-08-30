@@ -22,8 +22,8 @@
   "storeHealth": "Store health",
   "listings": "Listings",
   "opportunities": "Opportunities",
-  "aiOpportunity": "AI opportunity detected",
-  "opportunityText": "Your \"Personalized Necklace\" listing gets views but has room for improvement in its title and primary keyword.",
+  "aiOpportunity": "AI found an opportunity",
+  "opportunityText": "Your \"Personalized Necklace\" listing is getting views, but there is an opportunity to improve the title and primary keyword.",
   "fixWithAi": "Fix with AI",
   "priority": "Priority",
   "high": "High",
@@ -31,6 +31,105 @@
   "seo": "SEO",
   "action": "Action",
   "optimize": "Optimize",
+
+  "products": {
+  "title": "Products",
+  "description": "Manage and analyze your synced Etsy listings.",
+  "refresh": "Refresh",
+
+  "count": {
+    "one": "1 product",
+    "other": "{count} products"
+  },
+
+  "syncedFromEtsy": "Synced from Etsy",
+  "price": "Price",
+  "stock": "Stock",
+  "etsy": "Etsy",
+  "aiAnalyze": "AI Analyze",
+
+  "status": {
+    "active": "Active"
+  },
+
+  "empty": {
+    "title": "No products yet",
+    "description": "Sync your Etsy listings to see them here.",
+    "goToDashboard": "Go to dashboard"
+  },
+
+  "errors": {
+    "loadProducts": "Unable to load products."
+  },
+"optimization": {
+  "eyebrow": "AI Optimization",
+  "title": "Listing Optimization Preview",
+  "description": "Review AI-generated changes before applying them to your Etsy listing.",
+  "currentSeo": "Current SEO",
+  "optimizedSeo": "Optimized SEO",
+  "change": "Change",
+  "currentTitle": "Current Title",
+  "optimizedTitle": "Optimized Title",
+  "currentDescription": "Current Description",
+  "optimizedDescription": "Optimized Description",
+  "optimizedTags": "Optimized Tags",
+  "changes": "Changes",
+  "scoreImproved": "AI optimization improves the SEO score. You can apply the changes to your Etsy shop.",
+  "scoreSame": "AI optimization does not change the current SEO score. It is recommended to keep your current listing.",
+  "scoreLower": "AI optimization results in a lower SEO score. Applying these changes to Etsy is not recommended.",
+  "ctaTitle": "Optimize your Etsy listing",
+  "ctaDescription": "Improve your title, description, and tags according to Etsy SEO best practices with AI.",
+  "optimizeButton": "Optimize Listing",
+  "confirmTitle": "Update Etsy listing?",
+  "confirmDescription": "The AI-generated title, description, and tag changes will be applied to your actual Etsy listing.",
+  "fieldsToUpdate": "Fields to update",
+  "fieldTitle": "Title",
+  "fieldDescription": "Description",
+  "fieldTags": "Etsy tags",
+  "apply": "Apply to Etsy",
+  "applying": "Applying to Etsy...",
+  "applied": "Successfully applied to your Etsy shop.",
+  "cancel": "Cancel",
+  "optimizeImageButton": "Optimize Image",
+  "loading": "Preparing AI image...",
+  "loadingDescription": "Your product image is being optimized by AI. This may take a moment."
+
+},
+  "analysis": {
+    "eyebrow": "AI Listing Analysis",
+    "analyzing": "Analyzing listing...",
+    "analyzingDescription": "CraftPilot is analyzing your product title, description and tags.",
+
+    "seoScore": "SEO Score",
+    "titleScore": "Title Score",
+    "descriptionScore": "Description Score",
+    "tagScore": "Tag Score",
+
+    "strengths": "Strengths",
+    "issues": "Issues",
+    "missingInformation": "Missing Information",
+    "recommendations": "Recommendations",
+
+    "visual": {
+      "eyebrow": "AI Visual Analysis",
+      "title": "Product Image Analysis",
+      "analyzing": "Analyzing product images...",
+      "visualScore": "Visual Score",
+      "mainImageScore": "Main Image Score",
+      "compositionScore": "Composition Score",
+      "visibilityScore": "Product Visibility",
+      "backgroundScore": "Background Score",
+      "strengths": "Visual Strengths",
+      "issues": "Visual Issues",
+      "recommendations": "Visual Recommendations"
+    },
+
+    "errors": {
+      "failed": "Unable to analyze the listing.",
+      "visualFailed": "Unable to perform AI visual analysis."
+    }
+  }
+},
 
   "navigation": {
     "menu": "Menu",
@@ -44,21 +143,21 @@
 
   "store": {
     "notConnected": "Etsy not connected",
-    "connectDescription": "Connect your Etsy shop to unlock your store analytics and AI insights.",
+    "connectDescription": "Connect your Etsy shop to use store analytics and AI recommendations.",
     "connect": "Connect Etsy"
   },
 
   "user": {
-  "account": "My account",
-  "freePlan": "Free plan",
-  "logout": "Log out"
-},
+    "account": "My account",
+    "freePlan": "Free plan",
+    "logout": "Log out"
+  },
 
   "hero": {
     "badge": "Your store, powered by AI",
     "title": "Turn your Etsy data into smarter growth decisions.",
-    "description": "Connect your Etsy shop to analyze products, sales and performance with AI-powered insights.",
-    "connect": "Connect your Etsy shop"
+    "description": "Connect your Etsy shop and analyze your products, sales and performance with AI-powered insights.",
+    "connect": "Connect my Etsy shop"
   },
 
   "stats": {
@@ -81,7 +180,72 @@
   "insights": {
     "title": "AI Insights",
     "emptyTitle": "Your AI insights are waiting",
-    "emptyDescription": "Connect your Etsy shop and CraftPilot will analyze your store and generate personalized recommendations."
+    "emptyDescription": "Connect your Etsy shop and let CraftPilot analyze your store to create personalized recommendations."
+  },
+
+  "etsy": {
+    "connected": "Etsy connected",
+    "connectedWith": "Etsy connected · {shopName}",
+    "description": "Your Etsy shop {shopName} is connected. CraftPilot can now analyze your listings and store performance.",
+    "openShop": "Open Etsy shop",
+    "syncListings": "Sync listings",
+    "syncing": "Syncing...",
+    "openShopAria": "Open Etsy shop",
+    "checking": "Checking Etsy connection...",
+    "connecting": "Connecting...",
+    "welcome": "Welcome to {shopName}"
+  },
+
+  "metrics": {
+    "activeListings": "Active listings",
+    "favorites": "Favorites",
+    "reviews": "Reviews"
+  },
+
+  "ai": {
+    "ready": "Ready for AI analysis",
+    "description": "Your {count} active listing can now be analyzed for SEO, keywords and listing quality.",
+    "analyze": "Analyze listings"
+  },
+  "productAnalyzer": {
+  "title": "AI Product Preparer",
+  "description": "Turn your product URL into an Etsy-ready listing.",
+  "placeholder": "Paste product URL...",
+  "prepareListing": "Prepare Listing",
+  "preparing": "Preparing...",
+  "etsyListingReady": "Etsy Listing Ready",
+  "readyDescription": "Your product has been prepared for Etsy.",
+  "etsyTitle": "Etsy Title",
+  "etsyDescription": "Etsy Description",
+  "category": "Category",
+  "tags": "Etsy Tags",
+  "materials": "Materials",
+  "keywords": "SEO Keywords",
+  "price": "Price",
+  "quantity": "Quantity",
+  "etsyReady": "Etsy Ready",
+  "etsyReadiness": "Etsy Readiness Score",
+  "images": "Images",
+  "notAvailable": "Not available",
+  "informationNeeded": "Information Needed Before Publishing",
+  "aiRecommendations": "AI Recommendations",
+  "copy": "Copy",
+  "copied": "Copied",
+  "copyEntireListing": "Copy Entire Listing",
+  "noImage": "No image",
+  "available": "available",
+  "urlRequired": "Please enter a product URL.",
+  "analysisFailed": "Product analysis failed.",
+  "somethingWrong": "Something went wrong."
+},
+
+  "errors": {
+    "shopLoad": "Unable to load Etsy shop.",
+    "listingsLoad": "Unable to load Etsy listings.",
+    "dataLoad": "Unable to load Etsy data.",
+    "connection": "Unable to connect your Etsy shop.",
+    "authorizationUrl": "Etsy authorization URL is missing.",
+    "sync": "Unable to synchronize Etsy listings."
   }
 },
   "features": {
