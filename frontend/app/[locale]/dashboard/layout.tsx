@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import {
   BarChart3,
   Bell,
+  Calculator,
   LayoutDashboard,
   Menu,
   Package,
@@ -191,6 +192,11 @@ const [isCheckingEtsy, setIsCheckingEtsy] = useState(true);
       label: t("navigation.aiInsights"),
       icon: Sparkles,
     },
+    {
+  href: `/${locale}/dashboard/price-profit`,
+  label: t("navigation.priceProfit"),
+  icon: Calculator,
+},
     {
       href: `/${locale}/dashboard/notifications`,
       label: t("navigation.notifications"),

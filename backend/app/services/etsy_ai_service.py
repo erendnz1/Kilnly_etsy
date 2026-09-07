@@ -634,7 +634,282 @@ Return exactly:
 # ============================================================
 # VISUAL ANALYSIS
 # ============================================================
+# ============================================================
+# IDENTIFY PRODUCT FROM IMAGE
+# ============================================================
 
+def identify_product_from_image(
+    image_url: str,
+    language: str = "en",
+) -> dict:
+    """
+    Ürün görselini analiz eder ve supplier araması için
+    kullanılabilecek ürün bilgilerini üretir.
+
+    Bu fonksiyon görsel kalite analizi yapmaz.
+    Amacı ürünün ne olduğunu anlamak ve arama sorgusu
+    oluşturmaktır.
+    """
+
+    if not image_url:
+        raise ValueError(
+            "Image URL is required."
+        )
+
+    if language not in {"tr", "en"}:
+        language = "en"
+
+    language_name = (
+        "Turkish"
+        if language == "tr"
+        else "English"
+    )
+
+    # --------------------------------------------------------
+    # AI PROMPT
+    # --------------------------------------------------------
+
+    prompt_content = [
+        {
+            "type": "text",
+            "text": f"""
+You are a product identification assistant for an
+e-commerce supplier finder.
+
+Analyze the provided product image.
+
+OUTPUT LANGUAGE:
+{language_name}
+
+Your goal is to identify what kind of product is shown
+and create a useful search query that can be used to
+find similar products on AliExpress.
+
+============================================================
+IMPORTANT ACCURACY RULES
+============================================================
+
+Only use information that is visually observable.
+
+Do NOT invent:
+
+- exact materials
+- exact dimensions
+- exact weight
+- brand
+- certifications
+- product specifications
+- product origin
+- seller information
+
+If a material is visually suggested but cannot be confirmed,
+use a cautious description.
+
+For example:
+
+Good:
+"silver-colored necklace"
+
+Bad:
+"925 sterling silver necklace"
+
+unless 925 / sterling silver is actually visible or
+provided by the image.
+
+============================================================
+PRODUCT IDENTIFICATION
+============================================================
+
+Identify:
+
+- product type
+- visible style
+- visible design characteristics
+- visible color
+- visible shape
+- visible pattern
+- other useful visual characteristics
+
+============================================================
+SUPPLIER SEARCH QUERY
+============================================================
+
+Create a concise English search query suitable for
+AliExpress.
+
+The query should:
+
+- describe the actual product
+- include useful visible characteristics
+- avoid unsupported specifications
+- avoid brand names
+- avoid marketing language
+- avoid unnecessary words
+
+Example:
+
+"dainty silver name necklace"
+
+or:
+
+"minimalist heart pendant necklace"
+
+Do NOT create extremely long queries.
+
+============================================================
+RETURN ONLY JSON
+============================================================
+
+Return exactly:
+
+{{
+  "title": "",
+  "product_type": "",
+  "description": "",
+  "search_query": "",
+  "visual_attributes": []
+}}
+""",
+        },
+        {
+            "type": "image_url",
+            "image_url": {
+                "url": image_url,
+            },
+        },
+    ]
+
+    # --------------------------------------------------------
+    # AI REQUEST
+    # --------------------------------------------------------
+
+    response = groq_client.chat.completions.create(
+        model="qwen/qwen3.6-27b",
+        temperature=0,
+        max_completion_tokens=768,
+        reasoning_effort="none",
+        response_format={
+            "type": "json_object"
+        },
+        messages=[
+            {
+                "role": "system",
+                "content": (
+                    "You are a deterministic product "
+                    "identification assistant. "
+                    f"Always respond in {language_name}. "
+                    "Never invent product specifications."
+                ),
+            },
+            {
+                "role": "user",
+                "content": prompt_content,
+            },
+        ],
+    )
+
+    response_text = (
+        response.choices[0].message.content
+    )
+
+    if not response_text:
+        raise ValueError(
+            "Empty AI product identification response."
+        )
+
+    # --------------------------------------------------------
+    # PARSE JSON
+    # --------------------------------------------------------
+
+    try:
+        result = json.loads(
+            _clean_json_response(
+                response_text
+            )
+        )
+
+    except json.JSONDecodeError as error:
+
+        logger.error(
+            "Invalid product identification response: %s",
+            response_text,
+        )
+
+        raise ValueError(
+            "AI returned invalid product identification JSON."
+        ) from error
+
+    if not isinstance(result, dict):
+        raise ValueError(
+            "AI product identification response "
+            "is not a JSON object."
+        )
+
+    # --------------------------------------------------------
+    # CLEAN VALUES
+    # --------------------------------------------------------
+
+    title = str(
+        result.get("title")
+        or ""
+    ).strip()
+
+    product_type = str(
+        result.get("product_type")
+        or ""
+    ).strip()
+
+    description = str(
+        result.get("description")
+        or ""
+    ).strip()
+
+    search_query = str(
+        result.get("search_query")
+        or ""
+    ).strip()
+
+    visual_attributes = _clean_string_list(
+        result.get("visual_attributes")
+    )
+
+    # --------------------------------------------------------
+    # FALLBACK SEARCH QUERY
+    # --------------------------------------------------------
+
+    if not search_query:
+
+        parts = [
+            title,
+            product_type,
+        ]
+
+        parts.extend(
+            visual_attributes[:4]
+        )
+
+        search_query = " ".join(
+            part.strip()
+            for part in parts
+            if part and part.strip()
+        )
+
+    # --------------------------------------------------------
+    # VALIDATION
+    # --------------------------------------------------------
+
+    if not search_query:
+        raise ValueError(
+            "Could not generate a product search query."
+        )
+
+    return {
+        "title": title,
+        "product_type": product_type,
+        "description": description,
+        "search_query": search_query,
+        "visual_attributes": visual_attributes,
+    }
 def analyze_etsy_images(
     image_urls: list[str],
     language: str = "en",

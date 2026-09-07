@@ -141,7 +141,58 @@ const [showApplyConfirm, setShowApplyConfirm] =
   useState(false);
   const [selectedImageIndex, setSelectedImageIndex] =
     useState<Record<string, number>>({});
+async function handleSyncEtsy() {
+  const token = localStorage.getItem("access_token");
 
+  if (!token) {
+    window.location.href = `/${locale}/login`;
+    return;
+  }
+
+  setIsLoading(true);
+  setError("");
+
+  try {
+    const syncResponse = await fetch(
+      `${API_URL}/etsy/sync-listings`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    const syncData = await syncResponse.json();
+
+    if (!syncResponse.ok) {
+      throw new Error(
+        syncData.detail ||
+          t("errors.loadProducts")
+      );
+    }
+
+    console.log("ETSY SYNC RESULT:", syncData);
+
+    // Sync tamamlandıktan sonra DB'deki
+    // güncel ürünleri tekrar çek
+    await loadProducts();
+
+  } catch (error) {
+    console.error(
+      "Etsy sync error:",
+      error
+    );
+
+    setError(
+      error instanceof Error
+        ? error.message
+        : t("errors.loadProducts")
+    );
+
+    setIsLoading(false);
+  }
+}
   async function loadProducts() {
     const token =
       localStorage.getItem("access_token");
@@ -617,8 +668,8 @@ setIsOptimizingImage(false);
 
           <button
             type="button"
-            onClick={loadProducts}
-            disabled={isLoading}
+  onClick={handleSyncEtsy}
+  disabled={isLoading}
             className="
               inline-flex
               shrink-0

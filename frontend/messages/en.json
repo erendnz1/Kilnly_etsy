@@ -12,6 +12,7 @@
     "title": "Turn your Etsy data into your next best move.",
     "description": "CraftPilot analyzes your listings, SEO and store performance and turns the data into clear, actionable recommendations.",
     "primaryButton": "Analyze my store →",
+    "videoBadge": "See CraftPilot in action",
     "secondaryButton": "See how it works",
     "note": "Start free · No credit card required"
   },
@@ -130,12 +131,151 @@
     }
   }
 },
+"priceProfit": {
+  "title": "Price & Profit",
+  "description": "Calculate Etsy fees, profit, margin and recommended selling price.",
 
+  "calculator": "Profit Calculator",
+  "calculatorDescription": "Enter your product and sales details to estimate your real profit.",
+
+  "safeEstimate": "Etsy fee-aware estimate",
+
+  "summarySellingPrice": "Selling Price",
+  "summaryProductCost": "Product Cost",
+  "summaryMargin": "Profit Margin",
+  "summaryProfit": "Estimated Profit",
+
+  "totalProducts": "Total Products",
+  "analyzed": "Analyzed",
+  "needCost": "Need Cost",
+  "profitable": "Profitable",
+  "avgMargin": "Avg. Margin",
+  "estimatedProfit": "Estimated Profit",
+
+  "storeAnalysis": "Store Profit Analysis",
+  "storeAnalysisDescription": "Analyze all active Etsy products automatically.",
+  "refresh": "Refresh",
+
+  "usdTryLabel": "USD/TRY",
+  "destinationLabel": "Destination",
+  "feeAwareEstimate": "Etsy fee-aware estimate",
+
+  "yourProducts": "Your Products",
+  "productsCount": "{count} products",
+  "inStock": "{count} in stock",
+
+  "costDataRequired": "Cost data required",
+  "addSupplierCostDescription": "Add supplier cost to analyze profit.",
+  "addCost": "Add Cost",
+
+  "productCostShort": "Cost",
+  "etsyFeesShort": "Etsy Fees",
+  "profitShort": "Profit",
+  "marginShort": "Margin",
+
+  "manualCalculation": "Manual Calculation",
+
+  "supplier": "Supplier",
+  "supplierUrl": "Supplier URL",
+
+  "cancel": "Cancel",
+  "saving": "Saving...",
+  "saveCost": "Save Cost",
+  "close": "Close",
+
+  "noStoreAnalysis": "No store analysis available",
+  "refreshStoreAnalysis": "Refresh the analysis to scan your Etsy products.",
+
+  "productCost": "Product Cost ($)",
+  "sellingPrice": "Selling Price ($)",
+
+  "source": "Product Source",
+  "destination": "Destination",
+  "quantity": "Quantity",
+  "usdTryRate": "USD → TRY Rate",
+
+  "shipping": "Shipping",
+  "shippingDescription": "Separate customer shipping from your real shipping cost.",
+  "buyerShipping": "Buyer Shipping",
+  "actualShippingCost": "Actual Shipping Cost",
+  "actualShippingDescription": "What you actually pay to your supplier or carrier.",
+  "shippingAuto": "Shipping will be calculated automatically from your shipping profile.",
+  "useProfile": "Use profile",
+  "useManual": "Enter manually",
+
+  "sources": {
+    "turkey": "Turkey",
+    "aliexpress": "AliExpress"
+  },
+
+  "destinations": {
+    "usa": "United States",
+    "canada": "Canada",
+    "other": "Other"
+  },
+
+  "options": "Fee Options",
+  "currencyConversion": "Currency conversion fee",
+  "offsiteAds": "Offsite Ads",
+
+  "calculate": "Calculate Profit",
+  "calculating": "Calculating...",
+
+  "results": "Profit Analysis",
+  "resultsDescription": "Estimated costs, Etsy fees and pricing recommendations.",
+
+  "emptyTitle": "Your results will appear here",
+  "emptyDescription": "Enter your product details and calculate your estimated profit.",
+
+  "margin": "Profit Margin",
+
+  "order": "Order",
+  "itemPrice": "Item Price",
+  "shippingCost": "Shipping",
+  "orderTotal": "Order Total",
+
+  "costs": "Your Costs",
+  "totalCostBeforeFees": "Cost Before Etsy Fees",
+
+  "etsyFees": "Etsy Fees",
+  "transactionFee": "Transaction Fee",
+  "paymentProcessing": "Payment Processing",
+  "regulatoryFee": "Regulatory Operating Fee",
+  "listingFee": "Listing Fee",
+  "currencyConversionFee": "Currency Conversion",
+  "offsiteAdsFee": "Offsite Ads",
+  "totalFees": "Total Etsy Fees",
+
+  "statusProfitable": "Profitable",
+  "statusBelowBreakEven": "Below break-even",
+
+  "calculatorLabel": "Calculator",
+  "analysisLabel": "Analysis",
+  "profileLabel": "Profile",
+  "enterProductDetails": "Enter your product details",
+
+  "pricing": "Pricing Recommendation",
+  "breakEven": "Break-even Price",
+  "recommendedLow": "Recommended Low",
+  "recommended": "Recommended Price",
+  "recommendedHigh": "Recommended High",
+
+  "errors": {
+    "required": "Please fill in all required fields.",
+    "invalid": "Please enter valid values.",
+    "shipping": "Shipping cost cannot be negative.",
+    "calculate": "Unable to calculate profit.",
+    "invalidCost": "Please enter a valid product cost.",
+    "invalidShipping": "Actual shipping cost cannot be negative.",
+    "saveCost": "Failed to save product cost."
+  }
+},
   "navigation": {
     "menu": "Menu",
     "dashboard": "Dashboard",
     "products": "Products",
     "analytics": "Analytics",
+    "priceProfit": "Price & Profit",
     "aiInsights": "AI Insights",
     "notifications": "Notifications",
     "settings": "Settings"
@@ -297,24 +437,46 @@
     "button": "View recommendations"
   },
   "storeAudit": {
-    "eyebrow": "AI Store Audit",
-    "title": "Know what is holding your store back.",
-    "description": "CraftPilot scans your store and turns your data into a clear health score, problems and growth opportunities.",
-    "health": "Store Health",
-    "score": "82",
-    "outOf": "/100",
-    "seo": "SEO",
-    "listings": "Listings",
-    "keywords": "Keywords",
-    "conversion": "Conversion",
-    "opportunities": "7 opportunities found",
-    "highPriority": "High priority",
-    "seoProblems": "3 SEO problems",
-    "weakListings": "2 weak listings",
-    "pricingIssue": "1 pricing issue",
-    "keywordGap": "1 keyword opportunity",
-    "viewAudit": "View AI audit"
-  },
+  "eyebrow": "AI Store Audit",
+  "title": "Know what is holding your store back.",
+  "description": "CraftPilot scans your store and turns your data into a clear health score, problems and growth opportunities.",
+
+  "health": "Store Health",
+  "score": "82",
+  "outOf": "/100",
+  "status": "In good shape",
+
+  "seo": "SEO",
+  "listings": "Listings",
+  "keywords": "Keywords",
+  "conversion": "Conversion",
+"freeStart": "Start free · No credit card required",
+  "veryGood": "Very good",
+  "good": "Good",
+  "improvable": "Needs improvement",
+
+  "opportunities": "7 opportunities found",
+  "highPriority": "High priority",
+
+  "seoProblems": "3 SEO problems",
+  "seoProblemsDetail": "Title and tag optimization",
+
+  "weakListings": "2 weak listings",
+  "weakListingsDetail": "Low-performing products",
+
+  "pricingIssue": "1 pricing issue",
+  "pricingIssueDetail": "Pricing opportunity found",
+
+  "keywordGap": "1 keyword opportunity",
+  "keywordGapDetail": "New keyword opportunity discovered",
+
+  "featureHealth": "AI-powered store health score",
+  "featureAnalysis": "SEO, listing and conversion analysis",
+  "featureActions": "Prioritized AI action recommendations",
+  "featureGrowth": "Discover growth opportunities",
+
+  "viewAudit": "View AI audit"
+},
   "growthCoach": {
     "eyebrow": "AI Growth Coach",
     "title": "Know what to work on next.",
@@ -323,6 +485,8 @@
     "analyzed": "CraftPilot analyzed your store and found 4 actions worth doing.",
     "highImpact": "High impact",
     "mediumImpact": "Medium impact",
+    "recommendedActions": "Recommended actions",
+"opportunities": "4 opportunities",
     "lowImpact": "Low impact",
     "step1": "Fix your 3 weakest listings",
     "step2": "Target a new keyword opportunity",
@@ -332,25 +496,33 @@
     "today": "Today's priorities",
     "estimated": "Based on your store data"
   },
-  "competitor": {
-    "eyebrow": "Competitor Intelligence",
-    "title": "Understand the market before you make a move.",
-    "description": "Compare your listings with competing products and let CraftPilot identify the gaps that could give your store an advantage.",
-    "yourListing": "Your listing",
-    "price": "$29",
-    "reviews": "42 reviews",
-    "topCompetitors": "Top competitors",
-    "competitor1Reviews": "96 reviews",
-    "competitor2Reviews": "184 reviews",
-    "competitor3Reviews": "421 reviews",
-    "aiInsight": "AI insight",
-    "insight": "Your price is competitive, but your keyword coverage is weaker than top listings.",
-    "keywordCoverage": "Keyword coverage",
-    "pricePosition": "Price position",
-    "competitive": "Competitive",
-    "weaker": "Needs improvement",
-    "analyze": "Analyze competitors"
-  },
+  "competitor":{
+  "eyebrow": "Competitor Intelligence",
+  "title": "Understand the market before you make a move.",
+  "description": "Compare your listings with competing products and let CraftPilot identify the gaps that could give your store an advantage.",
+  "analyze": "Analyze competitors",
+  "yourListing": "Your Listing",
+  "price": "$29",
+  "reviews": "42 reviews",
+  "keywordCoverage": "Keyword coverage",
+  "pricePosition": "Price position",
+  "competitive": "Competitive",
+  "market": "Etsy market",
+
+  "topCompetitors": "Top competitors",
+
+  "competitor1Name": "Personalized Name Necklace",
+  "competitor2Name": "Custom Birthstone Jewelry",
+  "competitor3Name": "Personalized Gift Necklace",
+
+  "competitor1Reviews": "96 reviews",
+  "competitor2Reviews": "184 reviews",
+  "competitor3Reviews": "421 reviews",
+
+  "aiInsight": "AI insight",
+  "insight": "Your price is competitive, but your keyword coverage is weaker than top listings.",
+  "weaker": "Needs improvement"
+},
   "trendRadar": {
     "eyebrow": "Trend Radar",
     "title": "Find opportunities before everyone else does.",

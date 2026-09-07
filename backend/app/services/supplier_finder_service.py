@@ -97,18 +97,20 @@ def find_suppliers(
                     repr(error),
                 )
 
-        # ----------------------------------------------------
-        # ADD RESULTS
+                # ----------------------------------------------------
+        # ADD + ENRICH RESULTS
         # ----------------------------------------------------
 
         for result in results:
 
             result["search_query"] = query
 
+            # AliExpress ürün sayfası anti-bot nedeniyle
+            # doğrudan scrape edilmiyor. Arama sonucundan
+            # gelen aday ürünü olduğu gibi kullanıyoruz.
             suppliers.append(
                 result
             )
-
     # --------------------------------------------------------
     # DEDUPLICATE
     # --------------------------------------------------------
@@ -173,9 +175,9 @@ def build_search_queries(
     }
 
     words = re.findall(
-        r"[a-zA-Z0-9]+",
-        text,
-    )
+    r"[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*",
+    text,
+)
 
     keywords: list[str] = []
 
@@ -382,7 +384,253 @@ def search_aliexpress(
 # ============================================================
 # SEARCH ENGINE FALLBACK
 # ============================================================
+# ============================================================
+# ALIEXPRESS PRODUCT DETAIL
+# ============================================================
 
+def enrich_aliexpress_product(
+    supplier: dict[str, Any],
+) -> dict[str, Any]:
+    """
+    AliExpress ürün detay sayfaları x5sec / punish anti-bot
+    korumasına takılabildiği için bu serviste doğrudan ürün
+    sayfası scraping'i kullanılmıyor.
+
+    Fonksiyon geriye dönük uyumluluk için tutuluyor.
+    İleride resmi/API tabanlı ürün detay kaynağı eklenebilir.
+    """
+    return supplier
+
+
+def clean_supplier_title(
+    title: str,
+) -> str | None:
+
+    if not title:
+        return None
+
+    title = re.sub(
+        r"\s+",
+        " ",
+        title,
+    ).strip()
+
+    # AliExpress arayüz metinlerini temizle
+    patterns = [
+        r"\s+Ön izlemeyi görüntüle.*$",
+        r"\s+Benzer ürünler.*$",
+        r"\s+View preview.*$",
+        r"\s+Similar items.*$",
+    ]
+
+    for pattern in patterns:
+
+        title = re.sub(
+            pattern,
+            "",
+            title,
+            flags=re.IGNORECASE,
+        )
+
+    # Fiyatın title içine karıştığı durumlarda
+    # fiyat sonrasını mümkün olduğunca temizle.
+    title = re.sub(
+        r"\s+\d[\d\s.,]*\s*(?:TL|TRY|USD|\$|€|EUR)\b.*$",
+        "",
+        title,
+        flags=re.IGNORECASE,
+    )
+
+    return title.strip() or None
+
+
+def parse_float(
+    value: Any,
+) -> float | None:
+
+    if value is None:
+        return None
+
+    try:
+        value = str(value).strip()
+
+        match = re.search(
+            r"\d+(?:[.,]\d+)?",
+            value,
+        )
+
+        if not match:
+            return None
+
+        return float(
+            match.group(0).replace(
+                ",",
+                ".",
+            )
+        )
+
+    except (
+        ValueError,
+        TypeError,
+    ):
+        return None
+
+
+def parse_price(
+    value: Any,
+) -> float | None:
+
+    if value is None:
+        return None
+
+    try:
+
+        text = str(value).strip()
+
+        text = re.sub(
+            r"[^\d.,]",
+            "",
+            text,
+        )
+
+        if not text:
+            return None
+
+        # 12.49
+        if (
+            "." in text
+            and "," not in text
+        ):
+            return float(text)
+
+        # 12,49
+        if (
+            "," in text
+            and "." not in text
+        ):
+            return float(
+                text.replace(
+                    ",",
+                    ".",
+                )
+            )
+
+        # 1.234,56
+        if text.rfind(",") > text.rfind("."):
+
+            return float(
+                text.replace(
+                    ".",
+                    "",
+                ).replace(
+                    ",",
+                    ".",
+                )
+            )
+
+        # 1,234.56
+        return float(
+            text.replace(
+                ",",
+                "",
+            )
+        )
+
+    except (
+        ValueError,
+        TypeError,
+    ):
+        return None
+
+
+def parse_price_from_text(
+    text: str,
+) -> tuple[float | None, str | None]:
+
+    if not text:
+        return None, None
+
+    patterns = [
+
+        # Türkçe
+        (
+            r"(\d[\d\s.,]*)\s*(TL|TRY)\b",
+            "TRY",
+        ),
+
+        # USD
+        (
+            r"\$\s*(\d[\d.,]*)",
+            "USD",
+        ),
+
+        (
+            r"(\d[\d.,]*)\s*(USD)\b",
+            "USD",
+        ),
+
+        # EUR
+        (
+            r"€\s*(\d[\d.,]*)",
+            "EUR",
+        ),
+
+        (
+            r"(\d[\d.,]*)\s*(EUR)\b",
+            "EUR",
+        ),
+    ]
+
+    for pattern, currency in patterns:
+
+        match = re.search(
+            pattern,
+            text,
+            re.IGNORECASE,
+        )
+
+        if not match:
+            continue
+
+        raw_price = match.group(1)
+
+        price = parse_price(
+            raw_price
+        )
+
+        if price is not None:
+            return price, currency
+
+    return None, None
+
+
+def parse_integer(
+    value: Any,
+) -> int | None:
+
+    if value is None:
+        return None
+
+    try:
+
+        text = str(value)
+
+        text = re.sub(
+            r"[^\d]",
+            "",
+            text,
+        )
+
+        if not text:
+            return None
+
+        return int(text)
+
+    except (
+        ValueError,
+        TypeError,
+    ):
+        return None
 def search_aliexpress_via_search_engine(
     query: str,
 ) -> list[dict[str, Any]]:
@@ -451,103 +699,27 @@ def parse_search_engine_results(
 
     results: list[dict[str, Any]] = []
 
-    # ========================================================
-    # 1. BING NORMAL SEARCH RESULTS
-    # ========================================================
-
-    for result in soup.select(
-        "li.b_algo"
+    def add_result(
+        product_url: str,
+        title: str | None = None,
+        image_url: str | None = None,
     ):
 
-        anchor = result.select_one(
-            "h2 a"
+        if not product_url:
+            return
+
+        product_url = _clean_url(
+            unquote(product_url)
         )
-
-        if not anchor:
-            anchor = result.find(
-                "a"
-            )
-
-        if not anchor:
-            continue
-
-        href = anchor.get(
-            "href"
-        )
-
-        if not href:
-            continue
-
-        title = anchor.get_text(
-            " ",
-            strip=True,
-        )
-
-        product_url = (
-            _extract_aliexpress_url(
-                href
-            )
-        )
-
-        # ----------------------------------------------------
-        # Bazı Bing sonuçlarında AliExpress URL'si
-        # href yerine result HTML'inin içerisinde olabilir.
-        # ----------------------------------------------------
 
         if not product_url:
-
-            result_html = str(
-                result
-            )
-
-            product_url = (
-                _extract_aliexpress_url(
-                    result_html
-                )
-            )
-
-        if not product_url:
-            continue
-
-        # ----------------------------------------------------
-        # DUPLICATE
-        # ----------------------------------------------------
+            return
 
         if any(
             item["url"] == product_url
             for item in results
         ):
-            continue
-
-        # ----------------------------------------------------
-        # IMAGE
-        # ----------------------------------------------------
-
-        image_url = None
-
-        image = result.find(
-            "img"
-        )
-
-        if image:
-
-            image_url = (
-                image.get("src")
-                or image.get(
-                    "data-src"
-                )
-                or image.get(
-                    "data-lazy-src"
-                )
-            )
-
-        if image_url:
-
-            image_url = (
-                _clean_image_url(
-                    image_url
-                )
-            )
+            return
 
         results.append(
             {
@@ -561,107 +733,110 @@ def parse_search_engine_results(
             }
         )
 
-        if len(results) >= 20:
-            break
-
     # ========================================================
-    # 2. TÜM LINKLERİ İKİNCİ KEZ KONTROL ET
+    # 1. NORMAL LINKS
     # ========================================================
 
-    if len(results) < 10:
+    for anchor in soup.find_all("a"):
 
-        for anchor in soup.find_all(
-            "a"
-        ):
+        href = anchor.get("href")
 
-            href = anchor.get(
-                "href"
+        if not href:
+            continue
+
+        # ----------------------------------------------------
+        # Direct / encoded AliExpress URL
+        # ----------------------------------------------------
+
+        product_url = _extract_aliexpress_url(
+            href
+        )
+
+        if not product_url:
+
+            # HTML içindeki herhangi bir AliExpress
+            # product URL'sini ara
+            decoded_href = unquote(
+                href
             )
 
-            if not href:
-                continue
-
-            product_url = (
-                _extract_aliexpress_url(
-                    href
-                )
+            match = re.search(
+                r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+                decoded_href,
+                re.IGNORECASE,
             )
 
-            if not product_url:
-                continue
+            if match:
+                product_url = match.group(0)
 
-            if any(
-                item["url"] == product_url
-                for item in results
-            ):
-                continue
+        if not product_url:
+            continue
 
-            title = anchor.get_text(
+        title = anchor.get(
+            "title"
+        )
+
+        if not title:
+            anchor_text = anchor.get_text(
                 " ",
                 strip=True,
             )
 
-            image_url = None
-
-            image = anchor.find(
-                "img"
-            )
-
-            if image:
-
-                image_url = (
-                    image.get("src")
-                    or image.get(
-                        "data-src"
-                    )
-                    or image.get(
-                        "data-lazy-src"
-                    )
+            if 10 <= len(anchor_text) <= 300:
+                title = clean_supplier_title(
+                    anchor_text
                 )
+
+        image_url = None
+
+        image = anchor.find("img")
+
+        if image:
+
+            image_url = (
+                image.get("src")
+                or image.get("data-src")
+                or image.get("data-lazy-src")
+            )
 
             if image_url:
-
-                image_url = (
-                    _clean_image_url(
-                        image_url
-                    )
+                image_url = _clean_image_url(
+                    image_url
                 )
 
-            results.append(
-                {
-                    "title": title or None,
-                    "url": product_url,
-                    "image_url": image_url,
-                    "price": None,
-                    "currency": None,
-                    "sales": None,
-                    "rating": None,
-                }
+        add_result(
+            product_url=product_url,
+            title=title,
+            image_url=image_url,
+        )
+
+        if len(results) >= 20:
+            break
+
+    # ========================================================
+    # 2. DECODED HTML SCAN
+    # ========================================================
+
+    if len(results) < 20:
+
+        decoded_html = html
+
+        # Birkaç kez decode et
+        for _ in range(3):
+
+            new_html = unquote(
+                decoded_html
             )
 
-            if len(results) >= 20:
+            if new_html == decoded_html:
                 break
 
-    # ========================================================
-    # 3. RAW HTML URL SEARCH
-    # ========================================================
-
-    if len(results) < 10:
-
-        # Önce HTML decode et
-        decoded_html = unquote(
-            html
-        )
+            decoded_html = new_html
 
         patterns = [
 
-            # Normal URL
             r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
 
-            # Encoded URL
-            r'https?%3A%2F%2F(?:www\.)?aliexpress\.com%2Fitem%2F[0-9]+%2Ehtml',
-
-            # Escaped slash
             r'https?:\\/\\/(?:www\.)?aliexpress\.com\\/item\\/[0-9]+\.html',
 
         ]
@@ -670,36 +845,62 @@ def parse_search_engine_results(
 
             matches = re.findall(
                 pattern,
-                html,
+                decoded_html,
                 re.IGNORECASE,
             )
 
             for match in matches:
 
-                product_url = _clean_url(
-                    unquote(match)
+                product_url = (
+                    match
+                    .replace("\\/", "/")
                 )
 
-                if not product_url:
-                    continue
+                add_result(
+                    product_url=product_url
+                )
 
-                if any(
-                    item["url"]
-                    == product_url
-                    for item in results
-                ):
-                    continue
+                if len(results) >= 20:
+                    break
 
-                results.append(
-                    {
-                        "title": None,
-                        "url": product_url,
-                        "image_url": None,
-                        "price": None,
-                        "currency": None,
-                        "sales": None,
-                        "rating": None,
-                    }
+            if len(results) >= 20:
+                break
+
+    # ========================================================
+    # 3. RAW ALIEXPRESS PRODUCT IDS
+    # ========================================================
+
+    if len(results) < 20:
+
+        # HTML içerisinde AliExpress URL'si
+        # tamamen encode edilmiş olsa bile ID'yi yakala.
+        id_patterns = [
+
+            r'aliexpress\.com(?:\\?/|%2F|/)+item(?:\\?/|%2F|/)+([0-9]+)',
+
+            r'/item/([0-9]+)\.html',
+
+            r'%2Fitem%2F([0-9]+)%2Ehtml',
+
+        ]
+
+        for pattern in id_patterns:
+
+            matches = re.findall(
+                pattern,
+                decoded_html,
+                re.IGNORECASE,
+            )
+
+            for product_id in matches:
+
+                product_url = (
+                    f"https://www.aliexpress.com/item/"
+                    f"{product_id}.html"
+                )
+
+                add_result(
+                    product_url=product_url
                 )
 
                 if len(results) >= 20:
@@ -725,11 +926,6 @@ def parse_search_engine_results(
         )
 
     return results
-
-# ============================================================
-# EXTRACT ALIEXPRESS URL
-# ============================================================
-
 def _extract_aliexpress_url(
     href: str,
 ) -> str | None:
@@ -737,68 +933,32 @@ def _extract_aliexpress_url(
     if not href:
         return None
 
-    href = href.strip()
+    candidate = href.strip()
 
-    # --------------------------------------------------------
-    # HTML / escaped characters
-    # --------------------------------------------------------
+    # ========================================================
+    # DECODE
+    # ========================================================
 
-    href = (
-        href
-        .replace(
-            "\\/",
-            "/",
+    for _ in range(5):
+
+        candidate = (
+            candidate
+            .replace("\\/", "/")
+            .replace("\\u002F", "/")
         )
-        .replace(
-            "\\u002F",
-            "/",
+
+        decoded = unquote(
+            candidate
         )
-    )
-
-    # --------------------------------------------------------
-    # Direct
-    # --------------------------------------------------------
-
-    direct = _clean_url(
-        href
-    )
-
-    if direct:
-        return direct
-
-    # --------------------------------------------------------
-    # Decode multiple times
-    # --------------------------------------------------------
-
-    candidate = href
-
-    for _ in range(4):
-
-        try:
-
-            decoded = unquote(
-                candidate
-            )
-
-        except Exception:
-
-            break
 
         if decoded == candidate:
             break
 
         candidate = decoded
 
-        direct = _clean_url(
-            candidate
-        )
-
-        if direct:
-            return direct
-
-    # --------------------------------------------------------
-    # Search inside href
-    # --------------------------------------------------------
+    # ========================================================
+    # DIRECT ALIEXPRESS URL
+    # ========================================================
 
     match = re.search(
         r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
@@ -808,21 +968,35 @@ def _extract_aliexpress_url(
 
     if match:
 
-        direct = _clean_url(
+        return _clean_url(
             match.group(0)
         )
 
-        if direct:
-            return direct
+    # ========================================================
+    # ALIEXPRESS URL INSIDE REDIRECT
+    # ========================================================
 
-    # --------------------------------------------------------
-    # Query parameters
-    # --------------------------------------------------------
+    match = re.search(
+        r'aliexpress\.com/item/[0-9]+\.html',
+        candidate,
+        re.IGNORECASE,
+    )
+
+    if match:
+
+        return _clean_url(
+            "https://www."
+            + match.group(0)
+        )
+
+    # ========================================================
+    # QUERY PARAMETERS
+    # ========================================================
 
     try:
 
         parsed = urlparse(
-            href
+            candidate
         )
 
         params = parse_qs(
@@ -835,41 +1009,55 @@ def _extract_aliexpress_url(
             "q",
         ):
 
-            values = params.get(
+            for value in params.get(
                 key,
                 [],
-            )
+            ):
 
-            for value in values:
+                decoded_value = value
 
-                candidate = unquote(
-                    value
-                )
+                for _ in range(5):
 
-                for _ in range(4):
-
-                    decoded = unquote(
-                        candidate
+                    new_value = unquote(
+                        decoded_value
                     )
 
-                    if (
-                        decoded
-                        == candidate
-                    ):
+                    if new_value == decoded_value:
                         break
 
-                    candidate = decoded
+                    decoded_value = new_value
 
-                direct = _clean_url(
-                    candidate
+                match = re.search(
+                    r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+                    decoded_value,
+                    re.IGNORECASE,
                 )
 
-                if direct:
-                    return direct
+                if match:
+
+                    return _clean_url(
+                        match.group(0)
+                    )
 
     except Exception:
-
         pass
+
+    # ========================================================
+    # PRODUCT ID FALLBACK
+    # ========================================================
+
+    match = re.search(
+        r'aliexpress\.com.*?/item/([0-9]+)',
+        candidate,
+        re.IGNORECASE,
+    )
+
+    if match:
+
+        return (
+            "https://www.aliexpress.com/item/"
+            f"{match.group(1)}.html"
+        )
 
     return None
 
@@ -883,28 +1071,30 @@ def _is_bot_protection_page(
 ) -> bool:
 
     if not html:
-
         return False
 
     lowered = html.lower()
 
-    protection_terms = [
+    # Gerçek AliExpress blok sayfasını
+    # daha güçlü sinyallerle tespit et.
+    strong_protection_terms = [
         "_____tmd_____",
         "/punish",
         "x5sec",
-        "verify you are human",
-        "robot",
-        "captcha",
-        "security verification",
         "access denied",
+        "security verification",
     ]
 
-    return any(
-        term in lowered
-        for term in protection_terms
+    # Tek başına "robot" veya "captcha" kelimesi
+    # yeterli değildir. AliExpress'in normal HTML/JS
+    # içerisinde bu kelimeler bulunabilir.
+    strong_matches = sum(
+        1
+        for term in strong_protection_terms
+        if term in lowered
     )
 
-
+    return strong_matches >= 2
 # ============================================================
 # ALIEXPRESS PARSER
 # ============================================================
@@ -919,185 +1109,304 @@ def parse_aliexpress_results(
         "html.parser",
     )
 
-    results: list[
-        dict[str, Any]
-    ] = []
+    results: list[dict[str, Any]] = []
 
-    # --------------------------------------------------------
-    # SCRIPT DATA
-    # --------------------------------------------------------
+    # ========================================================
+    # HELPER
+    # ========================================================
 
-    for script in soup.find_all(
-        "script"
+    def add_product(
+        product_url: str,
+        title: str | None = None,
+        image_url: str | None = None,
     ):
-
-        content = script.string
-
-        if not content:
-
-            content = script.get_text()
-
-        if not content:
-
-            continue
-
-        matches = re.findall(
-            r'https?://(?:www\.)?aliexpress\.com/item/[^"\']+',
-            content,
-            re.IGNORECASE,
-        )
-
-        for product_url in matches:
-
-            product_url = _clean_url(
-                product_url
-            )
-
-            if not product_url:
-
-                continue
-
-            if any(
-                item["url"] == product_url
-                for item in results
-            ):
-
-                continue
-
-            results.append(
-                {
-                    "title": None,
-                    "url": product_url,
-                    "image_url": None,
-                    "price": None,
-                    "currency": None,
-                    "sales": None,
-                    "rating": None,
-                }
-            )
-
-            if len(results) >= 30:
-
-                return results
-
-    # --------------------------------------------------------
-    # LINK FALLBACK
-    # --------------------------------------------------------
-
-    for anchor in soup.find_all(
-        "a"
-    ):
-
-        href = anchor.get(
-            "href"
-        )
-
-        if not href:
-
-            continue
-
-        if "/item/" not in href:
-
-            continue
 
         product_url = _clean_url(
-            href,
+            unquote(product_url),
             base_url=base_url,
         )
 
         if not product_url:
-
-            continue
-
-        # ----------------------------------------------------
-        # TITLE
-        # ----------------------------------------------------
-
-        title = anchor.get(
-            "title"
-        )
-
-        if not title:
-
-            title = anchor.get_text(
-                " ",
-                strip=True,
-            )
-
-        if not title:
-
-            image = anchor.find(
-                "img"
-            )
-
-            if image:
-
-                title = (
-                    image.get("alt")
-                    or None
-                )
-
-        if title:
-
-            title = title.strip()
-
-        # ----------------------------------------------------
-        # IMAGE
-        # ----------------------------------------------------
-
-        image_url = None
-
-        image = anchor.find(
-            "img"
-        )
-
-        if image:
-
-            image_url = (
-                image.get("src")
-                or image.get(
-                    "data-src"
-                )
-                or image.get(
-                    "data-lazy-src"
-                )
-            )
-
-        if image_url:
-
-            image_url = _clean_image_url(
-                image_url
-            )
-
-        # ----------------------------------------------------
-        # DUPLICATE
-        # ----------------------------------------------------
+            return
 
         if any(
             item["url"] == product_url
             for item in results
         ):
-
-            continue
+            return
 
         results.append(
             {
-                "title": title,
+                "title": title.strip()
+                if title
+                else None,
+
                 "url": product_url,
+
                 "image_url": image_url,
+
                 "price": None,
+
                 "currency": None,
+
                 "sales": None,
+
                 "rating": None,
             }
         )
 
-        if len(results) >= 30:
+    # ========================================================
+    # 1. NORMAL LINKS
+    # ========================================================
 
+    for anchor in soup.find_all("a"):
+
+        href = anchor.get("href")
+
+        if not href:
+            continue
+
+        product_url = _extract_aliexpress_url(
+            href
+        )
+
+        if not product_url:
+            continue
+
+        title = anchor.get("title")
+
+        if title:
+            title = clean_supplier_title(title)
+
+        # Anchor metni çok uzunsa AliExpress'in UI metnini
+        # ürün başlığı sanma.
+        if not title:
+            anchor_text = anchor.get_text(
+                " ",
+                strip=True,
+            )
+
+            if 10 <= len(anchor_text) <= 300:
+                title = clean_supplier_title(
+                    anchor_text
+                )
+
+        image_url = None
+
+        image = anchor.find("img")
+
+        if image:
+
+            image_url = (
+                image.get("src")
+                or image.get("data-src")
+                or image.get("data-lazy-src")
+            )
+
+            if image_url:
+                image_url = _clean_image_url(
+                    image_url
+                )
+
+        add_product(
+            product_url=product_url,
+            title=title,
+            image_url=image_url,
+        )
+
+        if len(results) >= 30:
+            return results
+
+    # ========================================================
+    # 2. SCRIPT / JSON DATA
+    # ========================================================
+
+    decoded_html = html
+
+    for _ in range(5):
+
+        new_html = unquote(
+            decoded_html
+        )
+
+        if new_html == decoded_html:
             break
 
-    return results
+        decoded_html = new_html
 
+    # ========================================================
+    # 3. FIND PRODUCT URLs
+    # ========================================================
+
+    url_patterns = [
+
+        r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+
+        r'https?:\\/\\/(?:www\.)?aliexpress\.com\\/item\\/[0-9]+\.html',
+
+        r'aliexpress\.com/item/[0-9]+\.html',
+
+        r'aliexpress\.com\\/item\\/[0-9]+\.html',
+
+    ]
+
+    for pattern in url_patterns:
+
+        matches = re.findall(
+            pattern,
+            decoded_html,
+            re.IGNORECASE,
+        )
+
+        for match in matches:
+
+            product_url = (
+                match
+                .replace(
+                    "\\/",
+                    "/",
+                )
+            )
+
+            if not product_url.startswith(
+                "http"
+            ):
+
+                product_url = (
+                    "https://www."
+                    + product_url
+                )
+
+            add_product(
+                product_url=product_url
+            )
+
+            if len(results) >= 30:
+                return results
+
+    # ========================================================
+    # 4. PRODUCT ID FALLBACK
+    # ========================================================
+
+    if len(results) < 10:
+
+        id_patterns = [
+
+            r'aliexpress\.com.{0,200}?/item/([0-9]+)',
+
+            r'aliexpress\.com.{0,200}?\\/item\\/([0-9]+)',
+
+            r'aliexpress\.com.{0,200}?%2Fitem%2F([0-9]+)',
+
+        ]
+
+        for pattern in id_patterns:
+
+            matches = re.findall(
+                pattern,
+                decoded_html,
+                re.IGNORECASE,
+            )
+
+            for product_id in matches:
+
+                product_url = (
+                    "https://www.aliexpress.com/item/"
+                    f"{product_id}.html"
+                )
+
+                add_product(
+                    product_url=product_url
+                )
+
+                if len(results) >= 30:
+                    return results
+
+    # ========================================================
+    # 5. SCRIPT TAG PRODUCT DATA
+    # ========================================================
+
+    for script in soup.find_all("script"):
+
+        content = script.string
+
+        if not content:
+            content = script.get_text()
+
+        if not content:
+            continue
+
+        content = unquote(content)
+
+        # Product URL + nearby title
+        url_matches = re.finditer(
+            r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+            content,
+            re.IGNORECASE,
+        )
+
+        for match in url_matches:
+
+            product_url = match.group(0)
+
+            start = max(
+                0,
+                match.start() - 1000,
+            )
+
+            end = min(
+                len(content),
+                match.end() + 1000,
+            )
+
+            nearby = content[
+                start:end
+            ]
+
+            title = None
+
+            title_match = re.search(
+                r'"title"\s*:\s*"([^"]{10,300})"',
+                nearby,
+                re.IGNORECASE,
+            )
+
+            if title_match:
+
+                title = (
+                    title_match
+                    .group(1)
+                    .replace(
+                        "\\u0026",
+                        "&",
+                    )
+                )
+
+            add_product(
+                product_url=product_url,
+                title=title,
+            )
+
+            if len(results) >= 30:
+                return results
+
+    # ========================================================
+    # DEBUG
+    # ========================================================
+
+    print(
+        "ALIEXPRESS PRODUCTS FOUND:",
+        len(results),
+    )
+
+    for item in results[:10]:
+
+        print(
+            "ALIEXPRESS PRODUCT:",
+            item["url"],
+        )
+
+    return results
 
 # ============================================================
 # DEDUPLICATION
@@ -1241,17 +1550,21 @@ def rank_suppliers(
                     * 100
                 )
 
+                # Arama sorgusu zaten orijinal üründen
+                # üretildiği için sorgu eşleşmesine küçük
+                # bir güven tabanı ver, fakat artık herkese
+                # sabit 90 verme.
                 score = max(
-                    50,
+                    55,
                     min(
                         score,
-                        90,
+                        88,
                     ),
                 )
 
             else:
 
-                score = 50
+                score = 45
 
         supplier[
             "match_score"
@@ -1278,7 +1591,7 @@ def _tokenize(
     return [
         word
         for word in re.findall(
-            r"[a-zA-Z0-9]+",
+            r"[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*",
             text.lower(),
         )
         if len(word) >= 3
@@ -1467,3 +1780,177 @@ def _clean_image_url(
         return None
 
     return url
+
+
+# ============================================================
+# DEBUG ALIEXPRESS PRODUCT PAGE
+# ============================================================
+
+def debug_aliexpress_product(
+    product_url: str,
+) -> dict[str, Any]:
+
+    headers = {
+        **REQUEST_HEADERS,
+        "Referer": "https://www.aliexpress.com/",
+    }
+
+    result = {
+        "url": product_url,
+        "status": None,
+        "final_url": None,
+        "html_length": 0,
+        "has_og_title": False,
+        "has_og_image": False,
+        "has_description": False,
+        "has_product_json": False,
+        "product_ids_found": 0,
+        "sample_title": None,
+        "sample_image": None,
+        "page_title": None,
+        "html_preview": None,
+        "blocked": False,
+    }
+
+    try:
+        response = requests.get(
+            product_url,
+            headers=headers,
+            timeout=20,
+            allow_redirects=True,
+        )
+
+        html = response.text
+
+        result["status"] = response.status_code
+        result["final_url"] = str(response.url)
+        result["html_length"] = len(html)
+
+        soup = BeautifulSoup(
+            html,
+            "html.parser",
+        )
+
+        # PAGE TITLE + HTML PREVIEW
+        result["page_title"] = (
+            soup.title.get_text(
+                " ",
+                strip=True,
+            )
+            if soup.title
+            else None
+        )
+
+        # İlk 1000 karakteri debug amacıyla döndür.
+        result["html_preview"] = html[:1000]
+
+        # AliExpress ürün sayfası anti-bot / punish
+        # sayfasına yönlendirilmişse bunu açıkça belirt.
+        result["blocked"] = _is_bot_protection_page(
+            html
+        )
+
+        # OG TITLE
+        og_title = soup.find(
+            "meta",
+            attrs={"property": "og:title"},
+        )
+
+        if og_title:
+            result["has_og_title"] = True
+            result["sample_title"] = og_title.get(
+                "content"
+            )
+
+        # OG IMAGE
+        og_image = soup.find(
+            "meta",
+            attrs={"property": "og:image"},
+        )
+
+        if og_image:
+            result["has_og_image"] = True
+            result["sample_image"] = og_image.get(
+                "content"
+            )
+
+        # DESCRIPTION
+        description = soup.find(
+            "meta",
+            attrs={"property": "og:description"},
+        )
+
+        if not description:
+            description = soup.find(
+                "meta",
+                attrs={"name": "description"},
+            )
+
+        result["has_description"] = (
+            description is not None
+        )
+
+        # PRODUCT JSON
+        for script in soup.find_all("script"):
+
+            content = (
+                script.string
+                or script.get_text()
+                or ""
+            )
+
+            lowered = content.lower()
+
+            if any(
+                key in lowered
+                for key in [
+                    "productid",
+                    "product_id",
+                    "sku",
+                    "aliexpress",
+                ]
+            ):
+                result["has_product_json"] = True
+                break
+
+        # PRODUCT IDS
+        decoded_html = html
+
+        for _ in range(5):
+
+            decoded = unquote(decoded_html)
+
+            if decoded == decoded_html:
+                break
+
+            decoded_html = decoded
+
+        product_ids = set(
+            re.findall(
+                r"(?:/item/|%2Fitem%2F)(\d+)",
+                decoded_html,
+                re.IGNORECASE,
+            )
+        )
+
+        result["product_ids_found"] = len(
+            product_ids
+        )
+
+        print(
+            "ALIEXPRESS DEBUG:",
+            result,
+        )
+
+        return result
+
+    except Exception as error:
+
+        result["error"] = repr(error)
+
+        print(
+            "ALIEXPRESS DEBUG ERROR:",
+            repr(error),
+        )
+
+        return result

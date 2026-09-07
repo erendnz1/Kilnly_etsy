@@ -9,95 +9,230 @@ export default function HomePage() {
   const t = useTranslations();
   const locale = useLocale();
 
-  return (
+ return (
     <main className="min-h-screen bg-[#fafcfb] text-[#14201c] dark:bg-[#06110d] dark:text-[#f1f7f4]">
 
-      {/* NAVBAR */}
-      <nav className="bg-white dark:bg-[#0b1713]">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-6 lg:px-8">
+     {/* ===================================================== */}
+{/* NAVBAR */}
+{/* ===================================================== */}
 
-          {/* LOGO */}
-          <Link
-            href={`/${locale}`}
-            className="flex items-center gap-2"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#143d32] text-sm font-bold text-white">
-              C
-            </div>
+<div className="sticky top-0 z-50 px-4 pt-3 sm:px-6">
+  <nav
+    className="
+      mx-auto
+      max-w-7xl
+      rounded-full
+      border
+      border-[#e2ebe7]
+      bg-white/95
+      shadow-[0_8px_30px_rgba(20,61,50,0.06)]
+      backdrop-blur-xl
 
-            <span className="text-xl font-semibold tracking-tight text-[#143d32] dark:text-[#f1f7f4]">
-              CraftPilot
-            </span>
-          </Link>
+      dark:border-[#19382e]
+      dark:bg-[#091712]/95
+      dark:shadow-[0_8px_30px_rgba(0,0,0,0.25)]
+    "
+  >
+    <div className="flex items-center justify-between px-5 py-3.5 sm:px-6 lg:px-7">
 
-
-          {/* NAV LINKS */}
-          <div className="hidden items-center gap-8 text-sm text-[#68756f] dark:text-[#9fb4ab] md:flex">
-
-            <a
-              href="#features"
-              className="transition hover:text-[#143d32] dark:hover:text-[#79c2a9]"
-            >
-              {t("nav.features")}
-            </a>
-
-            <a
-              href="#how-it-works"
-              className="transition hover:text-[#143d32] dark:hover:text-[#79c2a9]"
-            >
-              {t("nav.howItWorks")}
-            </a>
-
-            <a
-              href="#pricing"
-              className="transition hover:text-[#143d32] dark:hover:text-[#79c2a9]"
-            >
-              {t("nav.pricing")}
-            </a>
-
-          </div>
-
-
-          {/* ACTIONS */}
-          <div className="flex items-center gap-3">
-
-            {/* LOGIN */}
-            <Link
-              href={`/${locale}/login`}
-              className="hidden text-sm font-medium text-[#46534f] transition hover:text-[#143d32] dark:text-[#c8d9d2] dark:hover:text-white sm:block"
-            >
-              {t("nav.login")}
-            </Link>
-
-
-            {/* START FREE */}
-            <Link
-              href={`/${locale}/register`}
-              className="rounded-full bg-[#143d32] px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-[#1c5143]"
-            >
-              {t("nav.startFree")}
-            </Link>
-
-
-            {/* LANGUAGE */}
-            <LanguageSwitcher />
-
-
-            {/* THEME */}
-            <ThemeToggle />
-
-          </div>
-
+      {/* LOGO */}
+      <Link
+        href={`/${locale}`}
+        className="flex items-center gap-2"
+      >
+        <div
+          className="
+            flex h-9 w-9
+            items-center justify-center
+            rounded-xl
+            bg-[#143d32]
+            text-sm font-bold
+            text-white
+            shadow-sm
+            dark:bg-[#18503e]
+          "
+        >
+          C
         </div>
-      </nav>
+
+        <span
+          className="
+            text-lg
+            font-semibold
+            tracking-tight
+            text-[#143d32]
+            dark:text-[#f1f7f4]
+          "
+        >
+          CraftPilot
+        </span>
+      </Link>
+
+
+      {/* NAV LINKS */}
+      <div
+        className="
+          hidden
+          items-center
+          gap-2
+          text-sm
+          md:flex
+        "
+      >
+
+        {/* FEATURES */}
+        <a
+          href="#features"
+          className="
+            rounded-full
+            border border-transparent
+            px-4 py-2.5
+            font-medium
+            text-[#68756f]
+            transition-all duration-200
+
+            hover:border-[#e2ebe7]
+            hover:bg-[#f6faf8]
+            hover:text-[#143d32]
+            hover:shadow-[0_2px_8px_rgba(20,61,50,0.05)]
+
+            dark:text-[#9fb4ab]
+            dark:hover:border-[#24483c]
+            dark:hover:bg-[#12251f]
+            dark:hover:text-[#79c2a9]
+          "
+        >
+          {t("nav.features")}
+        </a>
+
+
+        {/* HOW IT WORKS */}
+        <a
+          href="#how-it-works"
+          className="
+            rounded-full
+            border border-transparent
+            px-4 py-2.5
+            font-medium
+            text-[#68756f]
+            transition-all duration-200
+
+            hover:border-[#e2ebe7]
+            hover:bg-[#f6faf8]
+            hover:text-[#143d32]
+            hover:shadow-[0_2px_8px_rgba(20,61,50,0.05)]
+
+            dark:text-[#9fb4ab]
+            dark:hover:border-[#24483c]
+            dark:hover:bg-[#12251f]
+            dark:hover:text-[#79c2a9]
+          "
+        >
+          {t("nav.howItWorks")}
+        </a>
+
+
+        {/* PRICING */}
+        <a
+          href="#pricing"
+          className="
+            rounded-full
+            border border-transparent
+            px-4 py-2.5
+            font-medium
+            text-[#68756f]
+            transition-all duration-200
+
+            hover:border-[#e2ebe7]
+            hover:bg-[#f6faf8]
+            hover:text-[#143d32]
+            hover:shadow-[0_2px_8px_rgba(20,61,50,0.05)]
+
+            dark:text-[#9fb4ab]
+            dark:hover:border-[#24483c]
+            dark:hover:bg-[#12251f]
+            dark:hover:text-[#79c2a9]
+          "
+        >
+          {t("nav.pricing")}
+        </a>
+
+      </div>
+
+
+      {/* ACTIONS */}
+      <div className="flex items-center gap-2 sm:gap-3">
+
+        {/* LOGIN */}
+        <Link
+          href={`/${locale}/login`}
+          className="
+            hidden
+            text-sm
+            font-medium
+            text-[#46534f]
+            transition
+            hover:text-[#143d32]
+            dark:text-[#c8d9d2]
+            dark:hover:text-white
+            sm:block
+          "
+        >
+          {t("nav.login")}
+        </Link>
+
+
+        {/* START FREE */}
+        <Link
+          href={`/${locale}/register`}
+          className="
+            rounded-full
+            bg-[#143d32]
+            px-4 py-2.5
+            text-sm font-semibold
+            text-white
+            shadow-[0_4px_14px_rgba(20,61,50,0.12)]
+            transition-all duration-200
+
+            hover:-translate-y-0.5
+            hover:bg-[#1c5143]
+            hover:shadow-[0_6px_18px_rgba(20,61,50,0.18)]
+
+            sm:px-5
+          "
+        >
+          {t("nav.startFree")}
+        </Link>
+
+
+        {/* LANGUAGE */}
+        <LanguageSwitcher />
+
+
+        {/* THEME */}
+        <ThemeToggle />
+
+      </div>
+
+    </div>
+  </nav>
+</div>
+
+
+      {/* ===================================================== */}
       {/* HERO */}
+      {/* ===================================================== */}
+
       <section
         className="
-    relative isolate overflow-hidden
-    bg-[#f4faf7]
-    dark:bg-[#020806]
-  "
+          relative
+          isolate
+          overflow-hidden
+          bg-[#f4faf7]
+          dark:bg-[#020806]
+        "
       >
+
         {/* ===================================================== */}
         {/* DARK MODE BACKGROUND EFFECTS */}
         {/* ===================================================== */}
@@ -105,100 +240,140 @@ export default function HomePage() {
         {/* Ana yeşil radial glow */}
         <div
           className="
-      pointer-events-none absolute inset-0 -z-20
-      opacity-0
-      dark:opacity-100
-      bg-[radial-gradient(circle_at_50%_25%,rgba(20,110,78,0.28),transparent_42%)]
-    "
+            pointer-events-none
+            absolute
+            inset-0
+            -z-20
+            bg-[radial-gradient(circle_at_50%_25%,rgba(20,110,78,0.28),transparent_42%)]
+            opacity-0
+            dark:opacity-100
+          "
         />
+
 
         {/* Üst merkez ışığı */}
         <div
           className="
-      pointer-events-none absolute left-1/2 top-[-180px] -z-10
-      h-[520px] w-[900px]
-      -translate-x-1/2
-      rounded-full
-      bg-[#1fa875]/20
-      blur-[120px]
-      opacity-0
-      dark:opacity-100
-    "
+            pointer-events-none
+            absolute
+            left-1/2
+            top-[-180px]
+            -z-10
+            h-[520px]
+            w-[900px]
+            -translate-x-1/2
+            rounded-full
+            bg-[#1fa875]/20
+            blur-[120px]
+            opacity-0
+            dark:opacity-100
+          "
         />
+
 
         {/* Alt merkez yeşil ışık */}
         <div
           className="
-      pointer-events-none absolute left-1/2 bottom-[-260px] -z-10
-      h-[520px] w-[900px]
-      -translate-x-1/2
-      rounded-full
-      bg-[#0f8f61]/25
-      blur-[110px]
-      opacity-0
-      dark:opacity-100
-    "
+            pointer-events-none
+            absolute
+            bottom-[-260px]
+            left-1/2
+            -z-10
+            h-[520px]
+            w-[900px]
+            -translate-x-1/2
+            rounded-full
+            bg-[#0f8f61]/25
+            blur-[110px]
+            opacity-0
+            dark:opacity-100
+          "
         />
+
 
         {/* Sol alt neon glow */}
         <div
           className="
-      pointer-events-none absolute -left-40 bottom-[-100px] -z-10
-      h-[420px] w-[420px]
-      rounded-full
-      bg-[#16a36d]/20
-      blur-[100px]
-      opacity-0
-      dark:opacity-100
-    "
+            pointer-events-none
+            absolute
+            -bottom-[100px]
+            -left-40
+            -z-10
+            h-[420px]
+            w-[420px]
+            rounded-full
+            bg-[#16a36d]/20
+            blur-[100px]
+            opacity-0
+            dark:opacity-100
+          "
         />
+
 
         {/* Sağ alt neon glow */}
         <div
           className="
-      pointer-events-none absolute -right-40 bottom-[-100px] -z-10
-      h-[420px] w-[420px]
-      rounded-full
-      bg-[#16a36d]/20
-      blur-[100px]
-      opacity-0
-      dark:opacity-100
-    "
+            pointer-events-none
+            absolute
+            -bottom-[100px]
+            -right-40
+            -z-10
+            h-[420px]
+            w-[420px]
+            rounded-full
+            bg-[#16a36d]/20
+            blur-[100px]
+            opacity-0
+            dark:opacity-100
+          "
         />
+
 
         {/* ===================================================== */}
         {/* LARGE NEON ARC */}
         {/* ===================================================== */}
 
-        {/* LARGE NEON ARC */}
         <div
           className="
-    pointer-events-none absolute left-1/2 top-[100px] -z-10
-    h-[780px] w-[1180px]
-    -translate-x-1/2
-    rounded-[50%]
-    border border-transparent
-    opacity-0
-    dark:opacity-100
-    [border-top-color:rgba(44,190,132,0.16)]
-    [box-shadow:0_-10px_45px_rgba(25,180,120,0.04)]
-  "
+            pointer-events-none
+            absolute
+            left-1/2
+            top-[100px]
+            -z-10
+            h-[780px]
+            w-[1180px]
+            -translate-x-1/2
+            rounded-[50%]
+            border
+            border-transparent
+            opacity-0
+            dark:opacity-100
+            [border-top-color:rgba(44,190,132,0.16)]
+            [box-shadow:0_-10px_45px_rgba(25,180,120,0.04)]
+          "
         />
 
-        {/* İç neon arc */}
+
         {/* İç neon arc */}
         <div
           className="
-    pointer-events-none absolute left-1/2 top-[190px] -z-10
-    h-[600px] w-[920px]
-    -translate-x-1/2
-    rounded-[50%]
-    border border-transparent
-    opacity-0
-    dark:opacity-100
-    [border-top-color:rgba(79,220,160,0.09)]
-  "
+            pointer-events-none
+            absolute
+            left-1/2
+            top-[190px]
+            -z-10
+            h-[600px]
+            w-[920px]
+            -translate-x-1/2
+            rounded-[50%]
+            border
+            border-transparent
+            opacity-0
+            dark:opacity-100
+            [border-top-color:rgba(79,220,160,0.09)]
+          "
         />
+
 
         {/* ===================================================== */}
         {/* TOP LIGHT LINE */}
@@ -206,1153 +381,2332 @@ export default function HomePage() {
 
         <div
           className="
-      pointer-events-none absolute left-1/2 top-0 -z-10
-      h-px w-[70%]
-      -translate-x-1/2
-      bg-transparent
-      opacity-0
-      dark:opacity-100
-      shadow-[0_0_25px_8px_rgba(52,211,153,0.18)]
-    "
+            pointer-events-none
+            absolute
+            left-1/2
+            top-0
+            -z-10
+            h-px
+            w-[70%]
+            -translate-x-1/2
+            bg-transparent
+            opacity-0
+            dark:opacity-100
+            shadow-[0_0_25px_8px_rgba(52,211,153,0.18)]
+          "
         />
 
+
         {/* ===================================================== */}
-        {/* HERO */}
+        {/* HERO CONTAINER */}
         {/* ===================================================== */}
 
-        <div className="mx-auto max-w-7xl px-6 pb-24 pt-20 lg:px-8 lg:pb-32 lg:pt-28">
-
-          {/* HERO CONTENT */}
-          <div className="relative z-10 mx-auto max-w-4xl text-center">
-
-            {/* BADGE */}
-            <div
-              className="
-          mb-8 inline-flex items-center gap-2 rounded-full
-          border border-[#d7e5df]
-          bg-white
-          px-4 py-2
-          text-sm text-[#596861]
-          shadow-sm
-
-          dark:border-[#1b5742]
-          dark:bg-[#071a13]
-          dark:text-[#b9d8cb]
-          dark:shadow-[0_0_25px_rgba(37,180,125,0.08)]
-        "
-            >
-              <span
-                className="
-            h-2 w-2 rounded-full
-            bg-[#55a98d]
-            dark:bg-[#4ade80]
-            dark:shadow-[0_0_12px_rgba(74,222,128,0.9)]
+        <div
+          className="
+            mx-auto
+            max-w-7xl
+            px-6
+            pb-12
+            pt-10
+            lg:px-8
+            lg:pb-16
+            lg:pt-14
           "
-              />
+        >
 
-              {t("hero.badge")}
-            </div>
+          {/* =================================================== */}
+          {/* HERO SPLIT */}
+          {/* =================================================== */}
 
+          <div
+            className="
+              grid
+              items-center
+              gap-10
+              lg:grid-cols-[0.9fr_1.1fr]
+              lg:gap-10
+              xl:gap-12
+            "
+          >
 
-            {/* TITLE */}
-            <h1
-              className="
-          text-5xl font-semibold
-          leading-[1.03]
-          tracking-[-0.045em]
-          text-[#143d32]
+            {/* ================================================= */}
+            {/* LEFT SIDE - TEXT */}
+            {/* ================================================= */}
 
-          dark:bg-gradient-to-b
-          dark:from-white
-          dark:via-[#f1f8f5]
-          dark:to-[#9acdb8]
-          dark:bg-clip-text
-          dark:text-transparent
-
-          sm:text-6xl
-          lg:text-7xl
-        "
-            >
-              {t("hero.title")}
-            </h1>
-
-
-            {/* DESCRIPTION */}
-            <p
-              className="
-          mx-auto mt-7 max-w-2xl
-          text-lg leading-8
-          text-[#697671]
-
-          dark:text-[#9bb8ad]
-
-          sm:text-xl
-        "
-            >
-              {t("hero.description")}
-            </p>
-
-
-            {/* BUTTONS */}
-            {/* BUTTONS */}
-<div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-
-  {/* ANALYZE MY STORE */}
-  <Link
-    href={`/${locale}/register`}
-    className="rounded-full bg-[#143d32] px-7 py-3.5 text-sm font-semibold text-white shadow-lg shadow-[#143d32]/10 transition hover:-translate-y-0.5 hover:bg-[#1c5143]"
-  >
-    {t("hero.primaryButton")}
-  </Link>
-
-  {/* SEE HOW IT WORKS */}
-  <a
-    href="#how-it-works"
-    className="rounded-full border border-[#d8e2de] bg-white px-7 py-3.5 text-sm font-semibold text-[#30413b] transition hover:bg-[#f4f8f6] dark:border-[#29483d] dark:bg-[#12231e] dark:text-[#d8e8e1] dark:hover:bg-[#193129]"
-  >
-    {t("hero.secondaryButton")}
-  </a>
-
-</div>
-
-
-            {/* NOTE */}
-            <p
-              className="
-          mt-4 text-xs
-          text-[#8c9894]
-          dark:text-[#6f8d81]
-        "
-            >
-              {t("hero.note")}
-            </p>
-
-          </div>
-
-
-          {/* ===================================================== */}
-          {/* PRODUCT PREVIEW */}
-          {/* ===================================================== */}
-
-          <div className="relative mx-auto mt-16 max-w-6xl">
-
-            {/* HUGE GREEN GLOW BEHIND DASHBOARD */}
             <div
               className="
-          pointer-events-none absolute
-          -inset-20
-          rounded-[50%]
-          bg-transparent
-
-          dark:bg-[radial-gradient(ellipse_at_center,rgba(18,145,94,0.30),transparent_65%)]
-          dark:blur-3xl
-        "
-            />
-
-            {/* Dashboard glow */}
-            <div
-              className="
-          pointer-events-none absolute
-          left-1/2 top-1/2
-          h-[300px] w-[700px]
-          -translate-x-1/2 -translate-y-1/2
-          rounded-full
-          bg-[#cfeee1]/50
-          blur-3xl
-
-          dark:bg-[#15966a]/15
-          dark:blur-[100px]
-        "
-            />
-
-            {/* OUTER FRAME */}
-            <div
-              className="
-          relative rounded-[28px]
-          border border-[#dce8e3]
-          bg-white
-          p-2
-          shadow-[0_35px_100px_rgba(20,61,50,0.14)]
-
-          dark:border-[#174c3b]
-          dark:bg-[#07140f]
-          dark:shadow-[0_35px_100px_rgba(0,0,0,0.65)]
-        "
+                relative
+                z-10
+                text-center
+                lg:text-left
+              "
             >
 
-              {/* BROWSER */}
+              {/* BADGE */}
               <div
                 className="
-            overflow-hidden rounded-[22px]
-            border border-[#e7eeeb]
+                  mb-7
+                  inline-flex
+                  items-center
+                  gap-2
+                  rounded-full
+                  border
+                  border-[#d7e5df]
+                  bg-white
+                  px-4
+                  py-2
+                  text-sm
+                  text-[#596861]
+                  shadow-sm
 
-            dark:border-[#1c4637]
-            dark:bg-[#07120e]
-          "
+                  dark:border-[#1b5742]
+                  dark:bg-[#071a13]
+                  dark:text-[#b9d8cb]
+                  dark:shadow-[0_0_25px_rgba(37,180,125,0.08)]
+                "
+              >
+                <span
+                  className="
+                    h-2
+                    w-2
+                    rounded-full
+                    bg-[#55a98d]
+                    dark:bg-[#4ade80]
+                    dark:shadow-[0_0_12px_rgba(74,222,128,0.9)]
+                  "
+                />
+
+                {t("hero.badge")}
+              </div>
+
+
+              {/* TITLE */}
+              <h1
+                className="
+                  max-w-2xl
+                  text-5xl
+                  font-semibold
+                  leading-[1.02]
+                  tracking-[-0.045em]
+                  text-[#143d32]
+
+                  dark:bg-gradient-to-b
+                  dark:from-white
+                  dark:via-[#f1f8f5]
+                  dark:to-[#9acdb8]
+                  dark:bg-clip-text
+                  dark:text-transparent
+
+                  sm:text-5xl
+                  lg:text-[3.6rem]
+                  xl:text-[4rem]
+                "
+              >
+                {t("hero.title")}
+              </h1>
+
+
+              {/* DESCRIPTION */}
+              <p
+                className="
+                  mx-auto
+                  mt-7
+                  max-w-xl
+                  text-lg
+                  leading-8
+                  text-[#697671]
+
+                  dark:text-[#9bb8ad]
+
+                  sm:text-xl
+                  lg:mx-0
+                "
+              >
+                {t("hero.description")}
+              </p>
+
+
+              {/* BUTTONS */}
+              <div
+                className="
+                  mt-9
+                  flex
+                  flex-col
+                  justify-center
+                  gap-3
+                  sm:flex-row
+                  lg:justify-start
+                "
               >
 
-                {/* BROWSER HEADER */}
-                <div
+                {/* PRIMARY */}
+                <Link
+                  href={`/${locale}/register`}
                   className="
-              flex items-center gap-2
-              border-b border-[#edf1ef]
-              bg-[#fbfcfb]
-              px-5 py-4
-
-              dark:border-[#18372c]
-              dark:bg-[#091914]
-            "
-                >
-
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#d9e1de] dark:bg-[#28483c]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#d9e1de] dark:bg-[#28483c]" />
-                  <span className="h-2.5 w-2.5 rounded-full bg-[#d9e1de] dark:bg-[#28483c]" />
-
-                  <div
-                    className="
-                mx-auto hidden rounded-full
-                bg-[#f0f4f2]
-                px-24 py-1.5
-                text-xs text-[#9aa6a1]
-
-                dark:bg-[#10271e]
-                dark:text-[#6e8c80]
-
-                sm:block
-              "
-                  >
-                    app.craftpilot.ai
-                  </div>
-
-                </div>
-
-
-                {/* DASHBOARD */}
-                <div className="grid min-h-[430px] md:grid-cols-[190px_1fr]">
-
-                  {/* SIDEBAR */}
-                  <aside
-                    className="
-                hidden
-                border-r border-[#edf1ef]
-                bg-[#fbfcfb]
-                p-5
-
-                dark:border-[#18372c]
-                dark:bg-[#091914]
-
-                md:block
-              "
-                  >
-
-                    <div className="mb-9 flex items-center gap-2">
-
-                      <div className="h-7 w-7 rounded-lg bg-[#143d32] dark:bg-[#0e7553]" />
-
-                      <div className="h-3 w-20 rounded-full bg-[#dce6e2] dark:bg-[#254337]" />
-
-                    </div>
-
-
-                    <div className="space-y-2">
-
-                      {/* ACTIVE */}
-                      <div
-                        className="
-                    rounded-xl
-                    bg-[#e5f2ed]
-                    px-3 py-2.5
-                    text-xs font-semibold
-                    text-[#286653]
-
-                    dark:bg-[#0d4935]
-                    dark:text-[#72e0b0]
-                    dark:shadow-[0_0_18px_rgba(34,197,139,0.08)]
-                  "
-                      >
-                        {t("dashboard.overview")}
-                      </div>
-
-
-                      <div className="px-3 py-2.5 text-xs text-[#87938e] dark:text-[#668177]">
-                        AI Listings
-                      </div>
-
-                      <div className="px-3 py-2.5 text-xs text-[#87938e] dark:text-[#668177]">
-                        Keywords
-                      </div>
-
-                      <div className="px-3 py-2.5 text-xs text-[#87938e] dark:text-[#668177]">
-                        {t("dashboard.storeHealth")}
-                      </div>
-
-                      <div className="px-3 py-2.5 text-xs text-[#87938e] dark:text-[#668177]">
-                        AI Coach
-                      </div>
-
-                    </div>
-
-                  </aside>
-
-
-                  {/* DASHBOARD CONTENT */}
-                  <div
-                    className="
-                bg-white
-                p-6
-
-                dark:bg-[#07140f]
-
-                sm:p-8
-              "
-                  >
-
-                    {/* HEADER */}
-                    <div className="flex items-start justify-between">
-
-                      <div>
-
-                        <p className="text-xs text-[#9aa6a1] dark:text-[#688379]">
-                          {t("dashboard.overview")}
-                        </p>
-
-                        <h3 className="mt-1 text-2xl font-semibold text-[#171f1c] dark:text-[#edf8f3]">
-                          {t("dashboard.greeting")}
-                        </h3>
-
-                      </div>
-
-
-                      {/* CREDITS */}
-                      <div
-                        className="
                     rounded-full
-                    bg-[#edf7f3]
-                    px-3 py-1.5
-                    text-xs font-semibold
-                    text-[#367861]
-
-                    dark:bg-[#0c3829]
-                    dark:text-[#6de1ad]
+                    bg-[#143d32]
+                    px-7
+                    py-3.5
+                    text-sm
+                    font-semibold
+                    text-white
+                    shadow-lg
+                    shadow-[#143d32]/10
+                    transition
+                    hover:-translate-y-0.5
+                    hover:bg-[#1c5143]
                   "
-                      >
-                        {t("dashboard.credits")}
-                      </div>
-
-                    </div>
+                >
+                  {t("hero.primaryButton")}
+                </Link>
 
 
-                    {/* STATS */}
-                    <div className="mt-7 grid gap-4 sm:grid-cols-3">
+                {/* SECONDARY */}
+                <a
+                  href="#how-it-works"
+                  className="
+                    rounded-full
+                    border
+                    border-[#d8e2de]
+                    bg-white
+                    px-7
+                    py-3.5
+                    text-sm
+                    font-semibold
+                    text-[#30413b]
+                    transition
+                    hover:bg-[#f4f8f6]
 
-                      {/* STORE HEALTH */}
-                      <div
-                        className="
-                    rounded-2xl
-                    bg-[#f6f9f7]
-                    p-4
-
-                    dark:border dark:border-[#173b2e]
-                    dark:bg-[#0b1d16]
-                    dark:shadow-[0_0_25px_rgba(21,150,106,0.04)]
+                    dark:border-[#29483d]
+                    dark:bg-[#12231e]
+                    dark:text-[#d8e8e1]
+                    dark:hover:bg-[#193129]
                   "
-                      >
-
-                        <p className="text-xs text-[#8b9792] dark:text-[#688379]">
-                          {t("dashboard.storeHealth")}
-                        </p>
-
-                        <div className="mt-3 flex items-end gap-1">
-
-                          <span className="text-3xl font-semibold text-[#171f1c] dark:text-[#edf8f3]">
-                            82
-                          </span>
-
-                          <span className="mb-1 text-xs text-[#65a48f]">
-                            /100
-                          </span>
-
-                        </div>
-
-                      </div>
-
-
-                      {/* LISTINGS */}
-                      <div
-                        className="
-                    rounded-2xl
-                    bg-[#f6f9f7]
-                    p-4
-
-                    dark:border dark:border-[#173b2e]
-                    dark:bg-[#0b1d16]
-                  "
-                      >
-
-                        <p className="text-xs text-[#8b9792] dark:text-[#688379]">
-                          {t("dashboard.listings")}
-                        </p>
-
-                        <p className="mt-3 text-3xl font-semibold text-[#171f1c] dark:text-[#edf8f3]">
-                          47
-                        </p>
-
-                      </div>
-
-
-                      {/* OPPORTUNITIES */}
-                      <div
-                        className="
-                    rounded-2xl
-                    bg-[#f6f9f7]
-                    p-4
-
-                    dark:border dark:border-[#173b2e]
-                    dark:bg-[#0b1d16]
-                  "
-                      >
-
-                        <p className="text-xs text-[#8b9792] dark:text-[#688379]">
-                          {t("dashboard.opportunities")}
-                        </p>
-
-                        <p className="mt-3 text-3xl font-semibold text-[#171f1c] dark:text-[#edf8f3]">
-                          12
-                        </p>
-
-                      </div>
-
-                    </div>
-
-
-                    {/* AI OPPORTUNITY */}
-                    <div
-                      className="
-                  mt-5
-                  rounded-2xl
-                  border border-[#e4ebe8]
-                  p-5
-
-                  dark:border-[#1a4737]
-                  dark:bg-[#081a13]
-                  dark:shadow-[0_0_30px_rgba(21,150,106,0.05)]
-                "
-                    >
-
-                      <div className="flex items-start justify-between gap-4">
-
-                        <div>
-
-                          <div className="flex items-center gap-2">
-
-                            <span
-                              className="
-                          h-2 w-2 rounded-full
-                          bg-[#55a98d]
-
-                          dark:bg-[#4ade80]
-                          dark:shadow-[0_0_12px_rgba(74,222,128,0.8)]
-                        "
-                            />
-
-                            <p className="text-sm font-semibold text-[#171f1c] dark:text-[#edf8f3]">
-                              {t("dashboard.aiOpportunity")}
-                            </p>
-
-                          </div>
-
-                          <p className="mt-3 max-w-lg text-sm leading-6 text-[#717e79] dark:text-[#8eaba0]">
-                            {t("dashboard.opportunityText")}
-                          </p>
-
-                        </div>
-
-
-                        {/* FIX WITH AI */}
-                        <div
-                          className="
-                      hidden rounded-full
-                      bg-[#143d32]
-                      px-4 py-2
-                      text-xs font-semibold text-white
-
-                      dark:bg-[#15966a]
-                      dark:shadow-[0_0_20px_rgba(21,150,106,0.2)]
-
-                      sm:block
-                    "
-                        >
-                          {t("dashboard.fixWithAi")}
-                        </div>
-
-                      </div>
-
-
-                      {/* AI METRICS */}
-                      <div className="mt-5 grid gap-3 sm:grid-cols-3">
-
-                        <div className="rounded-xl bg-[#f7f9f8] p-3 dark:bg-[#0d2018]">
-
-                          <p className="text-[11px] text-[#929d99] dark:text-[#688379]">
-                            {t("dashboard.priority")}
-                          </p>
-
-                          <p className="mt-1 text-sm font-semibold text-[#171f1c] dark:text-[#e1eee8]">
-                            {t("dashboard.high")}
-                          </p>
-
-                        </div>
-
-
-                        <div className="rounded-xl bg-[#f7f9f8] p-3 dark:bg-[#0d2018]">
-
-                          <p className="text-[11px] text-[#929d99] dark:text-[#688379]">
-                            {t("dashboard.impact")}
-                          </p>
-
-                          <p className="mt-1 text-sm font-semibold text-[#171f1c] dark:text-[#e1eee8]">
-                            {t("dashboard.seo")}
-                          </p>
-
-                        </div>
-
-
-                        <div className="rounded-xl bg-[#f7f9f8] p-3 dark:bg-[#0d2018]">
-
-                          <p className="text-[11px] text-[#929d99] dark:text-[#688379]">
-                            {t("dashboard.action")}
-                          </p>
-
-                          <p className="mt-1 text-sm font-semibold text-[#171f1c] dark:text-[#e1eee8]">
-                            {t("dashboard.optimize")}
-                          </p>
-
-                        </div>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
+                >
+                  {t("hero.secondaryButton")}
+                </a>
 
               </div>
 
+
+              {/* NOTE */}
+              <p
+                className="
+                  mt-4
+                  text-xs
+                  text-[#8c9894]
+                  dark:text-[#6f8d81]
+                "
+              >
+                {t("hero.note")}
+              </p>
+
             </div>
 
-          </div>
 
-        </div>
-      </section>
-     {/* THE DIFFERENCE */}
-<section className="relative overflow-hidden border-y border-[#dfece6] bg-[#f1f8f5] dark:border-[#1d342c] dark:bg-[#0f1d18]">
+            {/* ================================================= */}
+            {/* RIGHT SIDE - DASHBOARD */}
+            {/* ================================================= */}
+{/* ================================================= */}
+{/* RIGHT SIDE - VIDEO */}
+{/* ================================================= */}
 
-  {/* BACKGROUND GLOW */}
-  <div className="pointer-events-none absolute -right-40 top-20 h-[420px] w-[420px] rounded-full bg-[#d8efe5]/60 blur-3xl dark:bg-[#174c3b]/30" />
+<div className="relative">
 
-  <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+  {/* HUGE GREEN GLOW */}
+  <div
+    className="
+      pointer-events-none
+      absolute
+      -inset-16
+      rounded-[50%]
+      bg-[#cfeee1]/50
+      blur-3xl
 
-    {/* HEADER */}
-    <div className="mx-auto max-w-3xl text-center">
+      dark:bg-[radial-gradient(
+        ellipse_at_center,
+        rgba(18,145,94,0.32),
+        transparent_65%
+      )]
+    "
+  />
 
-      <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4b9b83]">
+  {/* VIDEO GLOW */}
+  <div
+    className="
+      pointer-events-none
+      absolute
+      left-1/2
+      top-1/2
+      h-[320px]
+      w-[700px]
+      -translate-x-1/2
+      -translate-y-1/2
+      rounded-full
+      bg-[#15966a]/15
+      blur-[100px]
+    "
+  />
+
+  {/* VIDEO FRAME */}
+  <div
+    className="
+      relative
+      overflow-hidden
+      rounded-[28px]
+      border
+      border-[#dce8e3]
+      bg-white
+      p-2
+      shadow-[0_35px_100px_rgba(20,61,50,0.14)]
+
+      dark:border-[#174c3b]
+      dark:bg-[#07140f]
+      dark:shadow-[0_35px_100px_rgba(0,0,0,0.65)]
+    "
+  >
+
+    <video
+      src="/videos/Create_a_premium_–_second.mp4"
+      autoPlay
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      className="
+        block
+        aspect-video
+        w-full
+        rounded-[22px]
+        object-cover
+      "
+    />
+
+  </div>
+
+  {/* VIDEO BADGE */}
+  <div
+    className="
+      absolute
+      -bottom-5
+      left-6
+      flex
+      items-center
+      gap-2
+      rounded-full
+      border
+      border-[#d7e8e1]
+      bg-white
+      px-4
+      py-2.5
+      text-sm
+      font-semibold
+      text-[#173c31]
+      shadow-[0_12px_30px_rgba(20,61,50,0.12)]
+
+      dark:border-[#31564a]
+      dark:bg-[#12251f]
+      dark:text-[#dcece6]
+    "
+  >
+
+    <span
+      className="
+        flex
+        h-6
+        w-6
+        items-center
+        justify-center
+        rounded-full
+        bg-[#dff2ea]
+        text-xs
+        text-[#23745d]
+
+        dark:bg-[#193b30]
+        dark:text-[#79c2a9]
+      "
+    >
+      ✦
+    </span>
+
+      {t("hero.videoBadge")}
+
+  </div>
+
+</div>
+
+</div>   {/* HERO SPLIT */}
+</div>   {/* HERO CONTAINER */}
+</section> {/* HERO */}
+
+{/* THE DIFFERENCE */}
+<section
+  className="
+    relative overflow-hidden
+    border-y border-[#dfece6]
+    bg-[#f1f8f5]
+    dark:border-[#1d342c]
+    dark:bg-[#0f1d18]
+  "
+>
+  {/* BACKGROUND GLOWS */}
+  <div
+    className="
+      pointer-events-none
+      absolute -left-40 top-10
+      h-[500px] w-[500px]
+      rounded-full
+      bg-[#d8efe5]/60
+      blur-3xl
+      dark:bg-[#174c3b]/20
+    "
+  />
+
+  <div
+    className="
+      pointer-events-none
+      absolute -right-40 bottom-0
+      h-[500px] w-[500px]
+      rounded-full
+      bg-[#ccebdd]/50
+      blur-3xl
+      dark:bg-[#174c3b]/20
+    "
+  />
+
+  <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-24">
+
+    {/* TOP HEADER */}
+    <div className="mx-auto max-w-4xl text-center">
+
+      {/* EYEBROW */}
+      <p
+        className="
+          text-sm
+          font-semibold
+          uppercase
+          tracking-[0.2em]
+          text-[#3f967c]
+        "
+      >
         {t("theDifference.eyebrow")}
       </p>
 
-      <h2 className="mt-4 text-4xl font-semibold leading-tight tracking-tight dark:text-[#f1f7f4] sm:text-5xl">
+      {/* TITLE */}
+      <h2
+        className="
+          mx-auto
+          mt-4
+          max-w-4xl
+          text-4xl
+          font-semibold
+          leading-[1.08]
+          tracking-tight
+          text-[#102d25]
+          dark:text-[#f1f7f4]
+          sm:text-5xl
+          lg:text-[54px]
+          xl:text-[58px]
+        "
+      >
         {t("theDifference.title")}
       </h2>
 
-      <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-[#697671] dark:text-[#9fb4ab]">
+      {/* DESCRIPTION */}
+      <p
+        className="
+          mx-auto
+          mt-5
+          max-w-3xl
+          text-base
+          leading-7
+          text-[#697671]
+          dark:text-[#9fb4ab]
+          sm:text-lg
+          sm:leading-8
+        "
+      >
         {t("theDifference.description")}
       </p>
 
     </div>
 
 
-    {/* CONTENT */}
-    <div className="relative mx-auto mt-14 grid max-w-6xl gap-6 md:grid-cols-[0.85fr_1.15fr]">
+    {/* BOTTOM CONTENT */}
+    <div
+      className="
+        mx-auto
+        mt-14
+        grid
+        max-w-6xl
+        items-center
+        gap-10
+        lg:grid-cols-[0.7fr_1.3fr]
+        lg:gap-14
+      "
+    >
 
-      {/* STORE */}
-      <div className="rounded-3xl border border-[#dfe9e4] bg-white p-7 shadow-sm dark:border-[#29483d] dark:bg-[#12231e] dark:shadow-black/20">
+      {/* LEFT - FEATURES */}
+      <div className="relative max-w-md">
 
-        {/* STORE HEADER */}
-        <div className="flex items-center justify-between">
-
-          <div>
-            <p className="text-xs uppercase tracking-wider text-[#929d99] dark:text-[#71877e]">
-              {t("theDifference.storeTitle")}
-            </p>
-
-            <p className="mt-1 text-lg font-semibold dark:text-[#f1f7f4]">
-              {t("theDifference.storeName")}
-            </p>
-          </div>
-
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#edf7f3] text-[#34745f] dark:bg-[#193b30] dark:text-[#79c2a9]">
-            ✦
-          </div>
-
-        </div>
-
-
-        {/* STORE METRICS */}
-        <div className="mt-7 space-y-3">
-
-          <div className="flex items-center justify-between rounded-2xl bg-[#f7f9f8] p-4 dark:bg-[#172a24]">
-            <span className="text-sm text-[#6f7c77] dark:text-[#91a79e]">
-              {t("theDifference.listings")}
-            </span>
-
-            <span className="font-semibold dark:text-[#e5f0eb]">
-              47
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between rounded-2xl bg-[#f7f9f8] p-4 dark:bg-[#172a24]">
-            <span className="text-sm text-[#6f7c77] dark:text-[#91a79e]">
-              {t("theDifference.health")}
-            </span>
-
-            <span className="font-semibold text-[#34745f] dark:text-[#79c2a9]">
-              82/100
-            </span>
-          </div>
-
-          <div className="flex items-center justify-between rounded-2xl bg-[#f7f9f8] p-4 dark:bg-[#172a24]">
-            <span className="text-sm text-[#6f7c77] dark:text-[#91a79e]">
-              {t("theDifference.opportunities")}
-            </span>
-
-            <span className="font-semibold dark:text-[#e5f0eb]">
-              12
-            </span>
-          </div>
-
-        </div>
-
-      </div>
+        {/* FEATURE TITLE */}
+        <p
+          className="
+            text-xs
+            font-semibold
+            uppercase
+            tracking-[0.16em]
+            text-[#82918b]
+            dark:text-[#6f887d]
+          "
+        >
+          {locale === "tr"
+            ? "CraftPilot mağazanız için ne yapar?"
+            : "What CraftPilot does for your store"}
+        </p>
 
 
-      {/* AI */}
-      <div className="relative overflow-hidden rounded-3xl bg-[#143d32] p-7 text-white shadow-[0_25px_70px_rgba(20,61,50,0.18)] dark:shadow-[0_25px_70px_rgba(0,0,0,0.35)]">
+        {/* FEATURE POINTS */}
+        <div className="mt-6 space-y-4">
 
-        {/* AI GLOW */}
-        <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[#55a98d]/20 blur-3xl" />
+          {/* SEO */}
+          <div className="flex items-start gap-3">
 
-        {/* AI HEADER */}
-        <div className="relative flex items-center gap-3">
-
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10">
-            ✦
-          </div>
-
-          <div>
-            <p className="text-xs text-white/50">
-              AI
-            </p>
-
-            <p className="font-semibold">
-              {t("theDifference.aiTitle")}
-            </p>
-          </div>
-
-        </div>
-
-
-        {/* AI INSIGHTS */}
-        <div className="relative mt-7 space-y-3">
-
-          {[
-            t("theDifference.seoIssues"),
-            t("theDifference.weakListings"),
-            t("theDifference.pricingIssue"),
-            t("theDifference.keywordOpportunity"),
-          ].map((item, index) => (
-
-            <div
-              key={item}
-              className="flex items-start gap-3 rounded-2xl bg-white/[0.07] p-4"
+            <span
+              className="
+                mt-0.5
+                flex h-8 w-8 shrink-0
+                items-center justify-center
+                rounded-full
+                bg-[#dff2ea]
+                text-sm
+                font-semibold
+                text-[#23745d]
+                dark:bg-[#193b30]
+                dark:text-[#79c2a9]
+              "
             >
+              ✓
+            </span>
 
-              <span className="mt-1 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-white/10 text-[10px]">
-                {index === 3 ? "↑" : "!"}
-              </span>
+            <div>
+              <p
+                className="
+                  text-sm
+                  font-semibold
+                  text-[#183a31]
+                  dark:text-[#e5f0eb]
+                "
+              >
+                {t("theDifference.seoIssues")}
+              </p>
 
-              <span className="text-sm leading-6 text-white/80">
-                {item}
-              </span>
-
+              <p
+                className="
+                  mt-1
+                  text-sm
+                  leading-6
+                  text-[#71807b]
+                  dark:text-[#91a79e]
+                "
+              >
+                {locale === "tr"
+                  ? "Ürün başlıklarını, etiketleri ve SEO fırsatlarını analiz eder."
+                  : "Analyze titles, tags and SEO opportunities."}
+              </p>
             </div>
 
-          ))}
+          </div>
+
+
+          {/* LISTINGS */}
+          <div className="flex items-start gap-3">
+
+            <span
+              className="
+                mt-0.5
+                flex h-8 w-8 shrink-0
+                items-center justify-center
+                rounded-full
+                bg-[#dff2ea]
+                text-sm
+                font-semibold
+                text-[#23745d]
+                dark:bg-[#193b30]
+                dark:text-[#79c2a9]
+              "
+            >
+              ✓
+            </span>
+
+            <div>
+              <p
+                className="
+                  text-sm
+                  font-semibold
+                  text-[#183a31]
+                  dark:text-[#e5f0eb]
+                "
+              >
+                {t("theDifference.weakListings")}
+              </p>
+
+              <p
+                className="
+                  mt-1
+                  text-sm
+                  leading-6
+                  text-[#71807b]
+                  dark:text-[#91a79e]
+                "
+              >
+                {locale === "tr"
+                  ? "Zayıf ürünleri ve geliştirilmesi gereken listingleri belirler."
+                  : "Identify weak listings and improvement opportunities."}
+              </p>
+            </div>
+
+          </div>
+
+
+          {/* PRICING */}
+          <div className="flex items-start gap-3">
+
+            <span
+              className="
+                mt-0.5
+                flex h-8 w-8 shrink-0
+                items-center justify-center
+                rounded-full
+                bg-[#dff2ea]
+                text-sm
+                font-semibold
+                text-[#23745d]
+                dark:bg-[#193b30]
+                dark:text-[#79c2a9]
+              "
+            >
+              ✓
+            </span>
+
+            <div>
+              <p
+                className="
+                  text-sm
+                  font-semibold
+                  text-[#183a31]
+                  dark:text-[#e5f0eb]
+                "
+              >
+                {t("theDifference.pricingIssue")}
+              </p>
+
+              <p
+                className="
+                  mt-1
+                  text-sm
+                  leading-6
+                  text-[#71807b]
+                  dark:text-[#91a79e]
+                "
+              >
+                {locale === "tr"
+                  ? "Fiyatlandırma ve ürün performansındaki sorunları ortaya çıkarır."
+                  : "Find pricing and product performance issues."}
+              </p>
+            </div>
+
+          </div>
+
+
+          {/* SUPPLIER */}
+          <div className="flex items-start gap-3">
+
+            <span
+              className="
+                mt-0.5
+                flex h-8 w-8 shrink-0
+                items-center justify-center
+                rounded-full
+                bg-[#dff2ea]
+                text-sm
+                font-semibold
+                text-[#23745d]
+                dark:bg-[#193b30]
+                dark:text-[#79c2a9]
+              "
+            >
+              ✓
+            </span>
+
+            <div>
+              <p
+                className="
+                  text-sm
+                  font-semibold
+                  text-[#183a31]
+                  dark:text-[#e5f0eb]
+                "
+              >
+                {locale === "tr"
+                  ? "Tedarikçi ve ürün fırsatlarını keşfedin"
+                  : "Discover suppliers and product opportunities"}
+              </p>
+
+              <p
+                className="
+                  mt-1
+                  text-sm
+                  leading-6
+                  text-[#71807b]
+                  dark:text-[#91a79e]
+                "
+              >
+                {locale === "tr"
+                  ? "Ürünleri analiz ederek daha iyi tedarik ve satış fırsatlarını keşfetmenize yardımcı olur."
+                  : "Discover better sourcing and selling opportunities through product analysis."}
+              </p>
+            </div>
+
+          </div>
 
         </div>
 
 
-        {/* NEXT STEP */}
-        <div className="relative mt-6 rounded-2xl bg-white p-5 text-[#14201c]">
-
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#8b9792]">
-            {t("theDifference.nextStep")}
-          </p>
-
-          <p className="mt-2 font-semibold">
-            {t("theDifference.recommendation")}
-          </p>
-
-          <Link
-            href={`/${locale}/register`}
-            className="mt-4 inline-flex rounded-full bg-[#143d32] px-5 py-2.5 text-xs font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#1c5143]"
-          >
-            {t("theDifference.button")} →
-          </Link>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
-
-{/* AI STORE AUDIT */}
-<section className="relative overflow-hidden bg-white dark:bg-[#0b1713]">
-
-  {/* BACKGROUND GLOW */}
-  <div className="pointer-events-none absolute -right-40 top-24 h-[420px] w-[420px] rounded-full bg-[#e2f4ec]/70 blur-3xl dark:bg-[#174c3b]/30" />
-
-  <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
-
-    <div className="relative grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
-
-      {/* TEXT */}
-      <div>
-<div className="pointer-events-none absolute -left-20 top-1/2 h-[420px] w-[420px] -translate-y-1/2 rounded-full bg-[#38d39f]/[0.07] blur-[100px]" />
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4b9b83]">
-          {t("storeAudit.eyebrow")}
-        </p>
-
-        <h2 className="mt-4 text-4xl font-semibold leading-tight tracking-tight dark:text-[#f1f7f4] sm:text-5xl">
-          {t("storeAudit.title")}
-        </h2>
-
-        <p className="mt-5 max-w-lg text-lg leading-8 text-[#697671] dark:text-[#9fb4ab]">
-          {t("storeAudit.description")}
-        </p>
-
+        {/* CTA */}
         <Link
           href={`/${locale}/register`}
-          className="mt-8 inline-flex rounded-full bg-[#143d32] px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#1c5143]"
+          className="
+            mt-8
+            inline-flex
+            items-center
+            rounded-full
+            bg-[#143d32]
+            px-6
+            py-3.5
+            text-sm
+            font-semibold
+            text-white
+            shadow-[0_12px_30px_rgba(20,61,50,0.18)]
+            transition
+            hover:-translate-y-0.5
+            hover:bg-[#1c5143]
+            dark:bg-[#1d5a49]
+            dark:hover:bg-[#26725c]
+          "
         >
-          {t("storeAudit.viewAudit")} →
+          {t("theDifference.button")} →
         </Link>
 
       </div>
 
 
-      {/* AUDIT CARD */}
-      <div className="relative overflow-hidden rounded-[28px] border border-[#d5e5df] bg-[#f7faf8] p-5 shadow-[0_30px_80px_rgba(20,61,50,0.12)] dark:border-[#29483d] dark:bg-[#12231e] dark:shadow-[0_30px_80px_rgba(0,0,0,0.35)] sm:p-7">
+      {/* RIGHT - PRODUCT SHOWCASE */}
+      <div className="relative min-w-0">
 
-        {/* CARD GLOW */}
-        <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[#cfeee1]/70 blur-3xl dark:bg-[#174c3b]/30" />
+        {/* IMAGE GLOW */}
+        <div
+          className="
+            pointer-events-none
+            absolute
+            -inset-10
+            rounded-[50px]
+            bg-[#bfe8d7]/50
+            blur-3xl
+            dark:bg-[#1b5947]/25
+          "
+        />
 
-        {/* TOP */}
-        <div className="relative flex items-center justify-between">
+        {/* IMAGE FRAME */}
+        <div
+          className="
+            relative
+            overflow-hidden
+            rounded-[30px]
+            border
+            border-[#cfe1da]
+            bg-[#071812]
+            p-2
+            shadow-[0_30px_90px_rgba(20,61,50,0.24)]
+            dark:border-[#29483d]
+            dark:shadow-[0_30px_90px_rgba(0,0,0,0.45)]
+          "
+        >
 
-          <div>
-
-            <p className="text-xs uppercase tracking-wider text-[#929d99] dark:text-[#71877e]">
-              {t("storeAudit.health")}
-            </p>
-
-            <div className="mt-2 flex items-end gap-2">
-
-              <span className="text-5xl font-semibold tracking-tight text-[#143d32] dark:text-[#79c2a9]">
-                {t("storeAudit.score")}
-              </span>
-
-              <span className="mb-2 text-sm text-[#87938e] dark:text-[#71877e]">
-                {t("storeAudit.outOf")}
-              </span>
-
-            </div>
-
-          </div>
-
-          {/* SCORE CIRCLE */}
-          <div className="flex h-16 w-16 items-center justify-center rounded-full border-[6px] border-[#9fd4c1] bg-white text-sm font-bold text-[#34745f] dark:border-[#4d947c] dark:bg-[#172a24] dark:text-[#79c2a9]">
-            82
-          </div>
-
-        </div>
-
-
-        {/* METRICS */}
-        <div className="relative mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-
-          <div className="rounded-2xl bg-white p-4 dark:bg-[#172a24]">
-            <p className="text-xs text-[#8b9792] dark:text-[#71877e]">
-              {t("storeAudit.seo")}
-            </p>
-
-            <p className="mt-2 text-xl font-semibold dark:text-[#f1f7f4]">
-              91
-            </p>
-
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e8eeeb] dark:bg-[#29433a]">
-              <div className="h-full w-[91%] rounded-full bg-[#55a98d]" />
-            </div>
-          </div>
-
-          <div className="rounded-2xl bg-white p-4 dark:bg-[#172a24]">
-            <p className="text-xs text-[#8b9792] dark:text-[#71877e]">
-              {t("storeAudit.listings")}
-            </p>
-
-            <p className="mt-2 text-xl font-semibold dark:text-[#f1f7f4]">
-              76
-            </p>
-
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e8eeeb] dark:bg-[#29433a]">
-              <div className="h-full w-[76%] rounded-full bg-[#79b89f]" />
-            </div>
-          </div>
-
-          <div className="rounded-2xl bg-white p-4 dark:bg-[#172a24]">
-            <p className="text-xs text-[#8b9792] dark:text-[#71877e]">
-              {t("storeAudit.keywords")}
-            </p>
-
-            <p className="mt-2 text-xl font-semibold dark:text-[#f1f7f4]">
-              84
-            </p>
-
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e8eeeb] dark:bg-[#29433a]">
-              <div className="h-full w-[84%] rounded-full bg-[#55a98d]" />
-            </div>
-          </div>
-
-          <div className="rounded-2xl bg-white p-4 dark:bg-[#172a24]">
-            <p className="text-xs text-[#8b9792] dark:text-[#71877e]">
-              {t("storeAudit.conversion")}
-            </p>
-
-            <p className="mt-2 text-xl font-semibold dark:text-[#f1f7f4]">
-              68
-            </p>
-
-            <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e8eeeb] dark:bg-[#29433a]">
-              <div className="h-full w-[68%] rounded-full bg-[#d0b879]" />
-            </div>
-          </div>
+          <img
+            src="/ed3.png"
+            alt={
+              locale === "tr"
+                ? "CraftPilot ürün analizi ve Etsy ürünleri"
+                : "CraftPilot product analysis and Etsy products"
+            }
+            className="
+              block
+              h-auto
+              w-full
+              rounded-[22px]
+              object-contain
+            "
+          />
 
         </div>
 
 
-        {/* OPPORTUNITIES */}
-        <div className="relative mt-5 rounded-2xl border border-[#e2ebe6] bg-white p-5 dark:border-[#29483d] dark:bg-[#172a24]">
+        {/* AI BADGE */}
+        <div
+          className="
+            absolute
+            -bottom-5
+            left-6
+            flex
+            items-center
+            gap-2
+            rounded-full
+            border
+            border-[#d7e8e1]
+            bg-white
+            px-4
+            py-2.5
+            text-sm
+            font-semibold
+            text-[#173c31]
+            shadow-[0_12px_30px_rgba(20,61,50,0.12)]
+            dark:border-[#31564a]
+            dark:bg-[#12251f]
+            dark:text-[#dcece6]
+          "
+        >
 
-          <div className="flex items-center justify-between gap-3">
+          <span
+            className="
+              flex h-6 w-6
+              items-center justify-center
+              rounded-full
+              bg-[#dff2ea]
+              text-xs
+              text-[#23745d]
+              dark:bg-[#193b30]
+              dark:text-[#79c2a9]
+            "
+          >
+            ✦
+          </span>
 
-            <div>
-              <p className="font-semibold dark:text-[#f1f7f4]">
-                {t("storeAudit.opportunities")}
-              </p>
-
-              <p className="mt-1 text-xs text-[#929d99] dark:text-[#71877e]">
-                {t("storeAudit.highPriority")}
-              </p>
-            </div>
-
-            <div className="rounded-full bg-[#edf7f3] px-3 py-1.5 text-xs font-semibold text-[#34745f] dark:bg-[#193b30] dark:text-[#79c2a9]">
-              AI
-            </div>
-
-          </div>
-
-
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-
-            <div className="flex items-center gap-3 rounded-xl bg-[#fff7f5] p-3 dark:bg-[#30201d]">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#ffe4de] text-xs text-[#c55b47] dark:bg-[#553029] dark:text-[#f08a74]">
-                !
-              </span>
-
-              <span className="text-sm dark:text-[#e7d9d5]">
-                {t("storeAudit.seoProblems")}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3 rounded-xl bg-[#fffaf0] p-3 dark:bg-[#302a1b]">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#f7e9bd] text-xs text-[#a7832e] dark:bg-[#55491f] dark:text-[#e1c56d]">
-                !
-              </span>
-
-              <span className="text-sm dark:text-[#e5ddc5]">
-                {t("storeAudit.weakListings")}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3 rounded-xl bg-[#fffaf0] p-3 dark:bg-[#302a1b]">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#f7e9bd] text-xs text-[#a7832e] dark:bg-[#55491f] dark:text-[#e1c56d]">
-                !
-              </span>
-
-              <span className="text-sm dark:text-[#e5ddc5]">
-                {t("storeAudit.pricingIssue")}
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3 rounded-xl bg-[#f2faf6] p-3 dark:bg-[#19332a]">
-              <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-[#dcefe7] text-xs text-[#34745f] dark:bg-[#285443] dark:text-[#79c2a9]">
-                ↑
-              </span>
-
-              <span className="text-sm dark:text-[#d9ebe3]">
-                {t("storeAudit.keywordGap")}
-              </span>
-            </div>
-
-          </div>
+          {locale === "tr"
+            ? "AI destekli ürün analizi"
+            : "AI-powered product analysis"}
 
         </div>
 
       </div>
+
     </div>
 
   </div>
 </section>
-      {/* AI GROWTH COACH */}
-      <section className="relative overflow-hidden bg-[#f1f8f5] dark:bg-[#0d1b16]">
 
-        {/* BACKGROUND GLOW */}
-        <div className="pointer-events-none absolute -left-40 top-20 h-[420px] w-[420px] rounded-full bg-[#d9f1e8]/70 blur-3xl dark:bg-[#174c3b]/30" />
+{/* AI STORE AUDIT */}
+<section
+  className="
+    relative overflow-hidden
+    border-y border-[#dfece6]
+    bg-white
+    dark:border-[#1d342c]
+    dark:bg-[#0b1713]
+  "
+>
+  {/* BACKGROUND GLOWS */}
+  <div
+    className="
+      pointer-events-none absolute
+      -left-40 top-1/2
+      h-[420px] w-[420px]
+      -translate-y-1/2
+      rounded-full
+      bg-[#d8f2e7]/55
+      blur-[100px]
+      dark:bg-[#174c3b]/20
+    "
+  />
 
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+  <div
+    className="
+      pointer-events-none absolute
+      -right-40 top-10
+      h-[420px] w-[420px]
+      rounded-full
+      bg-[#dff5ec]/60
+      blur-[100px]
+      dark:bg-[#174c3b]/20
+    "
+  />
 
-          <div className="relative grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+  <div
+    className="
+      mx-auto max-w-7xl
+      px-6
+      py-14
+      sm:py-16
+      lg:px-8
+      lg:py-16
+    "
+  >
 
-            {/* LEFT */}
+    <div
+      className="
+        relative grid
+        items-center
+        gap-10
+        lg:grid-cols-[0.78fr_1.22fr]
+        lg:gap-12
+      "
+    >
+
+      {/* ===================================================== */}
+      {/* LEFT - TEXT */}
+      {/* ===================================================== */}
+
+      <div className="relative max-w-xl">
+
+        {/* EYEBROW */}
+        <div
+          className="
+            inline-flex
+            items-center
+            gap-2
+            rounded-full
+            border border-[#d7ebe3]
+            bg-[#f2faf6]
+            px-3 py-1.5
+            text-[11px]
+            font-semibold
+            uppercase
+            tracking-[0.16em]
+            text-[#3f967c]
+            dark:border-[#29483d]
+            dark:bg-[#12251f]
+            dark:text-[#79c2a9]
+          "
+        >
+          <span className="h-1.5 w-1.5 rounded-full bg-[#55b995]" />
+
+          {t("storeAudit.eyebrow")}
+        </div>
+
+
+        {/* TITLE */}
+        <h2
+          className="
+            mt-5
+            text-[38px]
+            font-semibold
+            leading-[1.04]
+            tracking-[-0.035em]
+            text-[#102d25]
+            dark:text-[#f1f7f4]
+            sm:text-[44px]
+            lg:text-[48px]
+            xl:text-[52px]
+          "
+        >
+          {t("storeAudit.title")}
+        </h2>
+
+
+        {/* DESCRIPTION */}
+        <p
+          className="
+            mt-5
+            max-w-lg
+            text-[16px]
+            leading-7
+            text-[#687873]
+            dark:text-[#9fb4ab]
+          "
+        >
+          {t("storeAudit.description")}
+        </p>
+
+
+        {/* FEATURE LIST */}
+        <div className="mt-6 space-y-3">
+
+          {/* FEATURE 1 */}
+          <div className="flex items-center gap-3">
+
+            <span
+              className="
+                flex h-8 w-8 shrink-0
+                items-center justify-center
+                rounded-lg
+                bg-[#e5f5ee]
+                text-xs
+                text-[#319475]
+                dark:bg-[#193b30]
+                dark:text-[#79c2a9]
+              "
+            >
+              ↗
+            </span>
+
+            <span
+              className="
+                text-[13px]
+                font-medium
+                text-[#30443d]
+                dark:text-[#c4d5ce]
+              "
+            >
+              {t("storeAudit.featureHealth")}
+            </span>
+
+          </div>
+
+
+          {/* FEATURE 2 */}
+          <div className="flex items-center gap-3">
+
+            <span
+              className="
+                flex h-8 w-8 shrink-0
+                items-center justify-center
+                rounded-lg
+                bg-[#e5f5ee]
+                text-xs
+                text-[#319475]
+                dark:bg-[#193b30]
+                dark:text-[#79c2a9]
+              "
+            >
+              ⌕
+            </span>
+
+            <span
+              className="
+                text-[13px]
+                font-medium
+                text-[#30443d]
+                dark:text-[#c4d5ce]
+              "
+            >
+              {t("storeAudit.featureAnalysis")}
+            </span>
+
+          </div>
+
+
+          {/* FEATURE 3 */}
+          <div className="flex items-center gap-3">
+
+            <span
+              className="
+                flex h-8 w-8 shrink-0
+                items-center justify-center
+                rounded-lg
+                bg-[#e5f5ee]
+                text-xs
+                text-[#319475]
+                dark:bg-[#193b30]
+                dark:text-[#79c2a9]
+              "
+            >
+              ✦
+            </span>
+
+            <span
+              className="
+                text-[13px]
+                font-medium
+                text-[#30443d]
+                dark:text-[#c4d5ce]
+              "
+            >
+              {t("storeAudit.featureActions")}
+            </span>
+
+          </div>
+
+
+          {/* FEATURE 4 */}
+          <div className="flex items-center gap-3">
+
+            <span
+              className="
+                flex h-8 w-8 shrink-0
+                items-center justify-center
+                rounded-lg
+                bg-[#e5f5ee]
+                text-xs
+                text-[#319475]
+                dark:bg-[#193b30]
+                dark:text-[#79c2a9]
+              "
+            >
+              ↑
+            </span>
+
+            <span
+              className="
+                text-[13px]
+                font-medium
+                text-[#30443d]
+                dark:text-[#c4d5ce]
+              "
+            >
+              {t("storeAudit.featureGrowth")}
+            </span>
+
+          </div>
+
+        </div>
+
+
+        {/* CTA */}
+        <div className="mt-7 flex flex-wrap items-center gap-4">
+
+          <Link
+            href={`/${locale}/register`}
+            className="
+              inline-flex
+              items-center
+              rounded-full
+              bg-[#143d32]
+              px-5 py-3
+              text-sm
+              font-semibold
+              text-white
+              shadow-[0_12px_28px_rgba(20,61,50,0.16)]
+              transition
+              hover:-translate-y-0.5
+              hover:bg-[#1c5143]
+              dark:bg-[#1d5a49]
+              dark:hover:bg-[#26725c]
+            "
+          >
+            {t("storeAudit.viewAudit")} →
+          </Link>
+
+          <span
+            className="
+              text-[11px]
+              text-[#82908a]
+              dark:text-[#758d83]
+            "
+          >
+            {t("storeAudit.freeStart")}
+          </span>
+
+        </div>
+
+      </div>
+
+
+      {/* ===================================================== */}
+      {/* RIGHT - AUDIT DASHBOARD */}
+      {/* ===================================================== */}
+
+      <div className="relative min-w-0">
+
+        {/* GLOW */}
+        <div
+          className="
+            pointer-events-none
+            absolute
+            -inset-8
+            rounded-[45px]
+            bg-[#ccefe0]/60
+            blur-[65px]
+            dark:bg-[#174c3b]/20
+          "
+        />
+
+
+        {/* DASHBOARD */}
+        <div
+          className="
+            relative
+            overflow-hidden
+            rounded-[28px]
+            border border-[#d8e8e1]
+            bg-[#f5faf7]
+            p-4
+            shadow-[0_25px_70px_rgba(20,61,50,0.12)]
+            dark:border-[#29483d]
+            dark:bg-[#10231d]
+            dark:shadow-[0_25px_70px_rgba(0,0,0,0.38)]
+            sm:p-5
+            lg:p-6
+          "
+        >
+
+          {/* CARD GLOW */}
+          <div
+            className="
+              pointer-events-none
+              absolute
+              -right-20
+              -top-20
+              h-60
+              w-60
+              rounded-full
+              bg-[#d7f2e6]
+              blur-[70px]
+              dark:bg-[#174c3b]/25
+            "
+          />
+
+
+          {/* DASHBOARD TOP */}
+          <div className="relative flex items-start justify-between">
+
             <div>
 
-              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4b9b83]">
-                {t("growthCoach.eyebrow")}
+              <p
+                className="
+                  text-[10px]
+                  font-medium
+                  uppercase
+                  tracking-[0.12em]
+                  text-[#8b9993]
+                  dark:text-[#71877e]
+                "
+              >
+                {t("storeAudit.health")}
               </p>
 
-              <h2 className="mt-4 max-w-xl text-4xl font-semibold leading-tight tracking-tight dark:text-[#f1f7f4] sm:text-5xl">
-                {t("growthCoach.title")}
-              </h2>
+              <div className="mt-1 flex items-end gap-2">
 
-              <p className="mt-5 max-w-lg text-lg leading-8 text-[#697671] dark:text-[#9fb4ab]">
-                {t("growthCoach.description")}
-              </p>
-
-              <div className="mt-8 flex items-center gap-3 text-sm text-[#7a8782] dark:text-[#91a79e]">
-
-                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white shadow-sm dark:bg-[#172a24]">
-                  ✦
+                <span
+                  className="
+                    text-[42px]
+                    font-semibold
+                    leading-none
+                    tracking-tight
+                    text-[#143d32]
+                    dark:text-[#79c2a9]
+                  "
+                >
+                  {t("storeAudit.score")}
                 </span>
 
-                {t("growthCoach.estimated")}
+                <span
+                  className="
+                    mb-1
+                    text-xs
+                    text-[#84918c]
+                    dark:text-[#71877e]
+                  "
+                >
+                  {t("storeAudit.outOf")}
+                </span>
+
+              </div>
+
+              <div className="mt-1.5 flex items-center gap-1.5">
+
+                <span className="h-1.5 w-1.5 rounded-full bg-[#55b995]" />
+
+                <span
+                  className="
+                    text-[10px]
+                    font-medium
+                    text-[#4c8976]
+                    dark:text-[#79c2a9]
+                  "
+                >
+                  {t("storeAudit.status")}
+                </span>
 
               </div>
 
             </div>
 
 
-            {/* COACH CARD */}
-            <div className="relative overflow-hidden rounded-[28px] border border-[#d5e5df] bg-white p-5 shadow-[0_30px_80px_rgba(20,61,50,0.12)] dark:border-[#29483d] dark:bg-[#12231e] dark:shadow-[0_30px_80px_rgba(0,0,0,0.35)] sm:p-7">
+            {/* SCORE */}
+            <div
+              className="
+                flex h-[64px] w-[64px]
+                items-center justify-center
+                rounded-full
+                border-[5px]
+                border-[#9fd7c3]
+                bg-white
+                text-base
+                font-bold
+                text-[#34745f]
+                shadow-sm
+                dark:border-[#4d947c]
+                dark:bg-[#172a24]
+                dark:text-[#79c2a9]
+              "
+            >
+              82
+            </div>
 
-              {/* CARD GLOW */}
-              <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[#d9f1e8]/80 blur-3xl dark:bg-[#174c3b]/30" />
-
-
-              {/* HEADER */}
-              <div className="relative flex items-start justify-between gap-4">
-
-                <div>
-
-                  <p className="text-xs uppercase tracking-wider text-[#929d99] dark:text-[#71877e]">
-                    {t("growthCoach.today")}
-                  </p>
-
-                  <h3 className="mt-2 text-2xl font-semibold tracking-tight dark:text-[#f1f7f4]">
-                    {t("growthCoach.question")}
-                  </h3>
-
-                </div>
-
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e7f3ee] text-[#34745f] dark:bg-[#193b30] dark:text-[#79c2a9]">
-                  ✦
-                </div>
-
-              </div>
+          </div>
 
 
-              {/* ANALYZED */}
-              <p className="relative mt-4 text-sm leading-6 text-[#77837f] dark:text-[#91a79e]">
-                {t("growthCoach.analyzed")}
-              </p>
+          {/* METRICS */}
+          <div
+            className="
+              relative
+              mt-5
+              grid
+              grid-cols-2
+              gap-2.5
+              lg:grid-cols-4
+            "
+          >
 
+            {/* SEO */}
+            <div
+              className="
+                rounded-xl
+                border border-[#edf2ef]
+                bg-white
+                p-3
+                dark:border-[#29483d]
+                dark:bg-[#172a24]
+              "
+            >
 
-              {/* RECOMMENDED ACTIONS */}
-              <div className="relative mb-5 mt-6 flex items-center justify-between gap-3">
+              <div className="flex items-center justify-between">
 
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#8a9892] dark:text-[#71877e]">
-                  Recommended actions
+                <p className="text-[10px] text-[#87958f] dark:text-[#71877e]">
+                  {t("storeAudit.seo")}
                 </p>
 
-                <span className="rounded-full bg-[#e8f4ef] px-3 py-1 text-[10px] font-semibold text-[#34745f] dark:bg-[#193b30] dark:text-[#79c2a9]">
-                  4 opportunities
+                <span
+                  className="
+                    flex h-6 w-6
+                    items-center justify-center
+                    rounded-md
+                    bg-[#e7f7ef]
+                    text-[10px]
+                    text-[#369675]
+                    dark:bg-[#193b30]
+                    dark:text-[#79c2a9]
+                  "
+                >
+                  ⌕
                 </span>
 
               </div>
 
+              <p className="mt-2 text-xl font-semibold text-[#142d26] dark:text-[#f1f7f4]">
+                91
+              </p>
 
-              {/* ACTIONS */}
-              <div className="relative space-y-3">
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e5ece8] dark:bg-[#29433a]">
+                <div className="h-full w-[91%] rounded-full bg-[#55b995]" />
+              </div>
+
+              <p className="mt-1 text-[9px] font-medium text-[#48a383]">
+                {t("storeAudit.veryGood")}
+              </p>
+
+            </div>
 
 
-                {/* 01 */}
-                <div className="rounded-2xl border border-[#dce8e3] bg-[#fbfcfb] p-4 dark:border-[#29483d] dark:bg-[#172a24]">
+            {/* LISTINGS */}
+            <div
+              className="
+                rounded-xl
+                border border-[#edf2ef]
+                bg-white
+                p-3
+                dark:border-[#29483d]
+                dark:bg-[#172a24]
+              "
+            >
 
-                  <div className="flex gap-4">
+              <div className="flex items-center justify-between">
 
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#143d32] text-xs font-bold text-white">
-                      01
-                    </div>
+                <p className="text-[10px] text-[#87958f] dark:text-[#71877e]">
+                  {t("storeAudit.listings")}
+                </p>
 
-                    <div className="min-w-0 flex-1">
+                <span
+                  className="
+                    flex h-6 w-6
+                    items-center justify-center
+                    rounded-md
+                    bg-[#eeeafa]
+                    text-[10px]
+                    text-[#7569b5]
+                    dark:bg-[#2b2844]
+                    dark:text-[#aaa0e8]
+                  "
+                >
+                  ◆
+                </span>
 
-                      <p className="font-semibold dark:text-[#f1f7f4]">
-                        {t("growthCoach.step1")}
-                      </p>
+              </div>
 
-                      <div className="mt-2">
+              <p className="mt-2 text-xl font-semibold text-[#142d26] dark:text-[#f1f7f4]">
+                76
+              </p>
 
-                        <span className="rounded-full bg-[#eaf5f0] px-2.5 py-1 text-[11px] font-semibold text-[#34745f] dark:bg-[#193b30] dark:text-[#79c2a9]">
-                          {t("growthCoach.highImpact")}
-                        </span>
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e5ece8] dark:bg-[#29433a]">
+                <div className="h-full w-[76%] rounded-full bg-[#79b89f]" />
+              </div>
 
-                      </div>
+              <p className="mt-1 text-[9px] font-medium text-[#6aa98e]">
+                {t("storeAudit.good")}
+              </p>
 
-                    </div>
+            </div>
 
-                  </div>
+
+            {/* KEYWORDS */}
+            <div
+              className="
+                rounded-xl
+                border border-[#edf2ef]
+                bg-white
+                p-3
+                dark:border-[#29483d]
+                dark:bg-[#172a24]
+              "
+            >
+
+              <div className="flex items-center justify-between">
+
+                <p className="text-[10px] text-[#87958f] dark:text-[#71877e]">
+                  {t("storeAudit.keywords")}
+                </p>
+
+                <span
+                  className="
+                    flex h-6 w-6
+                    items-center justify-center
+                    rounded-md
+                    bg-[#e8f4ff]
+                    text-[10px]
+                    text-[#5284b8]
+                    dark:bg-[#1d3445]
+                    dark:text-[#86b8e5]
+                  "
+                >
+                  ↗
+                </span>
+
+              </div>
+
+              <p className="mt-2 text-xl font-semibold text-[#142d26] dark:text-[#f1f7f4]">
+                84
+              </p>
+
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e5ece8] dark:bg-[#29433a]">
+                <div className="h-full w-[84%] rounded-full bg-[#55a98d]" />
+              </div>
+
+              <p className="mt-1 text-[9px] font-medium text-[#48a383]">
+                İyi
+              </p>
+
+            </div>
+
+
+            {/* CONVERSION */}
+            <div
+              className="
+                rounded-xl
+                border border-[#edf2ef]
+                bg-white
+                p-3
+                dark:border-[#29483d]
+                dark:bg-[#172a24]
+              "
+            >
+
+              <div className="flex items-center justify-between">
+
+                <p className="text-[10px] text-[#87958f] dark:text-[#71877e]">
+                  {t("storeAudit.conversion")}
+                </p>
+
+                <span
+                  className="
+                    flex h-6 w-6
+                    items-center justify-center
+                    rounded-md
+                    bg-[#fff5df]
+                    text-[10px]
+                    text-[#b08a35]
+                    dark:bg-[#3c331f]
+                    dark:text-[#e0c46c]
+                  "
+                >
+                  ↗
+                </span>
+
+              </div>
+
+              <p className="mt-2 text-xl font-semibold text-[#142d26] dark:text-[#f1f7f4]">
+                68
+              </p>
+
+              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e5ece8] dark:bg-[#29433a]">
+                <div className="h-full w-[68%] rounded-full bg-[#d0b879]" />
+              </div>
+
+              <p className="mt-1 text-[9px] font-medium text-[#ad8836]">
+                {t("storeAudit.improvable")}
+              </p>
+
+            </div>
+
+          </div>
+
+
+          {/* OPPORTUNITIES */}
+          <div
+            className="
+              relative
+              mt-3
+              rounded-xl
+              border border-[#e1ebe6]
+              bg-white
+              p-4
+              dark:border-[#29483d]
+              dark:bg-[#172a24]
+            "
+          >
+
+            {/* HEADER */}
+            <div className="flex items-center justify-between">
+
+              <div>
+
+                <div className="flex items-center gap-2">
+
+                  <p
+                    className="
+                      text-sm
+                      font-semibold
+                      text-[#172d26]
+                      dark:text-[#f1f7f4]
+                    "
+                  >
+                    {t("storeAudit.opportunities")}
+                  </p>
+
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#55b995]" />
 
                 </div>
 
+                <p
+                  className="
+                    mt-0.5
+                    text-[10px]
+                    text-[#929d99]
+                    dark:text-[#71877e]
+                  "
+                >
+                  {t("storeAudit.highPriority")}
+                </p>
 
-                {/* 02 */}
-                <div className="rounded-2xl border border-[#e7ecea] bg-[#fbfcfb] p-4 dark:border-[#29483d] dark:bg-[#172a24]">
+              </div>
 
-                  <div className="flex gap-4">
+              <div
+                className="
+                  rounded-full
+                  bg-[#edf7f3]
+                  px-2.5 py-1
+                  text-[10px]
+                  font-semibold
+                  text-[#34745f]
+                  dark:bg-[#193b30]
+                  dark:text-[#79c2a9]
+                "
+              >
+                AI
+              </div>
 
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#edf3f0] text-xs font-bold text-[#527168] dark:bg-[#29443b] dark:text-[#a6bbb3]">
-                      02
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-
-                      <p className="font-semibold dark:text-[#f1f7f4]">
-                        {t("growthCoach.step2")}
-                      </p>
-
-                      <div className="mt-2">
-
-                        <span className="rounded-full bg-[#f4f0df] px-2.5 py-1 text-[11px] font-semibold text-[#94772d] dark:bg-[#40381f] dark:text-[#d8bf68]">
-                          {t("growthCoach.mediumImpact")}
-                        </span>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-
-                {/* 03 */}
-                <div className="rounded-2xl border border-[#e7ecea] bg-[#fbfcfb] p-4 dark:border-[#29483d] dark:bg-[#172a24]">
-
-                  <div className="flex gap-4">
-
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#edf3f0] text-xs font-bold text-[#527168] dark:bg-[#29443b] dark:text-[#a6bbb3]">
-                      03
-                    </div>
-
-                    <div className="min-w-0 flex-1">
-
-                      <p className="font-semibold dark:text-[#f1f7f4]">
-                        {t("growthCoach.step3")}
-                      </p>
-
-                      <div className="mt-2">
-
-                        <span className="rounded-full bg-[#f4f0df] px-2.5 py-1 text-[11px] font-semibold text-[#94772d] dark:bg-[#40381f] dark:text-[#d8bf68]">
-                          {t("growthCoach.mediumImpact")}
-                        </span>
-
-                      </div>
-
-                    </div>
-
-                  </div>
-
-                </div>
+            </div>
 
 
-                {/* 04 */}
-                <div className="rounded-2xl border border-[#e7ecea] bg-[#fbfcfb] p-4 dark:border-[#29483d] dark:bg-[#172a24]">
+            {/* OPPORTUNITIES */}
+            <div className="mt-3 grid gap-2 sm:grid-cols-2">
 
-                  <div className="flex gap-4">
+              {/* SEO */}
+              <div
+                className="
+                  flex items-center gap-2.5
+                  rounded-lg
+                  border border-[#f5e4df]
+                  bg-[#fff8f6]
+                  p-2.5
+                  dark:border-[#553029]
+                  dark:bg-[#30201d]
+                "
+              >
 
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#edf3f0] text-xs font-bold text-[#527168] dark:bg-[#29443b] dark:text-[#a6bbb3]">
-                      04
-                    </div>
+                <span
+                  className="
+                    flex h-7 w-7 shrink-0
+                    items-center justify-center
+                    rounded-full
+                    bg-[#ffe4de]
+                    text-[10px]
+                    font-semibold
+                    text-[#c55b47]
+                    dark:bg-[#553029]
+                    dark:text-[#f08a74]
+                  "
+                >
+                  !
+                </span>
 
-                    <div className="min-w-0 flex-1">
+                <div className="min-w-0">
 
-                      <p className="font-semibold dark:text-[#f1f7f4]">
-                        {t("growthCoach.step4")}
-                      </p>
+                  <p className="truncate text-xs font-semibold text-[#26332f] dark:text-[#f0e2de]">
+                    {t("storeAudit.seoProblems")}
+                  </p>
 
-                      <div className="mt-2">
-
-                        <span className="rounded-full bg-[#f5f5f3] px-2.5 py-1 text-[11px] font-semibold text-[#7c827f] dark:bg-[#29332f] dark:text-[#9eaaa5]">
-                          {t("growthCoach.lowImpact")}
-                        </span>
-
-                      </div>
-
-                    </div>
-
-                  </div>
+                  <p className="mt-0.5 truncate text-[9px] text-[#8b9691] dark:text-[#a88f88]">
+                    {t("storeAudit.seoProblemsDetail")}
+                  </p>
 
                 </div>
 
               </div>
 
 
-              {/* CTA */}
-<Link
-  href={`/${locale}/register`}
-  className="relative mt-6 block w-full rounded-full bg-[#143d32] px-6 py-3.5 text-center text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#1c5143]"
->
-  {t("growthCoach.startAction")} →
-</Link>
+              {/* WEAK LISTINGS */}
+              <div
+                className="
+                  flex items-center gap-2.5
+                  rounded-lg
+                  border border-[#f1e7c9]
+                  bg-[#fffaf0]
+                  p-2.5
+                  dark:border-[#55491f]
+                  dark:bg-[#302a1b]
+                "
+              >
+
+                <span
+                  className="
+                    flex h-7 w-7 shrink-0
+                    items-center justify-center
+                    rounded-full
+                    bg-[#f7e9bd]
+                    text-[10px]
+                    font-semibold
+                    text-[#a7832e]
+                    dark:bg-[#55491f]
+                    dark:text-[#e1c56d]
+                  "
+                >
+                  !
+                </span>
+
+                <div className="min-w-0">
+
+                  <p className="truncate text-xs font-semibold text-[#26332f] dark:text-[#f0e5c9]">
+                    {t("storeAudit.weakListings")}
+                  </p>
+
+                  <p className="mt-0.5 truncate text-[9px] text-[#8b9691] dark:text-[#a99f7c]">
+                    {t("storeAudit.weakListingsDetail")}
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              {/* PRICING */}
+              <div
+                className="
+                  flex items-center gap-2.5
+                  rounded-lg
+                  border border-[#f1e7c9]
+                  bg-[#fffaf0]
+                  p-2.5
+                  dark:border-[#55491f]
+                  dark:bg-[#302a1b]
+                "
+              >
+
+                <span
+                  className="
+                    flex h-7 w-7 shrink-0
+                    items-center justify-center
+                    rounded-full
+                    bg-[#f7e9bd]
+                    text-[10px]
+                    font-semibold
+                    text-[#a7832e]
+                    dark:bg-[#55491f]
+                    dark:text-[#e1c56d]
+                  "
+                >
+                  !
+                </span>
+
+                <div className="min-w-0">
+
+                  <p className="truncate text-xs font-semibold text-[#26332f] dark:text-[#f0e5c9]">
+                    {t("storeAudit.pricingIssue")}
+                  </p>
+
+                  <p className="mt-0.5 truncate text-[9px] text-[#8b9691] dark:text-[#a99f7c]">
+                    {t("storeAudit.pricingIssueDetail")}
+                  </p>
+
+                </div>
+
+              </div>
+
+
+              {/* KEYWORD */}
+              <div
+                className="
+                  flex items-center gap-2.5
+                  rounded-lg
+                  border border-[#dceee6]
+                  bg-[#f3faf7]
+                  p-2.5
+                  dark:border-[#285443]
+                  dark:bg-[#19332a]
+                "
+              >
+
+                <span
+                  className="
+                    flex h-7 w-7 shrink-0
+                    items-center justify-center
+                    rounded-full
+                    bg-[#dcefe7]
+                    text-[10px]
+                    font-semibold
+                    text-[#34745f]
+                    dark:bg-[#285443]
+                    dark:text-[#79c2a9]
+                  "
+                >
+                  ↑
+                </span>
+
+                <div className="min-w-0">
+
+                  <p className="truncate text-xs font-semibold text-[#26332f] dark:text-[#d9ebe3]">
+                    {t("storeAudit.keywordGap")}
+                  </p>
+
+                  <p className="mt-0.5 truncate text-[9px] text-[#7e938a] dark:text-[#91b0a3]">
+                    {t("storeAudit.keywordGapDetail")}
+                  </p>
+
+                </div>
+
+              </div>
 
             </div>
 
           </div>
 
         </div>
-      </section>
+
+
+        {/* FLOATING BADGE */}
+        <div
+          className="
+            absolute
+            -bottom-4
+            left-5
+            flex
+            items-center
+            gap-2
+            rounded-full
+            border border-[#d6e9e1]
+            bg-white
+            px-3.5 py-2
+            text-xs
+            font-semibold
+            text-[#173c31]
+            shadow-[0_12px_28px_rgba(20,61,50,0.12)]
+            dark:border-[#31564a]
+            dark:bg-[#12251f]
+            dark:text-[#dcece6]
+          "
+        >
+
+          <span
+            className="
+              flex h-5 w-5
+              items-center
+              justify-center
+              rounded-full
+              bg-[#dff2ea]
+              text-[10px]
+              text-[#23745d]
+              dark:bg-[#193b30]
+              dark:text-[#79c2a9]
+            "
+          >
+            ✦
+          </span>
+
+          AI destekli mağaza analizi
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
+     {/* AI GROWTH COACH */}
+<section className="relative overflow-hidden bg-[#f1f8f5] dark:bg-[#0d1b16]">
+
+  {/* BACKGROUND GLOW */}
+  <div
+    className="
+      pointer-events-none absolute
+      -left-40 top-1/2
+      h-[500px] w-[500px]
+      -translate-y-1/2
+      rounded-full
+      bg-[#d9f1e8]/70
+      blur-3xl
+      dark:bg-[#174c3b]/30
+    "
+  />
+
+  <div
+    className="
+      pointer-events-none absolute
+      -right-40 top-20
+      h-[420px] w-[420px]
+      rounded-full
+      bg-[#cfeee1]/50
+      blur-3xl
+      dark:bg-[#174c3b]/20
+    "
+  />
+
+  <div className="mx-auto max-w-7xl px-6 py-20 lg:px-8 lg:py-24">
+
+    <div
+      className="
+        relative grid
+        gap-12
+        lg:grid-cols-[0.78fr_1.22fr]
+        lg:items-center
+        lg:gap-16
+      "
+    >
+
+      {/* LEFT - TEXT */}
+      <div className="relative max-w-xl">
+
+        {/* EYEBROW */}
+        <p
+          className="
+            text-sm font-semibold
+            uppercase tracking-[0.2em]
+            text-[#4b9b83]
+          "
+        >
+          {t("growthCoach.eyebrow")}
+        </p>
+
+        {/* TITLE */}
+        <h2
+          className="
+            mt-4
+            text-4xl font-semibold
+            leading-[1.08]
+            tracking-tight
+            text-[#102d25]
+            dark:text-[#f1f7f4]
+            sm:text-5xl
+            lg:text-[54px]
+          "
+        >
+          {t("growthCoach.title")}
+        </h2>
+
+        {/* DESCRIPTION */}
+        <p
+          className="
+            mt-6
+            max-w-lg
+            text-lg
+            leading-8
+            text-[#697671]
+            dark:text-[#9fb4ab]
+          "
+        >
+          {t("growthCoach.description")}
+        </p>
+
+        {/* TRUST / DATA POINT */}
+        <div
+          className="
+            mt-7
+            flex items-center gap-3
+            text-sm
+            text-[#667873]
+            dark:text-[#91a79e]
+          "
+        >
+          <span
+            className="
+              flex h-9 w-9 shrink-0
+              items-center justify-center
+              rounded-xl
+              bg-[#dff2ea]
+              text-[#34745f]
+              shadow-sm
+              dark:bg-[#193b30]
+              dark:text-[#79c2a9]
+            "
+          >
+            ✦
+          </span>
+
+          <span>
+            {t("growthCoach.estimated")}
+          </span>
+        </div>
+
+      </div>
+
+
+      {/* RIGHT - COACH CARD */}
+      <div
+        className="
+          relative overflow-hidden
+          rounded-[30px]
+          border border-[#d5e5df]
+          bg-white
+          p-5
+          shadow-[0_30px_90px_rgba(20,61,50,0.13)]
+          dark:border-[#29483d]
+          dark:bg-[#12231e]
+          dark:shadow-[0_30px_90px_rgba(0,0,0,0.4)]
+          sm:p-6
+          lg:p-7
+        "
+      >
+
+        {/* CARD GLOW */}
+        <div
+          className="
+            pointer-events-none absolute
+            -right-24 -top-24
+            h-72 w-72
+            rounded-full
+            bg-[#d9f1e8]/80
+            blur-3xl
+            dark:bg-[#174c3b]/30
+          "
+        />
+
+
+        {/* HEADER */}
+        <div className="relative flex items-start justify-between gap-4">
+
+          <div>
+
+            <p
+              className="
+                text-xs uppercase
+                tracking-[0.14em]
+                text-[#929d99]
+                dark:text-[#71877e]
+              "
+            >
+              {t("growthCoach.today")}
+            </p>
+
+            <h3
+              className="
+                mt-2
+                text-2xl
+                font-semibold
+                tracking-tight
+                text-[#14201c]
+                dark:text-[#f1f7f4]
+                sm:text-[26px]
+              "
+            >
+              {t("growthCoach.question")}
+            </h3>
+
+          </div>
+
+          <div
+            className="
+              flex h-11 w-11 shrink-0
+              items-center justify-center
+              rounded-xl
+              bg-[#e7f3ee]
+              text-[#34745f]
+              dark:bg-[#193b30]
+              dark:text-[#79c2a9]
+            "
+          >
+            ✦
+          </div>
+
+        </div>
+
+
+        {/* ANALYZED */}
+        <p
+          className="
+            relative mt-4
+            max-w-xl
+            text-sm
+            leading-6
+            text-[#77837f]
+            dark:text-[#91a79e]
+          "
+        >
+          {t("growthCoach.analyzed")}
+        </p>
+
+
+        {/* ACTION HEADER */}
+        <div
+          className="
+            relative mt-6
+            mb-3
+            flex items-center
+            justify-between gap-3
+          "
+        >
+
+          <p
+            className="
+              text-xs font-semibold
+              uppercase
+              tracking-[0.14em]
+              text-[#8a9892]
+              dark:text-[#71877e]
+            "
+          >
+            {t("growthCoach.recommendedActions")}
+          </p>
+
+          <span
+            className="
+              rounded-full
+              bg-[#e8f4ef]
+              px-3 py-1.5
+              text-[10px]
+              font-semibold
+              text-[#34745f]
+              dark:bg-[#193b30]
+              dark:text-[#79c2a9]
+            "
+          >
+            {t("growthCoach.opportunities")}
+          </span>
+
+        </div>
+
+
+        {/* ACTIONS */}
+        <div className="relative space-y-3">
+
+          {/* 01 */}
+          <div
+            className="
+              rounded-2xl
+              border border-[#dce8e3]
+              bg-[#f9fbfa]
+              p-4
+              transition
+              hover:-translate-y-0.5
+              hover:shadow-sm
+              dark:border-[#29483d]
+              dark:bg-[#172a24]
+            "
+          >
+            <div className="flex items-center gap-4">
+
+              <div
+                className="
+                  flex h-10 w-10 shrink-0
+                  items-center justify-center
+                  rounded-xl
+                  bg-[#143d32]
+                  text-xs font-bold
+                  text-white
+                  dark:bg-[#1d5a49]
+                "
+              >
+                01
+              </div>
+
+              <div className="min-w-0 flex-1">
+
+                <p
+                  className="
+                    font-semibold
+                    text-[#14201c]
+                    dark:text-[#f1f7f4]
+                  "
+                >
+                  {t("growthCoach.step1")}
+                </p>
+
+                <span
+                  className="
+                    mt-2 inline-flex
+                    rounded-full
+                    bg-[#eaf5f0]
+                    px-2.5 py-1
+                    text-[11px]
+                    font-semibold
+                    text-[#34745f]
+                    dark:bg-[#193b30]
+                    dark:text-[#79c2a9]
+                  "
+                >
+                  {t("growthCoach.highImpact")}
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+
+          {/* 02 */}
+          <div
+            className="
+              rounded-2xl
+              border border-[#e7ecea]
+              bg-[#f9fbfa]
+              p-4
+              transition
+              hover:-translate-y-0.5
+              hover:shadow-sm
+              dark:border-[#29483d]
+              dark:bg-[#172a24]
+            "
+          >
+            <div className="flex items-center gap-4">
+
+              <div
+                className="
+                  flex h-10 w-10 shrink-0
+                  items-center justify-center
+                  rounded-xl
+                  bg-[#edf3f0]
+                  text-xs font-bold
+                  text-[#527168]
+                  dark:bg-[#29443b]
+                  dark:text-[#a6bbb3]
+                "
+              >
+                02
+              </div>
+
+              <div className="min-w-0 flex-1">
+
+                <p
+                  className="
+                    font-semibold
+                    text-[#14201c]
+                    dark:text-[#f1f7f4]
+                  "
+                >
+                  {t("growthCoach.step2")}
+                </p>
+
+                <span
+                  className="
+                    mt-2 inline-flex
+                    rounded-full
+                    bg-[#f4f0df]
+                    px-2.5 py-1
+                    text-[11px]
+                    font-semibold
+                    text-[#94772d]
+                    dark:bg-[#40381f]
+                    dark:text-[#d8bf68]
+                  "
+                >
+                  {t("growthCoach.mediumImpact")}
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+
+          {/* 03 */}
+          <div
+            className="
+              rounded-2xl
+              border border-[#e7ecea]
+              bg-[#f9fbfa]
+              p-4
+              transition
+              hover:-translate-y-0.5
+              hover:shadow-sm
+              dark:border-[#29483d]
+              dark:bg-[#172a24]
+            "
+          >
+            <div className="flex items-center gap-4">
+
+              <div
+                className="
+                  flex h-10 w-10 shrink-0
+                  items-center justify-center
+                  rounded-xl
+                  bg-[#edf3f0]
+                  text-xs font-bold
+                  text-[#527168]
+                  dark:bg-[#29443b]
+                  dark:text-[#a6bbb3]
+                "
+              >
+                03
+              </div>
+
+              <div className="min-w-0 flex-1">
+
+                <p
+                  className="
+                    font-semibold
+                    text-[#14201c]
+                    dark:text-[#f1f7f4]
+                  "
+                >
+                  {t("growthCoach.step3")}
+                </p>
+
+                <span
+                  className="
+                    mt-2 inline-flex
+                    rounded-full
+                    bg-[#f4f0df]
+                    px-2.5 py-1
+                    text-[11px]
+                    font-semibold
+                    text-[#94772d]
+                    dark:bg-[#40381f]
+                    dark:text-[#d8bf68]
+                  "
+                >
+                  {t("growthCoach.mediumImpact")}
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+
+          {/* 04 */}
+          <div
+            className="
+              rounded-2xl
+              border border-[#e7ecea]
+              bg-[#f9fbfa]
+              p-4
+              transition
+              hover:-translate-y-0.5
+              hover:shadow-sm
+              dark:border-[#29483d]
+              dark:bg-[#172a24]
+            "
+          >
+            <div className="flex items-center gap-4">
+
+              <div
+                className="
+                  flex h-10 w-10 shrink-0
+                  items-center justify-center
+                  rounded-xl
+                  bg-[#edf3f0]
+                  text-xs font-bold
+                  text-[#527168]
+                  dark:bg-[#29443b]
+                  dark:text-[#a6bbb3]
+                "
+              >
+                04
+              </div>
+
+              <div className="min-w-0 flex-1">
+
+                <p
+                  className="
+                    font-semibold
+                    text-[#14201c]
+                    dark:text-[#f1f7f4]
+                  "
+                >
+                  {t("growthCoach.step4")}
+                </p>
+
+                <span
+                  className="
+                    mt-2 inline-flex
+                    rounded-full
+                    bg-[#f5f5f3]
+                    px-2.5 py-1
+                    text-[11px]
+                    font-semibold
+                    text-[#7c827f]
+                    dark:bg-[#29332f]
+                    dark:text-[#9eaaa5]
+                  "
+                >
+                  {t("growthCoach.lowImpact")}
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+
+        {/* CTA */}
+        <Link
+          href={`/${locale}/register`}
+          className="
+            relative mt-5
+            block w-full
+            rounded-full
+            bg-[#143d32]
+            px-6 py-3.5
+            text-center
+            text-sm font-semibold
+            text-white
+            shadow-[0_12px_30px_rgba(20,61,50,0.15)]
+            transition
+            hover:-translate-y-0.5
+            hover:bg-[#1c5143]
+            dark:bg-[#1d5a49]
+            dark:hover:bg-[#26725c]
+          "
+        >
+          {t("growthCoach.startAction")} →
+        </Link>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
       {/* COMPETITOR INTELLIGENCE */}
       <section className="relative overflow-hidden bg-[#f4faf7] dark:bg-[#0d1b16]">
 
@@ -1361,7 +2715,7 @@ export default function HomePage() {
 
         <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
 
-          <div className="relative grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+          <div className="relative grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
 
             {/* LEFT */}
             <div>
@@ -1389,14 +2743,14 @@ export default function HomePage() {
 
 
             {/* COMPETITOR CARD */}
-            <div className="relative overflow-hidden rounded-[28px] border border-[#d5e5df] bg-[#f7faf8] p-5 shadow-[0_30px_80px_rgba(20,61,50,0.12)] dark:border-[#29483d] dark:bg-[#12231e] dark:shadow-[0_30px_80px_rgba(0,0,0,0.35)] sm:p-7">
+            <div className="relative overflow-hidden rounded-[26px] border border-[#d5e5df] bg-[#f7faf8] p-4.5 shadow-[0_25px_70px_rgba(20,61,50,0.12)] dark:border-[#29483d] dark:bg-[#12231e] dark:shadow-[0_25px_70px_rgba(0,0,0,0.35)] sm:p-6">
 
               {/* CARD GLOW */}
               <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[#cfeee1]/70 blur-3xl dark:bg-[#174c3b]/30" />
 
 
               {/* YOUR LISTING */}
-              <div className="relative rounded-2xl border border-[#dce8e3] bg-white p-5 dark:border-[#29483d] dark:bg-[#172a24]">
+              <div className="relative rounded-2xl border border-[#dce8e3] bg-white p-4 dark:border-[#29483d] dark:bg-[#172a24]">
 
                 <div className="flex items-start justify-between gap-4">
 
@@ -1466,7 +2820,7 @@ export default function HomePage() {
                   </p>
 
                   <span className="text-xs text-[#929d99] dark:text-[#71877e]">
-                    Etsy market
+                    {t("competitor.market")}
                   </span>
 
                 </div>
@@ -1475,12 +2829,12 @@ export default function HomePage() {
                 <div className="mt-3 space-y-2">
 
                   {/* COMPETITOR 1 */}
-                  <div className="flex items-center justify-between rounded-xl bg-white p-4 dark:bg-[#172a24]">
+                  <div className="flex items-center justify-between rounded-xl bg-white p-3.5 dark:bg-[#172a24]">
 
                     <div>
 
                       <p className="text-sm font-medium dark:text-[#e8f1ed]">
-                        Personalized Name Necklace
+                        {t("competitor.competitor1Name")}
                       </p>
 
                       <p className="mt-1 text-xs text-[#929d99] dark:text-[#71877e]">
@@ -1497,12 +2851,12 @@ export default function HomePage() {
 
 
                   {/* COMPETITOR 2 */}
-                  <div className="flex items-center justify-between rounded-xl bg-white p-4 dark:bg-[#172a24]">
+                  <div className="flex items-center justify-between rounded-xl bg-white p-3.5 dark:bg-[#172a24]">
 
                     <div>
 
                       <p className="text-sm font-medium dark:text-[#e8f1ed]">
-                        Custom Birthstone Jewelry
+                        {t("competitor.competitor2Name")}
                       </p>
 
                       <p className="mt-1 text-xs text-[#929d99] dark:text-[#71877e]">
@@ -1519,12 +2873,12 @@ export default function HomePage() {
 
 
                   {/* COMPETITOR 3 */}
-                  <div className="flex items-center justify-between rounded-xl bg-white p-4 dark:bg-[#172a24]">
+                  <div className="flex items-center justify-between rounded-xl bg-white p-3.5 dark:bg-[#172a24]">
 
                     <div>
 
                       <p className="text-sm font-medium dark:text-[#e8f1ed]">
-                        Personalized Gift Necklace
+                        {t("competitor.competitor3Name")}
                       </p>
 
                       <p className="mt-1 text-xs text-[#929d99] dark:text-[#71877e]">
@@ -1869,248 +3223,608 @@ export default function HomePage() {
 
   </div>
 </section>
-     {/* AI LISTING OPTIMIZATION */}
-<section className="relative overflow-hidden bg-[#f4f8f6] dark:bg-[#0d1b16]">
+    {/* ===================================================== */}
+{/* FEATURES */}
+{/* ===================================================== */}
 
+<section
+  id="features"
+  className="relative overflow-hidden bg-white dark:bg-[#0b1713]"
+>
   {/* BACKGROUND GLOW */}
-  <div className="pointer-events-none absolute -right-40 top-20 h-[420px] w-[420px] rounded-full bg-[#d8f1e8]/60 blur-3xl dark:bg-[#174c3b]/25" />
+  <div
+    className="
+      pointer-events-none
+      absolute
+      -left-40
+      top-10
+      h-[380px]
+      w-[380px]
+      rounded-full
+      bg-[#e4f5ee]/60
+      blur-3xl
+      dark:bg-[#174c3b]/20
+    "
+  />
 
-  <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+  <div className="mx-auto max-w-6xl px-6 py-20 lg:px-8">
 
-    <div className="relative grid gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:items-center">
+    {/* ================================================= */}
+    {/* HEADER */}
+    {/* ================================================= */}
 
-      {/* LEFT */}
-      <div>
+    <div className="mx-auto max-w-2xl text-center">
 
-        <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4b9b83]">
-          {t("listingOptimizer.eyebrow")}
-        </p>
+      <p
+        className="
+          text-xs
+          font-semibold
+          uppercase
+          tracking-[0.2em]
+          text-[#4b9b83]
+        "
+      >
+        {t("features.eyebrow")}
+      </p>
 
-        <h2 className="mt-4 max-w-xl text-4xl font-semibold leading-tight tracking-tight dark:text-[#f1f7f4] sm:text-5xl">
-          {t("listingOptimizer.title")}
-        </h2>
+      <h2
+        className="
+          mt-3
+          text-3xl
+          font-semibold
+          leading-tight
+          tracking-tight
+          text-[#14231e]
+          dark:text-[#f1f7f4]
+          sm:text-4xl
+        "
+      >
+        {t("features.title")}
+      </h2>
 
-        <p className="mt-5 max-w-lg text-lg leading-8 text-[#697671] dark:text-[#9fb4ab]">
-          {t("listingOptimizer.description")}
-        </p>
+      <p
+        className="
+          mx-auto
+          mt-4
+          max-w-xl
+          text-base
+          leading-7
+          text-[#697671]
+          dark:text-[#9fb4ab]
+        "
+      >
+        {t("features.description")}
+      </p>
 
-        {/* MAIN CTA */}
-        <Link
-          href={`/${locale}/register`}
-          className="mt-8 inline-flex rounded-full bg-[#143d32] px-6 py-3.5 text-sm font-semibold text-white transition hover:-translate-y-0.5 hover:bg-[#1c5143]"
+    </div>
+
+
+    {/* ================================================= */}
+    {/* FEATURE GRID */}
+    {/* ================================================= */}
+
+    <div className="relative mx-auto mt-10 grid max-w-5xl gap-4 md:grid-cols-2">
+
+
+      {/* ================================================= */}
+      {/* STORE INTELLIGENCE */}
+      {/* ================================================= */}
+
+      <div
+        className="
+          group
+          relative
+          overflow-hidden
+          rounded-2xl
+          border
+          border-[#dce8e3]
+          bg-[#f7faf8]
+          p-6
+          shadow-[0_12px_35px_rgba(20,61,50,0.05)]
+          transition-all
+          duration-300
+          hover:-translate-y-1
+          hover:shadow-[0_20px_45px_rgba(20,61,50,0.09)]
+          dark:border-[#29483d]
+          dark:bg-[#14261f]
+          dark:hover:shadow-[0_20px_45px_rgba(0,0,0,0.25)]
+        "
+      >
+
+        {/* ICON */}
+        <div
+          className="
+            flex
+            h-10
+            w-10
+            items-center
+            justify-center
+            rounded-xl
+            bg-[#e4f2ec]
+            text-sm
+            font-medium
+            text-[#34745f]
+            dark:bg-[#21483b]
+            dark:text-[#79c2a9]
+          "
         >
-          {t("listingOptimizer.optimize")} →
-        </Link>
+          ◉
+        </div>
 
-      </div>
+        <h3
+          className="
+            mt-5
+            text-lg
+            font-semibold
+            tracking-tight
+            text-[#14231e]
+            dark:text-[#f1f7f4]
+          "
+        >
+          {t("features.storeTitle")}
+        </h3>
 
+        <p
+          className="
+            mt-2
+            max-w-md
+            text-sm
+            leading-6
+            text-[#697671]
+            dark:text-[#9fb4ab]
+          "
+        >
+          {t("features.storeDescription")}
+        </p>
 
-      {/* LISTING CARD */}
-      <div className="relative overflow-hidden rounded-[28px] border border-[#dfe9e4] bg-white p-5 shadow-[0_30px_80px_rgba(20,61,50,0.10)] dark:border-[#29483d] dark:bg-[#12231e] dark:shadow-[0_30px_80px_rgba(0,0,0,0.35)] sm:p-7">
+        {/* FEATURES */}
+        <div className="mt-5 space-y-2">
 
-        {/* CARD GLOW */}
-        <div className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-[#cfeee1]/60 blur-3xl dark:bg-[#174c3b]/25" />
-
-
-        {/* BEFORE / AFTER */}
-        <div className="relative grid gap-4 md:grid-cols-2">
-
-          {/* BEFORE */}
-          <div className="rounded-2xl border border-[#e7ecea] bg-[#fafbfa] p-5 dark:border-[#30473f] dark:bg-[#172a24]">
-
-            <div className="flex items-center justify-between">
-
-              <p className="text-xs font-semibold uppercase tracking-wider text-[#929d99] dark:text-[#71877e]">
-                {t("listingOptimizer.before")}
-              </p>
-
-              <span className="rounded-full bg-[#fff0ed] px-2.5 py-1 text-[11px] font-semibold text-[#c55b47] dark:bg-[#3a2926] dark:text-[#e48672]">
-                61
-              </span>
-
-            </div>
-
-
-            <p className="mt-4 text-sm font-semibold leading-6 dark:text-[#f1f7f4]">
-              {t("listingOptimizer.originalTitle")}
-            </p>
-
-
-            <div className="mt-5 space-y-3">
-
-              {/* SEO */}
-              <div>
-                <div className="flex justify-between text-[11px] text-[#929d99] dark:text-[#71877e]">
-                  <span>{t("listingOptimizer.seoScore")}</span>
-                  <span>61</span>
-                </div>
-
-                <div className="mt-1.5 h-1.5 rounded-full bg-[#e7ece9] dark:bg-[#294038]">
-                  <div className="h-full w-[61%] rounded-full bg-[#d0b879]" />
-                </div>
-              </div>
-
-
-              {/* KEYWORD COVERAGE */}
-              <div>
-                <div className="flex justify-between text-[11px] text-[#929d99] dark:text-[#71877e]">
-                  <span>{t("listingOptimizer.keywordCoverage")}</span>
-                  <span>58</span>
-                </div>
-
-                <div className="mt-1.5 h-1.5 rounded-full bg-[#e7ece9] dark:bg-[#294038]">
-                  <div className="h-full w-[58%] rounded-full bg-[#d0b879]" />
-                </div>
-              </div>
-
-
-              {/* READABILITY */}
-              <div>
-                <div className="flex justify-between text-[11px] text-[#929d99] dark:text-[#71877e]">
-                  <span>{t("listingOptimizer.readability")}</span>
-                  <span>72</span>
-                </div>
-
-                <div className="mt-1.5 h-1.5 rounded-full bg-[#e7ece9] dark:bg-[#294038]">
-                  <div className="h-full w-[72%] rounded-full bg-[#79b89f]" />
-                </div>
-              </div>
-
-            </div>
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.audit")}
           </div>
 
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.health")}
+          </div>
 
-          {/* AFTER */}
-          <div className="rounded-2xl border border-[#cfe3da] bg-[#f4faf7] p-5 dark:border-[#376052] dark:bg-[#18362d]">
-
-            <div className="flex items-center justify-between">
-
-              <p className="text-xs font-semibold uppercase tracking-wider text-[#34745f] dark:text-[#79c2a9]">
-                {t("listingOptimizer.after")}
-              </p>
-
-              <span className="rounded-full bg-[#143d32] px-2.5 py-1 text-[11px] font-semibold text-white dark:bg-[#15966a]">
-                89
-              </span>
-
-            </div>
-
-
-            <p className="mt-4 text-sm font-semibold leading-6 dark:text-[#f1f7f4]">
-              {t("listingOptimizer.optimizedTitle")}
-            </p>
-
-
-            <div className="mt-5 space-y-3">
-
-              {/* SEO */}
-              <div>
-                <div className="flex justify-between text-[11px] text-[#6f817a] dark:text-[#8fa79e]">
-                  <span>{t("listingOptimizer.seoScore")}</span>
-
-                  <span className="font-semibold text-[#34745f] dark:text-[#79c2a9]">
-                    89
-                  </span>
-                </div>
-
-                <div className="mt-1.5 h-1.5 rounded-full bg-[#dceae4] dark:bg-[#29483d]">
-                  <div className="h-full w-[89%] rounded-full bg-[#55a98d]" />
-                </div>
-              </div>
-
-
-              {/* KEYWORD COVERAGE */}
-              <div>
-                <div className="flex justify-between text-[11px] text-[#6f817a] dark:text-[#8fa79e]">
-                  <span>{t("listingOptimizer.keywordCoverage")}</span>
-
-                  <span className="font-semibold text-[#34745f] dark:text-[#79c2a9]">
-                    91
-                  </span>
-                </div>
-
-                <div className="mt-1.5 h-1.5 rounded-full bg-[#dceae4] dark:bg-[#29483d]">
-                  <div className="h-full w-[91%] rounded-full bg-[#55a98d]" />
-                </div>
-              </div>
-
-
-              {/* READABILITY */}
-              <div>
-                <div className="flex justify-between text-[11px] text-[#6f817a] dark:text-[#8fa79e]">
-                  <span>{t("listingOptimizer.readability")}</span>
-
-                  <span className="font-semibold text-[#34745f] dark:text-[#79c2a9]">
-                    94
-                  </span>
-                </div>
-
-                <div className="mt-1.5 h-1.5 rounded-full bg-[#dceae4] dark:bg-[#29483d]">
-                  <div className="h-full w-[94%] rounded-full bg-[#55a98d]" />
-                </div>
-              </div>
-
-            </div>
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.performance")}
           </div>
 
         </div>
 
-
-        {/* AI IMPROVEMENT */}
-        <div className="relative mt-5 overflow-hidden rounded-2xl bg-[#143d32] p-5 text-white shadow-lg shadow-[#143d32]/10">
-
-          {/* AI GLOW */}
-          <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#55a98d]/20 blur-3xl" />
-
-          <div className="relative">
-
-            <div className="flex items-center gap-2">
-
-              <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/10 text-xs">
-                ✦
-              </span>
-
-              <p className="text-sm font-semibold">
-                {t("listingOptimizer.improvement")}
-              </p>
-
-            </div>
+      </div>
 
 
-            {/* IMPROVEMENTS */}
-            <div className="mt-4 grid gap-2 sm:grid-cols-3">
+      {/* ================================================= */}
+      {/* SEO & LISTING */}
+      {/* ================================================= */}
 
-              <div className="rounded-xl bg-white/[0.07] p-3 text-sm text-white/80">
-                ✓ {t("listingOptimizer.betterKeywords")}
-              </div>
+      <div
+        className="
+          group
+          relative
+          overflow-hidden
+          rounded-2xl
+          border
+          border-[#dce8e3]
+          bg-[#f7faf8]
+          p-6
+          shadow-[0_12px_35px_rgba(20,61,50,0.05)]
+          transition-all
+          duration-300
+          hover:-translate-y-1
+          hover:shadow-[0_20px_45px_rgba(20,61,50,0.09)]
+          dark:border-[#29483d]
+          dark:bg-[#14261f]
+          dark:hover:shadow-[0_20px_45px_rgba(0,0,0,0.25)]
+        "
+      >
 
-              <div className="rounded-xl bg-white/[0.07] p-3 text-sm text-white/80">
-                ✓ {t("listingOptimizer.clearerTitle")}
-              </div>
+        <div
+          className="
+            flex
+            h-10
+            w-10
+            items-center
+            justify-center
+            rounded-xl
+            bg-[#e4f2ec]
+            text-sm
+            font-medium
+            text-[#34745f]
+            dark:bg-[#21483b]
+            dark:text-[#79c2a9]
+          "
+        >
+          Aa
+        </div>
 
-              <div className="rounded-xl bg-white/[0.07] p-3 text-sm text-white/80">
-                ✓ {t("listingOptimizer.betterStructure")}
-              </div>
+        <h3
+          className="
+            mt-5
+            text-lg
+            font-semibold
+            tracking-tight
+            text-[#14231e]
+            dark:text-[#f1f7f4]
+          "
+        >
+          {t("features.seoTitle")}
+        </h3>
 
-            </div>
+        <p
+          className="
+            mt-2
+            max-w-md
+            text-sm
+            leading-6
+            text-[#697671]
+            dark:text-[#9fb4ab]
+          "
+        >
+          {t("features.seoDescription")}
+        </p>
+
+        <div className="mt-5 space-y-2">
+
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.listing")}
+          </div>
+
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.keywords")}
+          </div>
+
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.generator")}
+          </div>
+
+        </div>
+
+      </div>
 
 
-            {/* CTA */}
-            <div className="mt-5 flex items-center justify-between gap-4">
+      {/* ================================================= */}
+      {/* MARKET INTELLIGENCE */}
+      {/* ================================================= */}
 
-              <span className="text-sm font-semibold text-white">
-                {t("listingOptimizer.scoreImproved")}
-              </span>
+      <div
+        className="
+          group
+          relative
+          overflow-hidden
+          rounded-2xl
+          border
+          border-[#dce8e3]
+          bg-[#f7faf8]
+          p-6
+          shadow-[0_12px_35px_rgba(20,61,50,0.05)]
+          transition-all
+          duration-300
+          hover:-translate-y-1
+          hover:shadow-[0_20px_45px_rgba(20,61,50,0.09)]
+          dark:border-[#29483d]
+          dark:bg-[#14261f]
+          dark:hover:shadow-[0_20px_45px_rgba(0,0,0,0.25)]
+        "
+      >
 
-              <Link
-                href={`/${locale}/register`}
-                className="rounded-full bg-white px-5 py-2.5 text-xs font-semibold text-[#143d32] transition hover:-translate-y-0.5 hover:bg-[#eef5f2]"
-              >
-                {t("listingOptimizer.optimize")} →
-              </Link>
+        <div
+          className="
+            flex
+            h-10
+            w-10
+            items-center
+            justify-center
+            rounded-xl
+            bg-[#e4f2ec]
+            text-sm
+            font-medium
+            text-[#34745f]
+            dark:bg-[#21483b]
+            dark:text-[#79c2a9]
+          "
+        >
+          ↗
+        </div>
 
-            </div>
+        <h3
+          className="
+            mt-5
+            text-lg
+            font-semibold
+            tracking-tight
+            text-[#14231e]
+            dark:text-[#f1f7f4]
+          "
+        >
+          {t("features.marketTitle")}
+        </h3>
 
+        <p
+          className="
+            mt-2
+            max-w-md
+            text-sm
+            leading-6
+            text-[#697671]
+            dark:text-[#9fb4ab]
+          "
+        >
+          {t("features.marketDescription")}
+        </p>
+
+        <div className="mt-5 space-y-2">
+
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.competitors")}
+          </div>
+
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.trends")}
+          </div>
+
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.opportunity")}
+          </div>
+
+        </div>
+
+      </div>
+
+
+      {/* ================================================= */}
+      {/* VISUAL INTELLIGENCE */}
+      {/* ================================================= */}
+
+      <div
+        className="
+          group
+          relative
+          overflow-hidden
+          rounded-2xl
+          border
+          border-[#dce8e3]
+          bg-[#f7faf8]
+          p-6
+          shadow-[0_12px_35px_rgba(20,61,50,0.05)]
+          transition-all
+          duration-300
+          hover:-translate-y-1
+          hover:shadow-[0_20px_45px_rgba(20,61,50,0.09)]
+          dark:border-[#29483d]
+          dark:bg-[#14261f]
+          dark:hover:shadow-[0_20px_45px_rgba(0,0,0,0.25)]
+        "
+      >
+
+        <div
+          className="
+            flex
+            h-10
+            w-10
+            items-center
+            justify-center
+            rounded-xl
+            bg-[#e4f2ec]
+            text-sm
+            font-medium
+            text-[#34745f]
+            dark:bg-[#21483b]
+            dark:text-[#79c2a9]
+          "
+        >
+          ◇
+        </div>
+
+        <h3
+          className="
+            mt-5
+            text-lg
+            font-semibold
+            tracking-tight
+            text-[#14231e]
+            dark:text-[#f1f7f4]
+          "
+        >
+          {t("features.visualTitle")}
+        </h3>
+
+        <p
+          className="
+            mt-2
+            max-w-md
+            text-sm
+            leading-6
+            text-[#697671]
+            dark:text-[#9fb4ab]
+          "
+        >
+          {t("features.visualDescription")}
+        </p>
+
+        <div className="mt-5 space-y-2">
+
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.visualAudit")}
+          </div>
+
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.imageScore")}
+          </div>
+
+          <div
+            className="
+              rounded-xl
+              border
+              border-[#edf1ef]
+              bg-white
+              px-3.5
+              py-2.5
+              text-sm
+              text-[#253630]
+              dark:border-[#29483d]
+              dark:bg-[#1b3028]
+              dark:text-[#d5e3de]
+            "
+          >
+            ✓ {t("features.recommendations")}
           </div>
 
         </div>
@@ -2118,239 +3832,126 @@ export default function HomePage() {
       </div>
 
     </div>
-  </div>
-</section>
-      {/* FEATURES */}
-      <section
-  id="features"
-  className="relative overflow-hidden bg-white dark:bg-[#0b1713]"
->
 
-        {/* BACKGROUND GLOW */}
-        <div className="pointer-events-none absolute -left-40 top-20 h-[420px] w-[420px] rounded-full bg-[#e4f5ee]/70 blur-3xl dark:bg-[#174c3b]/25" />
 
-        <div className="mx-auto max-w-7xl px-6 py-24 lg:px-8">
+    {/* ================================================= */}
+    {/* GROWTH COACH */}
+    {/* ================================================= */}
 
-          {/* HEADER */}
-          <div className="mx-auto max-w-3xl text-center">
+    <div
+      className="
+        relative
+        mx-auto
+        mt-4
+        max-w-5xl
+        overflow-hidden
+        rounded-2xl
+        bg-[#143d32]
+        px-6
+        py-6
+        text-white
+        shadow-[0_20px_55px_rgba(20,61,50,0.14)]
+        sm:px-7
+      "
+    >
 
-            <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#4b9b83]">
-              {t("features.eyebrow")}
-            </p>
+      {/* GLOW */}
+      <div
+        className="
+          pointer-events-none
+          absolute
+          -right-20
+          -top-20
+          h-48
+          w-48
+          rounded-full
+          bg-[#55a98d]/20
+          blur-3xl
+        "
+      />
 
-            <h2 className="mt-4 text-4xl font-semibold leading-tight tracking-tight dark:text-[#f1f7f4] sm:text-5xl">
-              {t("features.title")}
-            </h2>
+      <div
+        className="
+          relative
+          flex
+          flex-col
+          gap-6
+          md:flex-row
+          md:items-center
+          md:justify-between
+        "
+      >
 
-            <p className="mx-auto mt-5 max-w-2xl text-lg leading-8 text-[#697671] dark:text-[#9fb4ab]">
-              {t("features.description")}
-            </p>
+        {/* LEFT */}
+        <div className="min-w-0">
 
+          <div
+            className="
+              flex
+              h-9
+              w-9
+              items-center
+              justify-center
+              rounded-xl
+              bg-white/10
+              text-sm
+            "
+          >
+            ✦
           </div>
 
+          <h3 className="mt-4 text-xl font-semibold tracking-tight">
+            {t("features.coachTitle")}
+          </h3>
 
-          {/* FEATURE GRID */}
-          <div className="relative mt-14 grid gap-6 md:grid-cols-2">
+          <p className="mt-2 max-w-xl text-sm leading-6 text-white/65">
+            {t("features.coachDescription")}
+          </p>
 
-
-            {/* STORE INTELLIGENCE */}
-            <div className="relative overflow-hidden rounded-3xl border border-[#d5e5df] bg-[#f5faf7] p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(20,61,50,0.08)] dark:border-[#29483d] dark:bg-[#14261f] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
-
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e4f2ec] text-[#34745f] dark:bg-[#21483b] dark:text-[#79c2a9]">
-                ◉
-              </div>
-
-              <h3 className="mt-6 text-xl font-semibold dark:text-[#f1f7f4]">
-                {t("features.storeTitle")}
-              </h3>
-
-              <p className="mt-3 max-w-md text-sm leading-6 text-[#697671] dark:text-[#9fb4ab]">
-                {t("features.storeDescription")}
-              </p>
-
-              <div className="mt-6 space-y-2">
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.audit")}
-                </div>
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.health")}
-                </div>
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.performance")}
-                </div>
-
-              </div>
-            </div>
+        </div>
 
 
-            {/* SEO */}
-            <div className="relative overflow-hidden rounded-3xl border border-[#d5e5df] bg-[#f5faf7] p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(20,61,50,0.08)] dark:border-[#29483d] dark:bg-[#14261f] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
+        {/* STATS */}
+        <div className="grid shrink-0 grid-cols-3 gap-2 md:w-[390px]">
 
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e4f2ec] text-[#34745f] dark:bg-[#21483b] dark:text-[#79c2a9]">
-                Aa
-              </div>
+          <div className="rounded-xl bg-white/[0.07] px-3 py-3">
+            <p className="text-[10px] uppercase tracking-wide text-white/40">
+              {t("features.priorities")}
+            </p>
 
-              <h3 className="mt-6 text-xl font-semibold dark:text-[#f1f7f4]">
-                {t("features.seoTitle")}
-              </h3>
-
-              <p className="mt-3 max-w-md text-sm leading-6 text-[#697671] dark:text-[#9fb4ab]">
-                {t("features.seoDescription")}
-              </p>
-
-              <div className="mt-6 space-y-2">
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.listing")}
-                </div>
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.keywords")}
-                </div>
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.generator")}
-                </div>
-
-              </div>
-            </div>
-
-
-            {/* MARKET */}
-            <div className="relative overflow-hidden rounded-3xl border border-[#d5e5df] bg-[#f5faf7] p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(20,61,50,0.08)] dark:border-[#29483d] dark:bg-[#14261f] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
-
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e4f2ec] text-[#34745f] dark:bg-[#21483b] dark:text-[#79c2a9]">
-                ↗
-              </div>
-
-              <h3 className="mt-6 text-xl font-semibold dark:text-[#f1f7f4]">
-                {t("features.marketTitle")}
-              </h3>
-
-              <p className="mt-3 max-w-md text-sm leading-6 text-[#697671] dark:text-[#9fb4ab]">
-                {t("features.marketDescription")}
-              </p>
-
-              <div className="mt-6 space-y-2">
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.competitors")}
-                </div>
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.trends")}
-                </div>
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.opportunity")}
-                </div>
-
-              </div>
-            </div>
-
-
-            {/* VISUAL */}
-            <div className="relative overflow-hidden rounded-3xl border border-[#d5e5df] bg-[#f5faf7] p-7 shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-[0_20px_50px_rgba(20,61,50,0.08)] dark:border-[#29483d] dark:bg-[#14261f] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.3)]">
-
-              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e4f2ec] text-[#34745f] dark:bg-[#21483b] dark:text-[#79c2a9]">
-                ◇
-              </div>
-
-              <h3 className="mt-6 text-xl font-semibold dark:text-[#f1f7f4]">
-                {t("features.visualTitle")}
-              </h3>
-
-              <p className="mt-3 max-w-md text-sm leading-6 text-[#697671] dark:text-[#9fb4ab]">
-                {t("features.visualDescription")}
-              </p>
-
-              <div className="mt-6 space-y-2">
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.visualAudit")}
-                </div>
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.imageScore")}
-                </div>
-
-                <div className="rounded-xl bg-white p-3 text-sm dark:bg-[#1b3028] dark:text-[#d5e3de]">
-                  ✓ {t("features.recommendations")}
-                </div>
-
-              </div>
-            </div>
-
+            <p className="mt-1.5 text-sm font-semibold">
+              4 today
+            </p>
           </div>
 
+          <div className="rounded-xl bg-white/[0.07] px-3 py-3">
+            <p className="text-[10px] uppercase tracking-wide text-white/40">
+              {t("features.actions")}
+            </p>
 
-          {/* GROWTH COACH */}
-          <div className="relative mt-6 overflow-hidden rounded-3xl bg-[#143d32] p-7 text-white shadow-[0_25px_70px_rgba(20,61,50,0.15)] sm:p-9">
+            <p className="mt-1.5 text-sm font-semibold">
+              12 found
+            </p>
+          </div>
 
-            {/* GLOW */}
-            <div className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[#55a98d]/20 blur-3xl" />
+          <div className="rounded-xl bg-white/[0.07] px-3 py-3">
+            <p className="text-[10px] uppercase tracking-wide text-white/40">
+              {t("features.insights")}
+            </p>
 
-            <div className="relative grid gap-8 md:grid-cols-[1fr_auto] md:items-center">
-
-              <div>
-
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-white/10">
-                  ✦
-                </div>
-
-                <h3 className="mt-6 text-2xl font-semibold">
-                  {t("features.coachTitle")}
-                </h3>
-
-                <p className="mt-3 max-w-2xl text-sm leading-6 text-white/65">
-                  {t("features.coachDescription")}
-                </p>
-
-              </div>
-
-
-              <div className="grid gap-2 sm:grid-cols-3 md:w-[500px]">
-
-                <div className="rounded-2xl bg-white/[0.07] p-4">
-                  <p className="text-xs text-white/45">
-                    {t("features.priorities")}
-                  </p>
-
-                  <p className="mt-2 text-sm font-semibold">
-                    4 today
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-white/[0.07] p-4">
-                  <p className="text-xs text-white/45">
-                    {t("features.actions")}
-                  </p>
-
-                  <p className="mt-2 text-sm font-semibold">
-                    12 found
-                  </p>
-                </div>
-
-                <div className="rounded-2xl bg-white/[0.07] p-4">
-                  <p className="text-xs text-white/45">
-                    {t("features.insights")}
-                  </p>
-
-                  <p className="mt-2 text-sm font-semibold">
-                    AI powered
-                  </p>
-                </div>
-
-              </div>
-
-            </div>
+            <p className="mt-1.5 text-sm font-semibold">
+              AI powered
+            </p>
           </div>
 
         </div>
-      </section>
+
+      </div>
+
+    </div>
+
+  </div>
+</section>
       {/* HOW IT WORKS */}
       <section
         id="how-it-works"
@@ -2875,7 +4476,7 @@ export default function HomePage() {
 {/* FOOTER */}
 <footer className="border-t border-[#e5ece9] bg-white dark:border-[#203b32] dark:bg-[#0d1b16]">
 
-  <div className="mx-auto max-w-7xl px-6 py-14 lg:px-8">
+  <div className="mx-auto max-w-7xl px-6 lg:py-12 lg:px-8">
 
     <div className="grid gap-12 md:grid-cols-[1.5fr_1fr_1fr_1fr]">
 
@@ -2909,39 +4510,80 @@ export default function HomePage() {
 
 
       {/* PRODUCT */}
-      <div>
+      {/* NAV LINKS */}
+<div
+  className="
+    hidden
+    items-center
+    gap-2
+    text-sm
+    md:flex
+    dark:text-[#9fb4ab]
+  "
+>
+  <a
+    href="#features"
+    className="
+      rounded-full
+      border border-transparent
+      px-4 py-2.5
+      text-[#68756f]
+      transition-all duration-200
+      hover:border-[#dfe9e4]
+      hover:bg-white
+      hover:text-[#143d32]
+      hover:shadow-[0_2px_8px_rgba(20,61,50,0.04)]
+      dark:text-[#9fb4ab]
+      dark:hover:border-[#24483c]
+      dark:hover:bg-[#12251f]
+      dark:hover:text-[#79c2a9]
+    "
+  >
+    {t("nav.features")}
+  </a>
 
-        <p className="text-sm font-semibold dark:text-[#f1f7f4]">
-          {t("footer.product")}
-        </p>
+  <a
+    href="#how-it-works"
+    className="
+      rounded-full
+      border border-transparent
+      px-4 py-2.5
+      text-[#68756f]
+      transition-all duration-200
+      hover:border-[#dfe9e4]
+      hover:bg-white
+      hover:text-[#143d32]
+      hover:shadow-[0_2px_8px_rgba(20,61,50,0.04)]
+      dark:text-[#9fb4ab]
+      dark:hover:border-[#24483c]
+      dark:hover:bg-[#12251f]
+      dark:hover:text-[#79c2a9]
+    "
+  >
+    {t("nav.howItWorks")}
+  </a>
 
-        <div className="mt-5 space-y-3">
-
-          <a
-            href="#features"
-            className="block text-sm text-[#697671] transition hover:text-[#143d32] dark:text-[#9fb4ab] dark:hover:text-[#79c2a9]"
-          >
-            {t("footer.features")}
-          </a>
-
-          <a
-            href="#pricing"
-            className="block text-sm text-[#697671] transition hover:text-[#143d32] dark:text-[#9fb4ab] dark:hover:text-[#79c2a9]"
-          >
-            {t("footer.pricing")}
-          </a>
-
-          <a
-            href="#how-it-works"
-            className="block text-sm text-[#697671] transition hover:text-[#143d32] dark:text-[#9fb4ab] dark:hover:text-[#79c2a9]"
-          >
-            {t("footer.howItWorks")}
-          </a>
-
-        </div>
-
-      </div>
-
+  <a
+    href="#pricing"
+    className="
+      rounded-full
+      border border-transparent
+      px-4 py-2.5
+      text-[#68756f]
+      transition-all duration-200
+      hover:border-[#dfe9e4]
+      hover:bg-white
+      hover:text-[#143d32]
+      hover:shadow-[0_2px_8px_rgba(20,61,50,0.04)]
+      dark:text-[#9fb4ab]
+      dark:hover:border-[#24483c]
+      dark:hover:bg-[#12251f]
+      dark:hover:text-[#79c2a9]
+    "
+  >
+    {t("nav.pricing")}
+  </a>
+</div>
 
       {/* RESOURCES */}
       <div>

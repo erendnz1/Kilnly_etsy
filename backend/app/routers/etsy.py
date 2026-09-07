@@ -19,6 +19,7 @@ from app.schemas.supplier import (
     SupplierSearchRequest,
 )
 from app.services.supplier_finder_service import (
+    debug_aliexpress_product,
     find_suppliers,
 )
 
@@ -795,8 +796,38 @@ def find_supplier(
             detail="Could not find suppliers.",
         )
 
+    # Sadece kullanıcı için gerekli bilgileri döndür.
+    clean_suppliers = []
+
+    for supplier in suppliers:
+
+        url = supplier.get("url")
+
+        if not url:
+            continue
+
+        clean_suppliers.append(
+            {
+                "url": url,
+                "search_query": supplier.get(
+                    "search_query"
+                ),
+            }
+        )
+
     return {
         "success": True,
-        "count": len(suppliers),
-        "suppliers": suppliers,
+        "count": len(clean_suppliers),
+        "suppliers": clean_suppliers,
     }
+
+@router.get(
+    "/debug-supplier"
+)
+def debug_supplier(
+    url: str,
+):
+
+    return debug_aliexpress_product(
+        url
+    )

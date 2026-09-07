@@ -43,6 +43,10 @@ class EtsyListing(Base):
         nullable=True,
     )
 
+    # ============================================================
+    # ETSY PRODUCT DATA
+    # ============================================================
+
     price: Mapped[float | None] = mapped_column(
         Numeric(12, 2),
         nullable=True,
@@ -63,25 +67,84 @@ class EtsyListing(Base):
         nullable=True,
     )
 
+    # ============================================================
+    # IMAGES
+    # ============================================================
+
     image_url: Mapped[str | None] = mapped_column(
         Text,
         nullable=True,
     )
+
     image_count: Mapped[int] = mapped_column(
-    Integer,
-    default=0,
-    nullable=False,
-)
+        Integer,
+        default=0,
+        nullable=False,
+    )
 
     image_urls: Mapped[str | None] = mapped_column(
-    Text,
-    nullable=True,
-)
+        Text,
+        nullable=True,
+    )
+
+    # ============================================================
+    # SEO / LISTING DATA
+    # ============================================================
 
     tags: Mapped[str | None] = mapped_column(
         Text,
         nullable=True,
     )
+
+    # ============================================================
+    # PROFIT & COST DATA
+    # ============================================================
+
+    # Product / supplier cost per unit.
+    #
+    # Example:
+    # AliExpress product = $52.59
+    #
+    # This is NOT the Etsy selling price.
+    product_cost_usd: Mapped[float | None] = mapped_column(
+        Numeric(12, 2),
+        nullable=True,
+    )
+
+    # Actual shipping cost paid by the seller per unit/order.
+    #
+    # Example:
+    # AliExpress shipping = $0.00
+    #
+    # This is different from the shipping amount charged
+    # to the Etsy buyer.
+    actual_shipping_cost_usd: Mapped[float | None] = mapped_column(
+        Numeric(12, 2),
+        nullable=True,
+    )
+
+    # Where the product is sourced from.
+    #
+    # Examples:
+    # "turkey"
+    # "aliexpress"
+    supplier_source: Mapped[str | None] = mapped_column(
+        String(50),
+        nullable=True,
+    )
+
+    # Optional supplier/product URL.
+    #
+    # Example:
+    # AliExpress product URL
+    supplier_url: Mapped[str | None] = mapped_column(
+        Text,
+        nullable=True,
+    )
+
+    # ============================================================
+    # TIMESTAMPS
+    # ============================================================
 
     created_at: Mapped[datetime] = mapped_column(
         DateTime,

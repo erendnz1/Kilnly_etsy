@@ -13,6 +13,7 @@
     "description": "CraftPilot ürün listelemelerinizi, SEO'nuzu ve mağaza performansınızı analiz ederek size net ve uygulanabilir öneriler sunar.",
     "primaryButton": "Mağazamı analiz et →",
     "secondaryButton": "Nasıl çalışıyor?",
+    "videoBadge": "CraftPilot'u çalışırken görün",
     "note": "Ücretsiz başlayın · Kredi kartı gerekmez"
   },
   "dashboard": {
@@ -130,12 +131,151 @@
     }
   }
 },
+"priceProfit": {
+  "title": "Fiyat ve Kâr",
+  "description": "Etsy ücretlerini, kârınızı, kâr marjınızı ve önerilen satış fiyatını hesaplayın.",
 
+  "calculator": "Kâr Hesaplayıcı",
+  "calculatorDescription": "Gerçek kârınızı tahmin etmek için ürün ve satış bilgilerinizi girin.",
+
+  "safeEstimate": "Etsy ücretleri dahil tahmin",
+
+  "summarySellingPrice": "Satış Fiyatı",
+  "summaryProductCost": "Ürün Maliyeti",
+  "summaryMargin": "Kâr Marjı",
+  "summaryProfit": "Tahmini Kâr",
+
+  "totalProducts": "Toplam Ürün",
+  "analyzed": "Analiz Edildi",
+  "needCost": "Maliyet Gerekli",
+  "profitable": "Kârlı",
+  "avgMargin": "Ort. Marj",
+  "estimatedProfit": "Tahmini Kâr",
+
+  "storeAnalysis": "Mağaza Kâr Analizi",
+  "storeAnalysisDescription": "Aktif Etsy ürünlerinin tamamını otomatik olarak analiz edin.",
+  "refresh": "Yenile",
+
+  "usdTryLabel": "USD/TRY",
+  "destinationLabel": "Hedef",
+  "feeAwareEstimate": "Etsy ücretleri dahil tahmin",
+
+  "yourProducts": "Ürünlerin",
+  "productsCount": "{count} ürün",
+  "inStock": "{count} stokta",
+
+  "costDataRequired": "Maliyet bilgisi gerekli",
+  "addSupplierCostDescription": "Kârı analiz etmek için tedarikçi maliyetini ekleyin.",
+  "addCost": "Maliyet Ekle",
+
+  "productCostShort": "Maliyet",
+  "etsyFeesShort": "Etsy Ücretleri",
+  "profitShort": "Kâr",
+  "marginShort": "Marj",
+
+  "manualCalculation": "Manuel Hesaplama",
+
+  "supplier": "Tedarikçi",
+  "supplierUrl": "Tedarikçi URL'si",
+
+  "cancel": "İptal",
+  "saving": "Kaydediliyor...",
+  "saveCost": "Maliyeti Kaydet",
+  "close": "Kapat",
+
+  "noStoreAnalysis": "Mağaza analizi bulunamadı",
+  "refreshStoreAnalysis": "Etsy ürünlerinizi taramak için analizi yenileyin.",
+
+  "productCost": "Ürün Maliyeti ($)",
+  "sellingPrice": "Satış Fiyatı ($)",
+
+  "source": "Ürün Kaynağı",
+  "destination": "Hedef",
+  "quantity": "Adet",
+  "usdTryRate": "USD → TRY Kuru",
+
+  "shipping": "Kargo",
+  "shippingDescription": "Müşterinin ödediği kargo ile gerçek kargo maliyetinizi ayırın.",
+  "buyerShipping": "Müşteri Kargosu",
+  "actualShippingCost": "Gerçek Kargo Maliyeti",
+  "actualShippingDescription": "Tedarikçiye veya kargo firmasına gerçekten ödediğiniz tutar.",
+  "shippingAuto": "Kargo, kargo profilinize göre otomatik olarak hesaplanacaktır.",
+  "useProfile": "Profili kullan",
+  "useManual": "Manuel gir",
+
+  "sources": {
+    "turkey": "Türkiye",
+    "aliexpress": "AliExpress"
+  },
+
+  "destinations": {
+    "usa": "Amerika Birleşik Devletleri",
+    "canada": "Kanada",
+    "other": "Diğer"
+  },
+
+  "options": "Ücret Seçenekleri",
+  "currencyConversion": "Para birimi dönüşüm ücreti",
+  "offsiteAds": "Offsite Ads",
+
+  "calculate": "Kârı Hesapla",
+  "calculating": "Hesaplanıyor...",
+
+  "results": "Kâr Analizi",
+  "resultsDescription": "Tahmini maliyetler, Etsy ücretleri ve fiyat önerileri.",
+
+  "emptyTitle": "Sonuçlarınız burada görünecek",
+  "emptyDescription": "Tahmini kârınızı hesaplamak için ürün bilgilerinizi girin.",
+
+  "margin": "Kâr Marjı",
+
+  "order": "Sipariş",
+  "itemPrice": "Ürün Fiyatı",
+  "shippingCost": "Kargo",
+  "orderTotal": "Sipariş Toplamı",
+
+  "costs": "Maliyetlerin",
+  "totalCostBeforeFees": "Etsy Ücretleri Öncesi Maliyet",
+
+  "etsyFees": "Etsy Ücretleri",
+  "transactionFee": "İşlem Ücreti",
+  "paymentProcessing": "Ödeme İşleme Ücreti",
+  "regulatoryFee": "Düzenleyici İşletim Ücreti",
+  "listingFee": "Listeleme Ücreti",
+  "currencyConversionFee": "Para Birimi Dönüşümü",
+  "offsiteAdsFee": "Offsite Ads",
+  "totalFees": "Toplam Etsy Ücretleri",
+
+  "statusProfitable": "Kârlı",
+  "statusBelowBreakEven": "Başabaş seviyesinin altında",
+
+  "calculatorLabel": "Hesaplayıcı",
+  "analysisLabel": "Analiz",
+  "profileLabel": "Profil",
+  "enterProductDetails": "Ürün bilgilerinizi girin",
+
+  "pricing": "Fiyat Önerisi",
+  "breakEven": "Başabaş Fiyatı",
+  "recommendedLow": "Önerilen Düşük",
+  "recommended": "Önerilen Fiyat",
+  "recommendedHigh": "Önerilen Yüksek",
+
+  "errors": {
+    "required": "Lütfen gerekli tüm alanları doldurun.",
+    "invalid": "Lütfen geçerli değerler girin.",
+    "shipping": "Kargo maliyeti negatif olamaz.",
+    "calculate": "Kâr hesaplanamadı.",
+    "invalidCost": "Lütfen geçerli bir ürün maliyeti girin.",
+    "invalidShipping": "Gerçek kargo maliyeti negatif olamaz.",
+    "saveCost": "Ürün maliyeti kaydedilemedi."
+  }
+},
   "navigation": {
     "menu": "Menü",
     "dashboard": "Panel",
     "products": "Ürünler",
     "analytics": "Analitik",
+    "priceProfit": "Fiyat ve Kâr",
     "aiInsights": "AI Önerileri",
     "notifications": "Bildirimler",
     "settings": "Ayarlar"
@@ -286,22 +426,44 @@
   "button": "Önerileri görüntüle"
 },
 "storeAudit": {
-  "eyebrow": "Yapay Zekâ Mağaza Analizi",
+  "eyebrow": "YAPAY ZEKÂ MAĞAZA ANALİZİ",
   "title": "Mağazanızı geride tutan şeyleri keşfedin.",
   "description": "CraftPilot mağazanızı tarar ve verilerinizi anlaşılır bir mağaza sağlık skoruna, problemlere ve büyüme fırsatlarına dönüştürür.",
-  "health": "Mağaza Sağlığı",
+
+  "health": "MAĞAZA SAĞLIĞI",
   "score": "82",
   "outOf": "/100",
+  "status": "İyi durumda",
+
   "seo": "SEO",
   "listings": "Listelemeler",
   "keywords": "Anahtar Kelimeler",
   "conversion": "Dönüşüm",
+"freeStart": "Ücretsiz başlayın · Kredi kartı gerekmez",
+  "veryGood": "Çok iyi",
+  "good": "İyi",
+  "improvable": "İyileştirilebilir",
+
   "opportunities": "7 fırsat bulundu",
   "highPriority": "Yüksek öncelik",
+
   "seoProblems": "3 SEO problemi",
+  "seoProblemsDetail": "Başlık ve etiket optimizasyonu",
+
   "weakListings": "2 zayıf listeleme",
+  "weakListingsDetail": "Düşük performanslı ürünler",
+
   "pricingIssue": "1 fiyatlandırma problemi",
+  "pricingIssueDetail": "Fiyatlandırma fırsatı bulundu",
+
   "keywordGap": "1 anahtar kelime fırsatı",
+  "keywordGapDetail": "Yeni anahtar kelime fırsatı keşfedildi",
+
+  "featureHealth": "AI destekli mağaza sağlık skoru",
+  "featureAnalysis": "SEO, listeleme ve dönüşüm analizi",
+  "featureActions": "Önceliklendirilmiş AI aksiyon önerileri",
+  "featureGrowth": "Büyüme fırsatlarını keşfedin",
+
   "viewAudit": "AI analizini görüntüle"
 },
 "growthCoach": {
@@ -313,6 +475,8 @@
   "highImpact": "Yüksek etki",
   "mediumImpact": "Orta etki",
   "lowImpact": "Düşük etki",
+  "recommendedActions": "Önerilen aksiyonlar",
+"opportunities": "4 fırsat",
   "step1": "En zayıf 3 listelemenizi düzeltin",
   "step2": "Yeni bir anahtar kelime fırsatını hedefleyin",
   "step3": "Ana ürün görselinizi iyileştirin",
@@ -323,22 +487,30 @@
 },
 "competitor": {
   "eyebrow": "Rakip Analizi",
-  "title": "Bir sonraki hamlenizi yapmadan önce pazarı anlayın.",
-  "description": "Listelemelerinizi rakip ürünlerle karşılaştırın ve CraftPilot'un mağazanıza avantaj sağlayabilecek eksikleri belirlemesine izin verin.",
-  "yourListing": "Listelemeniz",
+  "title": "Bir sonraki hamleni yapmadan önce pazarı anla.",
+  "description": "Ürünlerinizi rakip ürünlerle karşılaştırın ve CraftPilot'un mağazanıza avantaj sağlayabilecek fırsatları keşfetmesine izin verin.",
+  "analyze": "Rakipleri analiz et",
+  "yourListing": "Listeniz",
   "price": "$29",
-  "reviews": "42 yorum",
-  "topCompetitors": "Öne çıkan rakipler",
-  "competitor1Reviews": "96 yorum",
-  "competitor2Reviews": "184 yorum",
-  "competitor3Reviews": "421 yorum",
-  "aiInsight": "Yapay zekâ içgörüsü",
-  "insight": "Fiyatınız rekabetçi ancak anahtar kelime kapsamınız önde gelen listelemelere göre daha zayıf.",
+  "reviews": "42 değerlendirme",
   "keywordCoverage": "Anahtar kelime kapsamı",
   "pricePosition": "Fiyat konumu",
   "competitive": "Rekabetçi",
-  "weaker": "Geliştirilmeli",
-  "analyze": "Rakipleri analiz et"
+  "market": "Etsy pazarı",
+
+  "topCompetitors": "Öne çıkan rakipler",
+
+  "competitor1Name": "Kişiselleştirilmiş İsim Kolyesi",
+  "competitor2Name": "Özel Doğum Taşı Takısı",
+  "competitor3Name": "Kişiselleştirilmiş Hediye Kolyesi",
+
+  "competitor1Reviews": "96 değerlendirme",
+  "competitor2Reviews": "184 değerlendirme",
+  "competitor3Reviews": "421 değerlendirme",
+
+  "aiInsight": "AI içgörüsü",
+  "insight": "Fiyatınız rekabetçi, ancak anahtar kelime kapsamınız en iyi performans gösteren listelere göre daha zayıf.",
+  "weaker": "İyileştirme gerekli"
 },
 "trendRadar": {
   "eyebrow": "Trend Radar",
