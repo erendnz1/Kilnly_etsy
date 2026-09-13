@@ -107,7 +107,7 @@ export default function DashboardPage() {
 
         throw new Error(
           data.detail ||
-            "Unable to load Etsy shop."
+          "Unable to load Etsy shop."
         );
       }
 
@@ -116,7 +116,7 @@ export default function DashboardPage() {
 
         throw new Error(
           data.detail ||
-            "Unable to load Etsy listings."
+          "Unable to load Etsy listings."
         );
       }
 
@@ -179,7 +179,7 @@ export default function DashboardPage() {
       if (!response.ok) {
         throw new Error(
           data.detail ||
-            "Unable to connect your Etsy shop."
+          "Unable to connect your Etsy shop."
         );
       }
 
@@ -235,7 +235,7 @@ export default function DashboardPage() {
       if (!response.ok) {
         throw new Error(
           data.detail ||
-            "Unable to synchronize Etsy listings."
+          "Unable to synchronize Etsy listings."
         );
       }
 
@@ -424,7 +424,7 @@ export default function DashboardPage() {
             <h2 className="text-3xl font-semibold tracking-tight lg:text-4xl">
               {hasConnectedShop
                 ? shop?.title ||
-                  `Welcome to ${shop?.shop_name}`
+                `Welcome to ${shop?.shop_name}`
                 : t("hero.title")}
             </h2>
 

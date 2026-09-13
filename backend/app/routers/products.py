@@ -48,6 +48,11 @@ class SupplierImageRequest(BaseModel):
     image_url: str
     language: str = "en"
 
+class SupplierSearchRequest(BaseModel):
+    title: str
+    description: str | None = None
+    image_urls: list[str] = []
+
 class PriceProfitRequest(BaseModel):
     product_cost_usd: float
     selling_price_usd: float
@@ -379,6 +384,77 @@ def find_supplier_from_image(
         "count": len(supplier_links),
         "suppliers": supplier_links,
     }
+# ============================================================
+# FIND SUPPLIER FROM PRODUCT URL ANALYSIS
+# ============================================================
+
+@router.post("/find-supplier")
+def find_supplier(
+    payload: SupplierSearchRequest,
+):
+    """
+    Find potential AliExpress suppliers for a product
+    detected by the URL analyzer.
+    """
+
+    title = payload.title.strip()
+
+    if not title:
+        raise HTTPException(
+            status_code=400,
+            detail="Product title is required.",
+        )
+
+    try:
+        suppliers = find_suppliers(
+            title=title,
+            description=payload.description or "",
+            image_urls=payload.image_urls,
+        )
+
+    except Exception as error:
+        print(
+            "Supplier finder error:",
+            repr(error),
+        )
+
+        raise HTTPException(
+            status_code=500,
+            detail="Could not find suppliers.",
+        )
+
+    clean_suppliers = []
+
+    for supplier in suppliers:
+        url = supplier.get("url")
+
+        if not url:
+            continue
+
+        clean_suppliers.append(
+            {
+                "title": supplier.get("title"),
+                "url": url,
+                "image_url": supplier.get("image_url"),
+                "price": supplier.get("price"),
+                "currency": supplier.get("currency"),
+                "sales": supplier.get("sales"),
+                "rating": supplier.get("rating"),
+                "match_score": supplier.get("match_score", 0),
+                "supplier_confidence": supplier.get(
+                    "supplier_confidence",
+                ),
+                "search_query": supplier.get("search_query"),
+            }
+        )
+
+    return {
+        "success": True,
+        "count": len(clean_suppliers),
+        "suppliers": clean_suppliers,
+    }
+
+
 # ============================================================
 # PRICE & PROFIT CALCULATOR
 # ============================================================

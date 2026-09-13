@@ -4,7 +4,7 @@ import json
 import logging
 import os
 import re
-
+import time
 import requests
 from groq import Groq
 from huggingface_hub import InferenceClient
@@ -135,7 +135,42 @@ def _normalize_text(text: str | None) -> str:
         text.lower().strip(),
     )
 
+def _remove_invalid_image_analysis(
+    items: list[str],
+    has_images: bool,
+) -> list[str]:
+    if not has_images:
+        return items
 
+    invalid_patterns = [
+        "no image",
+        "no images",
+        "image url",
+        "image urls",
+        "missing image",
+        "missing images",
+        "add image",
+        "add images",
+        "include image",
+        "include images",
+        "image url provided",
+        "image urls provided",
+    ]
+
+    cleaned = []
+
+    for item in items:
+        normalized = _normalize_text(item)
+
+        if any(
+            pattern in normalized
+            for pattern in invalid_patterns
+        ):
+            continue
+
+        cleaned.append(item)
+
+    return cleaned
 # ============================================================
 # SCORE CALCULATIONS
 # ============================================================
@@ -541,9 +576,176 @@ Only mention genuinely missing product information.
 RECOMMENDATIONS
 ============================================================
 
-Provide 2-5 actionable recommendations.
+Provide 2-5 actionable recommendations ONLY when they would
+materially improve the Etsy listing.
 
-Every recommendation must correspond to an actual weakness.
+Every recommendation MUST correspond to a specific weakness,
+missing product fact, or objectively measurable listing issue.
+
+IMPORTANT:
+
+Recommendations must be based ONLY on verified source
+information and the generated Etsy listing.
+
+Do NOT create recommendations based on assumptions,
+industry habits, generic Etsy checklists, or information that
+is simply unavailable from the source.
+
+============================================================
+WHAT A VALID RECOMMENDATION LOOKS LIKE
+============================================================
+
+A recommendation is valid when it addresses a concrete issue.
+
+Examples:
+
+- If the title does not contain an important VERIFIED product
+  keyword, recommend improving the title.
+
+- If tags are missing important VERIFIED keywords, recommend
+  improving the tags.
+
+- If the description does not clearly communicate a VERIFIED
+  product fact, recommend adding that fact.
+
+- If important product dimensions are missing and dimensions
+  are materially relevant to the product, recommend adding
+  verified dimensions.
+
+- If material information is missing and material is important
+  for this product, recommend adding the verified material.
+
+- If the source provides a price but the Etsy listing does not
+  contain it, recommend adding the source price.
+
+============================================================
+DO NOT MAKE GENERIC RECOMMENDATIONS
+============================================================
+
+Do NOT recommend:
+
+- adding shipping information
+- adding shipping costs
+- adding return policies
+- adding warranties
+- adding processing times
+- adding handling times
+- adding seller information
+- adding shop policies
+- adding packaging information
+- adding care instructions
+- adding installation instructions
+- adding certifications
+- adding manufacturing information
+- adding handmade status
+
+unless the source explicitly provides relevant information
+that should be included in the listing.
+
+Do NOT recommend adding information merely because it is
+normally useful on Etsy.
+
+============================================================
+IMAGE RULES
+============================================================
+
+The source scraper provides the available image URLs.
+
+IMAGE COUNT and IMAGE AVAILABILITY are authoritative.
+
+If IMAGE COUNT > 0:
+
+- Do NOT recommend uploading images.
+- Do NOT recommend adding images.
+- Do NOT say that images are missing.
+- Do NOT recommend replacing images.
+- Do NOT recommend improving image quality or resolution.
+
+The URL analyzer does not perform visual quality analysis.
+
+Therefore, image quality, resolution, composition, variety,
+background quality, or product presentation must NOT be used
+as a weakness or recommendation in this analysis.
+
+Visual recommendations belong to the separate Visual AI
+Analysis feature.
+
+============================================================
+MISSING INFORMATION VS RECOMMENDATIONS
+============================================================
+
+Do not turn every missing piece of information into a
+recommendation.
+
+For example:
+
+Missing:
+"dimensions"
+
+does NOT automatically mean:
+
+"Add dimensions."
+
+Only recommend adding dimensions if dimensions are genuinely
+important for this specific product and their absence would
+materially affect the listing.
+
+Similarly:
+
+Missing:
+"weight"
+
+does NOT automatically mean:
+
+"Add product weight."
+
+Only recommend it when weight is materially relevant to the
+specific product.
+
+============================================================
+NO DUPLICATE RECOMMENDATIONS
+============================================================
+
+Do not repeat the same issue in different wording.
+
+If an item is already identified in "missing_information",
+only mention it in "recommendations" when there is a clear
+action the seller should take.
+
+Recommendations should be concise and actionable.
+
+============================================================
+RECOMMENDATION COUNT
+============================================================
+
+Return 2-5 recommendations ONLY if at least 2 meaningful
+recommendations exist.
+
+If fewer than 2 meaningful recommendations exist, return only
+the recommendations that are genuinely justified.
+
+Do NOT invent additional recommendations just to reach 2-5.
+
+If the listing is already strong and no meaningful action is
+needed, return:
+
+[]
+
+============================================================
+FINAL RULE
+============================================================
+
+The purpose of recommendations is to help the seller improve
+the generated Etsy listing.
+
+Do NOT produce a generic Etsy optimization checklist.
+
+Every recommendation must answer:
+
+"What specific problem exists in this listing, and what
+specific action would improve it?"
+
+If there is no clear problem, do not recommend anything.
 
 Return ONLY valid JSON.
 
@@ -1495,6 +1697,8 @@ def analyze_product_from_url(
     hale getirmek için AI ile analiz ve içerik üretimi yapar.
     """
 
+    total_start = time.perf_counter()
+
     if language not in {"tr", "en"}:
         language = "en"
 
@@ -1519,17 +1723,13 @@ def analyze_product_from_url(
     prompt = f"""
 You are an expert Etsy listing creation and SEO assistant.
 
-Your job is to take product information collected from
-an external product URL and prepare the product for
-listing on Etsy.
+Create an Etsy-ready listing from the verified product information below.
 
 OUTPUT LANGUAGE:
 {language_name}
 
-============================================================
 SOURCE PRODUCT
-============================================================
-
+----------------
 TITLE:
 {title}
 
@@ -1548,201 +1748,357 @@ BRAND:
 IMAGE COUNT:
 {len(images)}
 
+IMAGE AVAILABILITY:
+{"Available" if images else "Not available"}
+
 SOURCE URL:
 {product.get("url", "")}
 
-============================================================
-IMPORTANT ACCURACY RULES
-============================================================
 
-The source product information may be incomplete.
+CORE ACCURACY RULE
+----------------
+The SOURCE TITLE and SOURCE DESCRIPTION are the ONLY authoritative
+sources for product facts.
 
-NEVER invent information.
+Every factual claim in the generated listing must be directly supported
+by the source.
 
-Do not invent:
+You may:
+- translate verified facts
+- rewrite wording
+- improve SEO
+- reorder verified information
+- combine directly supported facts
+
+You MUST NOT invent, infer, or specialize:
+- product type or form
 - materials
-- dimensions
+- dimensions or measurements
 - colors
 - weight
-- certifications
+- features or specifications
+- personalization method
 - manufacturing method
 - handmade status
-- personalization
-- shipping information
-- return policy
-- warranty
+- quality or durability
+- compatibility
+- installation or mounting
+- audiences or occasions
+- benefits or use cases
 - brand
-- product specifications
+- shipping, returns, warranty, or shop policies
 
-If information is unavailable, put it in
-"missing_information".
+SEO NEVER overrides factual accuracy.
 
-You may improve wording and SEO, but the actual
-product facts must remain accurate.
+When a term has a general and specific interpretation, always use the
+general interpretation unless the specific meaning is explicitly stated.
 
-============================================================
-YOUR TASK
-============================================================
+Examples:
+- "animal" does not mean cat or dog
+- "home decor" does not mean wall-mounted
+- "canvas print" does not automatically prove material composition
+- "personalized" does not explain how personalization works
+- "40 inches" does not mean 40 inches wide/tall/diameter
+- "party decoration" does not mean birthday or baby shower
 
-Prepare an Etsy-ready product listing.
+If a generated statement cannot be directly traced to the source,
+remove it.
 
+Avoid unsupported marketing claims such as:
+"stylish", "elegant", "premium", "beautiful", "high quality",
+"durable", "long-lasting", "perfect", "luxury", unless explicitly
+supported by the source.
+
+Use neutral wording. Do not add subjective marketing claims
+such as stylish, beautiful, premium, colorful, elegant, or
+"adds a decorative touch" unless explicitly supported by the source.
+
+TASK
+----------------
 Generate:
 
 1. Etsy optimized title
 2. Complete Etsy product description
 3. Etsy category
-4. Etsy tags
+4. Up to 13 Etsy tags
 5. SEO keywords
 6. Materials
-7. Product attributes when information is available
-8. Recommended price only when enough information exists
-9. Product quantity recommendation
-10. Missing information
-11. Etsy suitability score
-12. SEO score
-13. Title quality score
-14. Description quality score
-15. Recommendations
+7. Price and currency
+8. Quantity
+9. Source images
+10. Etsy suitability score
+11. SEO score
+12. Title score
+13. Description score
+14. Strengths
+15. Weaknesses
+16. Recommendations
+17. Missing information
 
-============================================================
+
 TITLE
-============================================================
-
+----------------
 Create a natural Etsy SEO title.
 
 Rules:
+- most important verified keywords first
+- readable and natural
+- no keyword stuffing
+- no unsupported claims
+- maximum 140 characters
 
-- Put the most important product keywords first.
-- Do not keyword stuff.
-- Keep it readable.
-- Do not make unsupported claims.
-- Do not invent product characteristics.
-- Maximum 140 characters.
 
-============================================================
 DESCRIPTION
-============================================================
+----------------
+Write a useful Etsy-ready description using ONLY verified source facts.
 
-Create a complete Etsy-ready product description.
+Every sentence must be supported by the source.
 
-The description should include, when supported by
-the available information:
+Do not add:
+- unsupported benefits
+- subjective marketing language
+- care instructions
+- cleaning instructions
+- installation instructions
+- durability or quality claims
+- safety or compatibility claims
+- packaging information
+- shipping or return information
 
-- short introduction
-- product characteristics
-- materials
-- size/specifications
-- ideal use
-- gift occasions
-- care information
+If the source supports a specific use, mention only that exact use.
 
-Do NOT invent missing details.
+Do not mention AliExpress, suppliers, scraping, or the source URL
+in the customer-facing description.
 
-If information is unavailable, simply omit that detail.
 
-Do not mention AliExpress, dropshipping, supplier,
-source URL or scraping in the customer-facing description.
-
-============================================================
 CATEGORY
-============================================================
+----------------
+Choose the most appropriate human-readable Etsy category based on
+verified product information.
 
-Return the most appropriate Etsy category based on
-the available product information.
+Do not use an overly specific category unless the source supports it.
 
-Use a human-readable category path.
 
-Example:
-
-Jewelry > Necklaces > Pendant Necklaces
-
-Do not invent an overly specific category if the
-product information does not support it.
-
-============================================================
 TAGS
-============================================================
-
-Generate exactly 13 Etsy tags when enough information
-exists.
+----------------
+Generate up to 13 unique Etsy tags.
 
 Rules:
-
 - maximum 20 characters per tag
-- unique tags
-- relevant to the product
+- directly supported by the source
+- relevant to the actual product
 - natural Etsy search phrases
-- no unrelated trending keywords
-- no unsupported claims
-- avoid duplicate phrases
+- no unsupported or generic trending keywords
+- no duplicate phrases
+- never change the product type
 
-============================================================
+Use fewer than 13 if there are not enough trustworthy tags.
+
+CRITICAL:
+Every tag must be directly supported by the source.
+
+Never make a general source term more specific for SEO.
+
+For example:
+"pet" -> "pet" is valid
+"pet" -> "cat", "dog", "cat dog" is invalid
+
+If a tag is not directly supported by the source, do not use it.
+KEYWORDS
+----------------
+Generate relevant SEO keywords using only verified source information.
+
+Do not add product types, materials, features, audiences, occasions,
+styles, or use cases that are not explicitly supported.
+
+Never increase specificity for SEO.
+General source terms must remain general.
 MATERIALS
-============================================================
+----------------
+Return ONLY materials explicitly stated as materials or composition
+in the source.
 
-Return only materials explicitly supported by the
-source information.
+Product names, categories, product types, and images cannot be used
+to infer materials.
 
-If no reliable material information exists, return [].
+Examples:
+"canvas print" -> []
+"canvas poster" -> []
+"made of cotton" -> ["cotton"]
 
-============================================================
+If no material is explicitly stated:
+"materials": []
+
+
 PRICE
-============================================================
+----------------
+If the source price is reliable, return it with its currency.
 
-If the source price exists and is reliable:
-
-- return the source price
-- return its currency
-
-If there is not enough information for a recommended
-selling price, return null.
+If not available or unreliable:
+price = null
+currency = null
 
 Never invent a price.
 
-============================================================
+
 QUANTITY
-============================================================
+----------------
+Return 1 unless the source clearly indicates another quantity.
 
-Return 1 unless the source clearly indicates another
-quantity.
 
-============================================================
+IMAGES
+----------------
+Use the provided source image URLs exactly as given.
+
+Do not invent or remove valid source image URLs.
+
+If IMAGE COUNT > 0:
+- images are available
+- do not claim images are missing
+- do not recommend uploading images
+- do not judge image quality or resolution
+
+This analyzer does not perform visual quality analysis.
+
+
 MISSING INFORMATION
-============================================================
+----------------
+Report ONLY important product facts that are genuinely missing and
+would materially help complete this specific listing.
 
-List information that would normally be useful for
-an Etsy listing but could not be verified.
+Valid examples:
+- important dimensions
+- important weight
+- material composition
+- important product-specific specifications
+- color/finish only when the source clearly indicates variants
+  but their values cannot be verified
+- quantity when the source indicates a set/pack/bundle but quantity
+  cannot be verified
 
-Examples:
+Do NOT report as missing:
+- shipping
+- shipping cost or method
+- processing time
+- returns/refunds
+- warranty
+- seller information
+- shop policies
+- packaging
+- care/cleaning
+- installation
+- handmade status
+- certifications
+- manufacturing method
 
-- necklace length
-- product weight
-- color
-- shipping information
-- return policy
+Do not infer missing information from images, category, or common
+knowledge.
 
-Only include genuinely missing information.
+Missing information does not automatically mean the listing is poor.
 
-============================================================
-ETSY SUITABILITY
-============================================================
+If no materially important product information is missing:
+[]
 
-Estimate how ready the product information is for
-an Etsy listing.
 
-This score is NOT a legal determination.
+ANALYSIS
+----------------
+Evaluate the generated listing from 0 to 100.
 
-It should reflect:
+ETSY SUITABILITY:
+Consider overall usefulness, factual accuracy, title, description,
+category, tags, available information, and images.
 
-- completeness
-- listing quality
-- product information
-- SEO readiness
+SEO SCORE:
+Consider keyword relevance, coverage, natural wording, and absence
+of unsupported or duplicate keywords.
 
-============================================================
+TITLE SCORE:
+Consider relevance, clarity, readability, verified keywords,
+and absence of keyword stuffing.
+
+DESCRIPTION SCORE:
+Consider clarity, usefulness, factual accuracy, and natural wording.
+
+Do not heavily penalize missing information that simply was not
+available from the source.
+
+SCORING
+----------------
+Return ALL scores independently on a 0-100 scale.
+
+IMPORTANT:
+Every score below MUST be a number between 0 and 100.
+Do NOT use the percentages as score limits.
+Do NOT return 15, 20, 30, etc. because of any weighting.
+Each score is an independent quality score.
+
+ETS​Y SUITABILITY SCORE:
+Overall quality and readiness of the generated Etsy listing.
+
+SEO SCORE:
+Evaluate keyword relevance, keyword coverage, tags, search intent,
+natural keyword usage, and absence of duplicates or unsupported terms.
+
+Unsupported tags or keywords must significantly reduce the SEO score.
+TITLE SCORE:
+Evaluate relevance, clarity, readability, important verified keywords,
+natural Etsy wording, and absence of keyword stuffing.
+
+DESCRIPTION SCORE:
+Evaluate clarity, usefulness, structure, factual accuracy,
+and natural wording.
+
+CATEGORY QUALITY:
+Evaluate whether the selected category matches the verified
+product type and uses appropriate specificity.
+
+SOURCE COMPLETENESS:
+Consider important product information available from the source,
+but do not heavily penalize information that the source does not provide.
+
+IMAGE AVAILABILITY:
+If IMAGE COUNT > 0, consider images available.
+Do not penalize the listing because image quality was not analyzed.
+
+SCORING GUIDELINE:
+90-100 = Excellent
+80-89 = Very good
+70-79 = Good
+60-69 = Needs improvement
+40-59 = Weak
+0-39 = Insufficient
+
+Missing source information should not automatically produce a low score.
+A missing price, dimensions, shipping information, or shop policy
+must not by itself make a strong listing receive a low score.
+
+
+RECOMMENDATIONS
+----------------
+Return 2-5 recommendations ONLY when they are materially useful.
+
+Every recommendation must address:
+- a real weakness in the generated listing
+- important missing product information
+- or an objective listing issue
+
+Do not give generic Etsy checklists.
+
+Do not recommend:
+- shipping or return policies
+- seller information
+- packaging
+- care instructions
+- image uploads when images already exist
+- image quality improvements without visual analysis
+- unsupported product changes
+
+If there are no meaningful recommendations:
+[]
+
+
 RETURN ONLY JSON
-============================================================
-
+----------------
 Return exactly this structure:
 
 {{
@@ -1777,6 +2133,8 @@ Return exactly this structure:
     # AI REQUEST
     # ========================================================
 
+    ai_start = time.perf_counter()
+
     response = groq_client.chat.completions.create(
         model=settings.groq_model,
         temperature=0,
@@ -1798,6 +2156,13 @@ Return exactly this structure:
                 "content": prompt,
             },
         ],
+    )
+
+    ai_elapsed = time.perf_counter() - ai_start
+
+    print(
+        f"🤖 URL PRODUCT AI ANALYSIS TIME: "
+        f"{ai_elapsed:.2f} seconds"
     )
 
     response_text = (
@@ -1982,6 +2347,13 @@ Return exactly this structure:
     ):
         analysis = {}
 
+    total_elapsed = time.perf_counter() - total_start
+
+    print(
+        f"⏱️ TOTAL URL PRODUCT ANALYSIS TIME: "
+        f"{total_elapsed:.2f} seconds"
+    )
+
     # ========================================================
     # RETURN
     # ========================================================
@@ -2031,22 +2403,31 @@ Return exactly this structure:
                 )
             ),
 
-            "weaknesses": _clean_string_list(
-                analysis.get(
-                    "weaknesses"
-                )
-            ),
+            "weaknesses": _remove_invalid_image_analysis(
+    _clean_string_list(
+        analysis.get(
+            "weaknesses"
+        )
+    ),
+    has_images=bool(images),
+),
 
-            "recommendations": _clean_string_list(
-                analysis.get(
-                    "recommendations"
-                )
-            ),
+            "recommendations": _remove_invalid_image_analysis(
+    _clean_string_list(
+        analysis.get(
+            "recommendations"
+        )
+    ),
+    has_images=bool(images),
+),
         },
 
-        "missing_information": _clean_string_list(
-            result.get(
-                "missing_information"
-            )
-        ),
+        "missing_information": _remove_invalid_image_analysis(
+    _clean_string_list(
+        result.get(
+            "missing_information"
+        )
+    ),
+    has_images=bool(images),
+),
     }

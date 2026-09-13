@@ -183,6 +183,11 @@ const [isCheckingEtsy, setIsCheckingEtsy] = useState(true);
       icon: Package,
     },
     {
+  href: `/${locale}/dashboard/ai-product-analyzer`,
+  label: t("navigation.aiProductAnalyzer"),
+  icon: Sparkles,
+},
+    {
       href: `/${locale}/dashboard/analytics`,
       label: t("navigation.analytics"),
       icon: BarChart3,

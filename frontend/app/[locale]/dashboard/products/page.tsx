@@ -1,6 +1,6 @@
 
 "use client";
-import UrlProductAnalyzer from "./components/UrlProductAnalyzer";
+
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import Link from "next/link";
@@ -709,14 +709,14 @@ setIsOptimizingImage(false);
       </header>
 
       <main
-        className="
-          px-6
-          py-8
-          lg:px-10
-          lg:py-10
-        "
-      >
-<UrlProductAnalyzer />
+  className="
+    px-6
+    py-8
+    lg:px-10
+    lg:py-10
+  "
+>
+  {/* ERROR */}
         {/* ERROR */}
         {error && (
           <div

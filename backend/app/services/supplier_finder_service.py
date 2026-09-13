@@ -123,10 +123,18 @@ def find_suppliers(
     # RANK
     # --------------------------------------------------------
 
+    source_context = f"{title} {description or ''}".strip()
+
     suppliers = rank_suppliers(
-        suppliers=suppliers,
-        original_title=title,
-    )
+    suppliers=suppliers,
+    original_title=source_context,
+)
+
+    suppliers = filter_relevant_suppliers(
+    suppliers=suppliers,
+    original_title=source_context,
+    minimum_score=18,
+)
 
     # --------------------------------------------------------
     # RETURN TOP 10
@@ -139,246 +147,266 @@ def find_suppliers(
 # SEARCH QUERY GENERATION
 # ============================================================
 
+
+def _detect_product_family(text: str) -> str | None:
+    text = (text or '').lower()
+    families = {
+        'pillow': {'pillow','pillowcase','cushion','cushion cover','throw pillow','pillow cover','yastık','yastık kılıfı','kırlent','kırlent kılıfı'},
+        'tshirt': {'t-shirt','tshirt','tee','shirt','tişört'},
+        'tote_bag': {'tote bag','canvas bag','shopping bag','bez çanta'},
+        'mug': {'mug','coffee mug','cup','kupa','bardak'},
+        'phone_case': {'phone case','iphone case','phone cover','telefon kılıfı'},
+        'necklace': {'necklace','pendant','kolye','kolye ucu'},
+        'bracelet': {'bracelet','bileklik'},
+    }
+    for family, variants in families.items():
+        for variant in variants:
+            if re.search(rf'\b{re.escape(variant)}\b', text, flags=re.IGNORECASE):
+                return family
+    return None
+
+
+def _is_customizable_product(text: str) -> bool:
+    text = (text or '').lower()
+    return bool(re.search(
+        r'\b(personalized|personalised|custom|customized|customised|personalizable|name|initial|monogram|photo|custom print|photo print|kişiye özel|kişiselleştir|kişiselleştiril|isim|harf|fotoğraf|özelleştir)\b',
+        text, flags=re.IGNORECASE,
+    ))
+
+
+def _supplier_intent_queries(title: str, description: str) -> list[str]:
+    combined = f'{title} {description}'.strip().lower()
+    if not _is_customizable_product(combined):
+        return []
+    family = _detect_product_family(combined)
+    query_map = {
+        'pillow': ['blank pillow cover','blank cushion cover','custom pillow cover','sublimation pillowcase'],
+        'tshirt': ['blank t shirt','plain t shirt','custom t shirt','sublimation t shirt'],
+        'tote_bag': ['blank canvas tote bag','plain tote bag','custom tote bag','sublimation tote bag'],
+        'mug': ['blank mug','plain ceramic mug','custom mug','sublimation mug'],
+        'phone_case': ['blank phone case','plain phone case','custom phone case','printable phone case'],
+        'necklace': ['blank necklace','custom necklace','personalized necklace base','name pendant necklace'],
+        'bracelet': ['blank bracelet','custom bracelet','personalized bracelet base'],
+    }
+    if family in query_map:
+        return query_map[family]
+    words = re.findall(r'[\w]+(?:[.\'-][\w]+)*', title.lower(), flags=re.UNICODE)
+    ignored = {'personalized','personalised','custom','customized','customised','personalizable','name','initial','monogram','photo','etsy'}
+    base = [w for w in words if w not in ignored and len(w)>=3]
+    if base:
+        b=' '.join(base[:4]); return [f'blank {b}',f'custom {b}',f'personalized {b}']
+    return []
+
 def build_search_queries(
     title: str,
     description: str | None = None,
 ) -> list[str]:
+    """Build focused marketplace-friendly AliExpress queries.
 
-    text = (
-        f"{title} {description or ''}"
-    ).lower()
+    The source product determines the search terms. Generic presentation words
+    are removed, while concrete product attributes such as material and shape
+    are preserved when they are useful for supplier matching.
+    """
+    title = (title or "").strip()
+    description = (description or "").strip()
+
+    if not title:
+        return []
 
     stop_words = {
-        "for",
-        "with",
-        "and",
-        "the",
-        "this",
-        "that",
-        "women",
-        "woman",
-        "men",
-        "man",
-        "new",
-        "best",
-        "hot",
-        "sale",
-        "fashion",
-        "gift",
-        "gifts",
-        "etsy",
-        "free",
-        "shipping",
-        "custom",
-        "personalized",
-        "personalised",
+        "the", "and", "for", "with", "from", "this", "that", "new",
+        "best", "sale", "etsy", "shop", "item", "product", "gift",
+        "gifts", "shipping", "free", "custom", "personalized",
+        "personalised", "made", "use", "used", "perfect", "ideal",
+        "home", "decor", "decoration", "aesthetic", "style", "modern",
+        "minimalist", "minimal", "mid", "century", "japandi",
+        "sky", "blue", "handmade", "eco", "friendly",
+        "bir", "ve", "ile", "için", "bu", "ürün", "hediye",
+        "özel", "yeni", "satış", "kargo",
     }
 
-    words = re.findall(
-    r"[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*",
-    text,
-)
+    def words(text: str) -> list[str]:
+        found = re.findall(
+            r"[\w]+(?:[.'-][\w]+)*",
+            text.lower(),
+            flags=re.UNICODE,
+        )
 
-    keywords: list[str] = []
+        result: list[str] = []
 
-    for word in words:
+        for word in found:
+            word = word.strip(".-'")
 
-        if len(word) < 3:
-            continue
+            if len(word) < 3 or word in stop_words:
+                continue
 
-        if word in stop_words:
-            continue
+            if word not in result:
+                result.append(word)
 
-        if word not in keywords:
-            keywords.append(word)
+        return result
 
-    keywords = keywords[:12]
+    title_words = words(title)
+    desc_words = words(description)
+
+    combined_lower = f"{title} {description}".lower()
 
     queries: list[str] = []
 
+    supplier_intent_queries = _supplier_intent_queries(title, description)
+    if supplier_intent_queries:
+        queries.extend(supplier_intent_queries)
+
     # --------------------------------------------------------
-    # MAIN QUERY
+    # CONCRETE ATTRIBUTES
     # --------------------------------------------------------
 
-    if len(keywords) >= 2:
+    attribute_words: list[str] = []
 
-        queries.append(
-            " ".join(keywords[:6])
+    attribute_aliases = {
+        "wavy": {
+            "wavy",
+            "wave",
+            "ripple",
+            "scallop",
+            "dalgalı",
+            "dalga",
+        },
+        "ceramic": {
+            "ceramic",
+            "seramik",
+            "clay",
+            "kil",
+        },
+        "wood": {
+            "wood",
+            "wooden",
+            "ahşap",
+            "tahta",
+        },
+        "metal": {
+            "metal",
+            "iron",
+            "steel",
+            "metallic",
+            "demir",
+            "çelik",
+        },
+        "glass": {
+            "glass",
+            "cam",
+        },
+        "stone": {
+            "stone",
+            "marble",
+            "taş",
+            "mermer",
+        },
+    }
+
+    raw_words = set(title_words + desc_words)
+
+    for canonical, variants in attribute_aliases.items():
+        if raw_words & variants:
+            attribute_words.append(canonical)
+
+    # --------------------------------------------------------
+    # INCENSE PRODUCT
+    # --------------------------------------------------------
+
+    incense_source = bool(
+        re.search(
+            r"\b(incense|joss|tütsü|tütsülük)\b",
+            combined_lower,
+            flags=re.IGNORECASE,
         )
-
-    # --------------------------------------------------------
-    # SHORT QUERY
-    # --------------------------------------------------------
-
-    if len(keywords) >= 3:
-
-        queries.append(
-            " ".join(keywords[:4])
-        )
-
-    # --------------------------------------------------------
-    # PRODUCT-SPECIFIC QUERY
-    # --------------------------------------------------------
-
-    product_terms = _detect_product_terms(
-        text
     )
 
-    if product_terms:
-
-        queries.append(
-            " ".join(product_terms)
+    has_blue = bool(
+        re.search(
+            r"\b(blue|navy|sky blue|mavi|lacivert)\b",
+            combined_lower,
+            flags=re.IGNORECASE,
         )
+    )
+
+    if incense_source and not supplier_intent_queries:
+        if "wavy" in attribute_words and "ceramic" in attribute_words:
+            queries.extend([
+                "wavy ceramic incense holder",
+                "ceramic wavy incense holder",
+            ])
+        elif "wavy" in attribute_words:
+            queries.append("wavy ceramic incense holder")
+        elif "ceramic" in attribute_words:
+            queries.extend([
+                "ceramic incense holder",
+                "ceramic incense burner",
+            ])
+        else:
+            queries.extend([
+                "incense holder",
+                "incense burner",
+            ])
+
+        if has_blue:
+            queries.insert(0, "blue ceramic wavy incense holder")
+
+        # General query en sona bırakılıyor.
+        queries.append("incense holder")
+    # --------------------------------------------------------
+    # GENERIC PRODUCT
+    # --------------------------------------------------------
+
+    elif not supplier_intent_queries:
+
+        if title_words:
+            queries.append(
+                " ".join(title_words[:5])
+            )
+
+        extras = [
+            word
+            for word in desc_words
+            if word not in title_words
+        ]
+
+        if title_words and extras:
+            queries.append(
+                " ".join(
+                    (
+                        title_words[:4]
+                        + extras[:3]
+                    )[:7]
+                )
+            )
+
+        if len(title_words) >= 2:
+            queries.append(
+                " ".join(title_words[:3])
+            )
 
     # --------------------------------------------------------
-    # REMOVE DUPLICATES
+    # DEDUPLICATE
     # --------------------------------------------------------
 
-    unique_queries: list[str] = []
+    unique: list[str] = []
+    seen: set[str] = set()
 
     for query in queries:
 
-        query = query.strip()
+        query = re.sub(
+            r"\s+",
+            " ",
+            query,
+        ).strip()
 
-        if not query:
-            continue
+        key = query.lower()
 
-        if query not in unique_queries:
+        if query and key not in seen:
+            seen.add(key)
+            unique.append(query)
 
-            unique_queries.append(
-                query
-            )
-
-    return unique_queries[:3]
-
-
-# ============================================================
-# PRODUCT TERM DETECTION
-# ============================================================
-
-def _detect_product_terms(
-    text: str,
-) -> list[str]:
-
-    product_groups = [
-
-        [
-            "moissanite",
-            "necklace",
-            "silver",
-        ],
-
-        [
-            "name",
-            "necklace",
-            "personalized",
-        ],
-
-        [
-            "ring",
-            "zirconia",
-        ],
-
-        [
-            "earrings",
-            "jewelry",
-        ],
-
-        [
-            "bracelet",
-            "jewelry",
-        ],
-
-        [
-            "backpack",
-            "personalized",
-        ],
-    ]
-
-    for group in product_groups:
-
-        if all(
-            term in text
-            for term in group
-        ):
-            return group
-
-    return []
-
-
-# ============================================================
-# ALIEXPRESS DIRECT SEARCH
-# ============================================================
-
-def search_aliexpress(
-    query: str,
-) -> list[dict[str, Any]]:
-
-    encoded_query = quote(
-        query,
-        safe="",
-    )
-
-    url = (
-        "https://www.aliexpress.com/w/wholesale-"
-        f"{encoded_query}.html"
-    )
-
-    headers = {
-        **REQUEST_HEADERS,
-        "Referer": (
-            "https://www.aliexpress.com/"
-        ),
-    }
-
-    response = requests.get(
-        url,
-        headers=headers,
-        timeout=20,
-        allow_redirects=True,
-    )
-
-    print(
-        "ALIEXPRESS STATUS:",
-        response.status_code,
-    )
-
-    print(
-        "ALIEXPRESS FINAL URL:",
-        response.url,
-    )
-
-    print(
-        "ALIEXPRESS HTML LENGTH:",
-        len(response.text),
-    )
-
-    if not response.ok:
-
-        return []
-
-    # --------------------------------------------------------
-    # BOT PROTECTION
-    # --------------------------------------------------------
-
-    if _is_bot_protection_page(
-        response.text
-    ):
-
-        print(
-            "AliExpress direct search blocked."
-        )
-
-        return []
-
-    # --------------------------------------------------------
-    # PARSE
-    # --------------------------------------------------------
-
-    return parse_aliexpress_results(
-        response.text,
-        response.url,
-    )
+    return unique[:4]
 
 
 # ============================================================
@@ -631,31 +659,20 @@ def parse_integer(
         TypeError,
     ):
         return None
-def search_aliexpress_via_search_engine(
+
+def search_aliexpress(
     query: str,
 ) -> list[dict[str, Any]]:
-
-    search_query = (
-        f"site:aliexpress.com/item/ {query}"
-    )
-
-    encoded_query = quote(
-        search_query,
-        safe="",
-    )
-
-    # --------------------------------------------------------
-    # BING
-    # --------------------------------------------------------
+    encoded_query = quote(query, safe="")
 
     url = (
-        "https://www.bing.com/search"
-        f"?q={encoded_query}"
+        "https://www.aliexpress.com/w/wholesale-"
+        f"{encoded_query}.html"
     )
 
     headers = {
         **REQUEST_HEADERS,
-        "Referer": "https://www.bing.com/",
+        "Referer": "https://www.aliexpress.com/",
     }
 
     response = requests.get(
@@ -665,23 +682,126 @@ def search_aliexpress_via_search_engine(
         allow_redirects=True,
     )
 
-    print(
-        "SEARCH ENGINE STATUS:",
-        response.status_code,
-    )
-
-    print(
-        "SEARCH ENGINE URL:",
-        response.url,
-    )
+    print("ALIEXPRESS STATUS:", response.status_code)
+    print("ALIEXPRESS FINAL URL:", response.url)
+    print("ALIEXPRESS HTML LENGTH:", len(response.text))
 
     if not response.ok:
-
         return []
 
-    return parse_search_engine_results(
-        response.text
+    if _is_bot_protection_page(response.text):
+        print("AliExpress direct search blocked.")
+        return []
+
+    return parse_aliexpress_results(
+        response.text,
+        response.url,
     )
+def search_aliexpress_via_search_engine(
+    query: str,
+) -> list[dict[str, Any]]:
+    """Search AliExpress through public search engines.
+
+    AliExpress search pages can be blocked by anti-bot protection, so the
+    supplier finder uses search engines as a fallback. Multiple engines are
+    tried because one engine may return weak/empty results.
+    """
+    queries = [
+        f'site:aliexpress.com/item/ "{query}"',
+        f'site:aliexpress.com/item/ {query}',
+    ]
+
+    all_results: list[dict[str, Any]] = []
+
+    for search_query in queries:
+        encoded_query = quote(search_query, safe="")
+
+        # --------------------------------------------------------
+        # BING
+        # --------------------------------------------------------
+        try:
+            bing_url = f"https://www.bing.com/search?q={encoded_query}"
+            response = requests.get(
+                bing_url,
+                headers={**REQUEST_HEADERS, "Referer": "https://www.bing.com/"},
+                timeout=20,
+                allow_redirects=True,
+            )
+            print("BING SEARCH STATUS:", response.status_code)
+            if response.ok:
+                all_results.extend(parse_search_engine_results(response.text))
+        except Exception as error:
+            print("Bing supplier search error:", repr(error))
+
+        # --------------------------------------------------------
+        # GOOGLE
+        # --------------------------------------------------------
+        try:
+            google_url = f"https://www.google.com/search?q={encoded_query}&num=10"
+            response = requests.get(
+                google_url,
+                headers={**REQUEST_HEADERS, "Referer": "https://www.google.com/"},
+                timeout=20,
+                allow_redirects=True,
+            )
+            print("GOOGLE SEARCH STATUS:", response.status_code)
+            if response.ok:
+                all_results.extend(parse_google_search_results(response.text))
+        except Exception as error:
+            print("Google supplier search error:", repr(error))
+
+        # A useful batch is enough; otherwise continue with the next query.
+        if len(all_results) >= 20:
+            break
+
+    # Deduplicate by product URL.
+    unique: dict[str, dict[str, Any]] = {}
+    for result in all_results:
+        url = result.get("url")
+        if url and url not in unique:
+            unique[url] = result
+
+    print("SEARCH ENGINE SUPPLIERS FOUND:", len(unique))
+    return list(unique.values())[:30]
+
+
+def parse_google_search_results(html: str) -> list[dict[str, Any]]:
+    """Parse Google's normal organic result cards for AliExpress product URLs."""
+    soup = BeautifulSoup(html, "html.parser")
+    results: list[dict[str, Any]] = []
+
+    for block in soup.select("div.MjjYud, div.g"):
+        anchor = block.find("a", href=True)
+        heading = block.find("h3")
+        if not anchor or not heading:
+            continue
+
+        product_url = _extract_aliexpress_url(anchor.get("href", ""))
+        if not product_url:
+            continue
+
+        title = clean_supplier_title(heading.get_text(" ", strip=True))
+        snippet_node = block.select_one("div.VwiC3b, div[data-sncf], span.aCOpRe")
+        snippet = snippet_node.get_text(" ", strip=True) if snippet_node else None
+
+        if any(item["url"] == product_url for item in results):
+            continue
+
+        results.append({
+            "title": title,
+            "url": product_url,
+            "image_url": None,
+            "description": snippet,
+            "price": None,
+            "currency": None,
+            "sales": None,
+            "rating": None,
+        })
+
+        if len(results) >= 20:
+            break
+
+    return results
 
 
 # ============================================================
@@ -703,6 +823,7 @@ def parse_search_engine_results(
         product_url: str,
         title: str | None = None,
         image_url: str | None = None,
+        description: str | None = None,
     ):
 
         if not product_url:
@@ -726,6 +847,7 @@ def parse_search_engine_results(
                 "title": title or None,
                 "url": product_url,
                 "image_url": image_url,
+                "description": description,
                 "price": None,
                 "currency": None,
                 "sales": None,
@@ -734,7 +856,52 @@ def parse_search_engine_results(
         )
 
     # ========================================================
-    # 1. NORMAL LINKS
+    # 1. BING RESULT BLOCKS
+    # ========================================================
+    # Bing normally stores the result URL in an anchor and the actual result
+    # title in an h2. Reading both together gives us a useful product title
+    # for relevance ranking instead of relying on anchor text alone.
+    for block in soup.select("li.b_algo"):
+        anchor = block.find("a", href=True)
+        if not anchor:
+            continue
+
+        product_url = _extract_aliexpress_url(anchor.get("href", ""))
+        if not product_url:
+            continue
+
+        heading = block.find("h2")
+        title = clean_supplier_title(
+            heading.get_text(" ", strip=True)
+            if heading
+            else None
+        )
+
+        image_url = None
+        image = block.find("img")
+        if image:
+            image_url = _clean_image_url(
+                image.get("src")
+                or image.get("data-src")
+                or image.get("data-lazy-src")
+                or ""
+            )
+
+        snippet_node = block.select_one("div.b_caption p")
+        snippet = snippet_node.get_text(" ", strip=True) if snippet_node else None
+
+        add_result(
+            product_url=product_url,
+            title=title,
+            image_url=image_url,
+            description=snippet,
+        )
+
+        if len(results) >= 20:
+            break
+
+    # ========================================================
+    # 2. NORMAL LINKS
     # ========================================================
 
     for anchor in soup.find_all("a"):
@@ -761,7 +928,7 @@ def parse_search_engine_results(
             )
 
             match = re.search(
-                r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+                r'https?://(?:www\.)?aliexpress\.[a-z.]+/item/[0-9]+\.html',
                 decoded_href,
                 re.IGNORECASE,
             )
@@ -835,9 +1002,9 @@ def parse_search_engine_results(
 
         patterns = [
 
-            r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+            r'https?://(?:www\.)?aliexpress\.[a-z.]+/item/[0-9]+\.html',
 
-            r'https?:\\/\\/(?:www\.)?aliexpress\.com\\/item\\/[0-9]+\.html',
+            r'https?:\\/\\/(?:www\.)?aliexpress\.[a-z.]+\\/item\\/[0-9]+\.html',
 
         ]
 
@@ -876,7 +1043,7 @@ def parse_search_engine_results(
         # tamamen encode edilmiş olsa bile ID'yi yakala.
         id_patterns = [
 
-            r'aliexpress\.com(?:\\?/|%2F|/)+item(?:\\?/|%2F|/)+([0-9]+)',
+            r'aliexpress\.[a-z.]+(?:\\?/|%2F|/)+item(?:\\?/|%2F|/)+([0-9]+)',
 
             r'/item/([0-9]+)\.html',
 
@@ -961,7 +1128,7 @@ def _extract_aliexpress_url(
     # ========================================================
 
     match = re.search(
-        r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+        r'https?://(?:www\.)?aliexpress\.[a-z.]+/item/[0-9]+\.html',
         candidate,
         re.IGNORECASE,
     )
@@ -977,7 +1144,7 @@ def _extract_aliexpress_url(
     # ========================================================
 
     match = re.search(
-        r'aliexpress\.com/item/[0-9]+\.html',
+        r'aliexpress\.[a-z.]+/item/[0-9]+\.html',
         candidate,
         re.IGNORECASE,
     )
@@ -1028,7 +1195,7 @@ def _extract_aliexpress_url(
                     decoded_value = new_value
 
                 match = re.search(
-                    r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+                    r'https?://(?:www\.)?aliexpress\.[a-z.]+/item/[0-9]+\.html',
                     decoded_value,
                     re.IGNORECASE,
                 )
@@ -1047,7 +1214,7 @@ def _extract_aliexpress_url(
     # ========================================================
 
     match = re.search(
-        r'aliexpress\.com.*?/item/([0-9]+)',
+        r'aliexpress\.[a-z.]+.*?/item/([0-9]+)',
         candidate,
         re.IGNORECASE,
     )
@@ -1156,7 +1323,48 @@ def parse_aliexpress_results(
         )
 
     # ========================================================
-    # 1. NORMAL LINKS
+    # 1. BING RESULT BLOCKS
+    # ========================================================
+    # Bing normally stores the result URL in an anchor and the actual result
+    # title in an h2. Reading both together gives us a useful product title
+    # for relevance ranking instead of relying on anchor text alone.
+    for block in soup.select("li.b_algo"):
+        anchor = block.find("a", href=True)
+        if not anchor:
+            continue
+
+        product_url = _extract_aliexpress_url(anchor.get("href", ""))
+        if not product_url:
+            continue
+
+        heading = block.find("h2")
+        title = clean_supplier_title(
+            heading.get_text(" ", strip=True)
+            if heading
+            else None
+        )
+
+        image_url = None
+        image = block.find("img")
+        if image:
+            image_url = _clean_image_url(
+                image.get("src")
+                or image.get("data-src")
+                or image.get("data-lazy-src")
+                or ""
+            )
+
+        add_product(
+            product_url=product_url,
+            title=title,
+            image_url=image_url,
+        )
+
+        if len(results) >= 20:
+            break
+
+    # ========================================================
+    # 2. NORMAL LINKS
     # ========================================================
 
     for anchor in soup.find_all("a"):
@@ -1240,13 +1448,13 @@ def parse_aliexpress_results(
 
     url_patterns = [
 
-        r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+        r'https?://(?:www\.)?aliexpress\.[a-z.]+/item/[0-9]+\.html',
 
-        r'https?:\\/\\/(?:www\.)?aliexpress\.com\\/item\\/[0-9]+\.html',
+        r'https?:\\/\\/(?:www\.)?aliexpress\.[a-z.]+\\/item\\/[0-9]+\.html',
 
-        r'aliexpress\.com/item/[0-9]+\.html',
+        r'aliexpress\.[a-z.]+/item/[0-9]+\.html',
 
-        r'aliexpress\.com\\/item\\/[0-9]+\.html',
+        r'aliexpress\.[a-z.]+\\/item\\/[0-9]+\.html',
 
     ]
 
@@ -1292,11 +1500,11 @@ def parse_aliexpress_results(
 
         id_patterns = [
 
-            r'aliexpress\.com.{0,200}?/item/([0-9]+)',
+            r'aliexpress\.[a-z.]+.{0,200}?/item/([0-9]+)',
 
-            r'aliexpress\.com.{0,200}?\\/item\\/([0-9]+)',
+            r'aliexpress\.[a-z.]+.{0,200}?\\/item\\/([0-9]+)',
 
-            r'aliexpress\.com.{0,200}?%2Fitem%2F([0-9]+)',
+            r'aliexpress\.[a-z.]+.{0,200}?%2Fitem%2F([0-9]+)',
 
         ]
 
@@ -1340,7 +1548,7 @@ def parse_aliexpress_results(
 
         # Product URL + nearby title
         url_matches = re.finditer(
-            r'https?://(?:www\.)?aliexpress\.com/item/[0-9]+\.html',
+            r'https?://(?:www\.)?aliexpress\.[a-z.]+/item/[0-9]+\.html',
             content,
             re.IGNORECASE,
         )
@@ -1456,6 +1664,139 @@ def deduplicate_suppliers(
 
 
 # ============================================================
+# RELEVANCE FILTER
+# ============================================================
+
+def filter_relevant_suppliers(
+    suppliers: list[dict[str, Any]],
+    original_title: str,
+    minimum_score: int = 18,
+) -> list[dict[str, Any]]:
+    """Keep only suppliers that match the actual product identity and key attributes."""
+
+    source = (original_title or "").lower()
+    source_semantic = _semantic_tokens(source)
+    source_family = _detect_product_family(source)
+    source_is_customizable = _is_customizable_product(source)
+
+    is_incense = bool(
+        source_semantic
+        & {"incense", "joss", "tütsü", "tütsülük"}
+    )
+
+    source_has_wavy = bool(
+        source_semantic
+        & {"wavy", "wave", "ripple", "scallop", "dalgalı", "dalga"}
+    )
+
+    source_has_ceramic = bool(
+        source_semantic
+        & {"ceramic", "seramik", "clay", "kil"}
+    )
+
+    source_has_blue = bool(
+        re.search(
+            r"\b(blue|navy|sky blue|mavi|lacivert)\b",
+            source,
+            flags=re.IGNORECASE,
+        )
+    )
+
+    filtered: list[dict[str, Any]] = []
+
+    negative_terms = {
+        "mosquito", "repellent", "sivrisinek", "kovucu",
+        "tea", "teapot", "çay", "demlik",
+        "buddha", "statue", "heykel",
+        "vase", "vazo",
+        "lamp", "lantern", "lamba", "fener",
+        "diffuser", "difüzör",
+        "candle", "mum",
+        "wax", "balmumu",
+        "essential",
+        "jewelry", "takı",
+        "flower", "çiçek",
+        "ashtray", "küllük",
+    }
+
+    for supplier in suppliers:
+        score = int(supplier.get("match_score", 0) or 0)
+
+        title = (supplier.get("title") or "").strip()
+        description = (supplier.get("description") or "").strip()
+
+        if not title:
+            continue
+
+        evidence_text = f"{title} {description}".lower()
+        evidence_semantic = _semantic_tokens(evidence_text)
+        evidence_tokens = set(_tokenize(evidence_text))
+
+        if score < minimum_score:
+            continue
+
+        if source_family:
+            family_terms = {
+                "pillow": {"pillow", "pillowcase", "cushion", "yastık", "kırlent"},
+                "tshirt": {"t-shirt", "tshirt", "tee", "shirt", "tişört"},
+                "tote_bag": {"tote", "canvas", "bag", "bez", "çanta"},
+                "mug": {"mug", "cup", "kupa", "bardak"},
+                "phone_case": {"phone", "case", "cover", "iphone", "kılıf"},
+                "necklace": {"necklace", "pendant", "kolye"},
+                "bracelet": {"bracelet", "bileklik"},
+            }
+            if not evidence_semantic & family_terms.get(source_family, set()):
+                continue
+
+        # Clearly wrong product types are never accepted.
+        if evidence_tokens & negative_terms:
+            continue
+
+        if is_incense and not source_is_customizable:
+            has_incense = bool(
+                evidence_semantic
+                & {"incense", "joss", "tütsü", "tütsülük"}
+            )
+
+            has_holder = bool(
+                evidence_semantic
+                & {"holder", "burner", "brülör", "tutucu", "ashcatcher"}
+            )
+
+            # Product identity is mandatory.
+            if not has_incense or not has_holder:
+                continue
+
+            # For this source, ceramic and wavy are key product attributes,
+            # not optional bonuses.
+            if source_has_ceramic and not (
+                evidence_semantic & {"ceramic", "seramik", "clay", "kil"}
+            ):
+                continue
+
+            if source_has_wavy and not (
+                evidence_semantic
+                & {"wavy", "wave", "ripple", "scallop", "dalgalı", "dalga"}
+            ):
+                continue
+
+            # Blue is a strong attribute, but marketplace titles often omit color.
+            # Do not hard-reject on missing blue; only reward it when present.
+            if source_has_blue and re.search(
+                r"\b(blue|navy|sky blue|mavi|lacivert)\b",
+                evidence_text,
+                flags=re.IGNORECASE,
+            ):
+                supplier["match_score"] = min(
+                    100,
+                    int(supplier.get("match_score", 0) or 0) + 8,
+                )
+
+        filtered.append(supplier)
+
+    return filtered
+
+# ============================================================
 # RANKING
 # ============================================================
 
@@ -1463,112 +1804,356 @@ def rank_suppliers(
     suppliers: list[dict[str, Any]],
     original_title: str,
 ) -> list[dict[str, Any]]:
+    """Rank supplier candidates by product identity first, attributes second."""
 
-    original_words = set(
-        _tokenize(
-            original_title
-        )
+    source_text = (
+        original_title or ""
+    ).lower()
+
+    source_semantic = _semantic_tokens(
+        source_text
     )
+    source_family = _detect_product_family(source_text)
+    source_is_customizable = _is_customizable_product(source_text)
+
+    generic = {
+        "the",
+        "and",
+        "for",
+        "with",
+        "from",
+        "new",
+        "best",
+        "sale",
+        "etsy",
+        "shop",
+        "item",
+        "product",
+        "gift",
+        "gifts",
+        "home",
+        "decor",
+        "decoration",
+        "aesthetic",
+        "style",
+        "modern",
+        "minimalist",
+        "minimal",
+        "mid",
+        "century",
+        "japandi",
+        "handmade",
+        "hand",
+        "sculpted",
+        "eco",
+        "friendly",
+        "sky",
+        "blue",
+        "beautiful",
+        "small",
+        "space",
+        "scented",
+    }
+
+    concept_groups = {
+        "pillow": {"pillow", "pillowcase", "cushion", "cover", "yastık", "kırlent"},
+        "tshirt": {"t-shirt", "tshirt", "tee", "shirt", "tişört"},
+        "tote_bag": {"tote", "canvas", "bag", "bez", "çanta"},
+        "mug": {"mug", "cup", "kupa", "bardak"},
+        "phone_case": {"phone", "case", "cover", "iphone", "kılıf"},
+        "necklace": {"necklace", "pendant", "kolye"},
+        "bracelet": {"bracelet", "bileklik"},
+        "customizable": {"blank", "plain", "custom", "personalized", "personalised", "customizable", "customised", "sublimation", "printing", "printable"},
+        "incense": {
+            "incense",
+            "joss",
+            "tütsü",
+            "tütsülük",
+        },
+
+        "holder": {
+            "holder",
+            "burner",
+            "brülör",
+            "tutucu",
+            "ashcatcher",
+        },
+
+        "ceramic": {
+            "ceramic",
+            "seramik",
+            "clay",
+            "kil",
+        },
+
+        "wavy": {
+            "wavy",
+            "wave",
+            "ripple",
+            "scallop",
+            "dalgalı",
+            "dalga",
+        },
+        "blue": {
+            "blue",
+            "navy",
+            "sky",
+            "mavi",
+            "lacivert",
+        },
+    }
+
+    source_concepts: set[str] = set()
+
+    for concept, variants in concept_groups.items():
+
+        if (
+            source_semantic
+            & variants
+        ):
+            source_concepts.add(
+                concept
+            )
 
     for supplier in suppliers:
 
-        supplier_title = (
+        title = (
             supplier.get("title")
             or ""
         )
 
-        supplier_query = (
+        description = (
+            supplier.get("description")
+            or ""
+        )
+
+        evidence_text = (
+            f"{title} {description}"
+        ).lower()
+
+        evidence_semantic = _semantic_tokens(
+            evidence_text
+        )
+
+        query_semantic = _semantic_tokens(
             supplier.get(
                 "search_query"
             )
             or ""
         )
 
-        supplier_words = set(
-            _tokenize(
-                supplier_title
+        score = 0.0
+
+        # ====================================================
+        # SUPPLIER PRODUCT FAMILY
+        # ====================================================
+
+        if source_family:
+            family_match = bool(
+                evidence_semantic & concept_groups.get(source_family, set())
             )
+            score += 45 if family_match else -40
+
+        if source_is_customizable and (
+            evidence_semantic & concept_groups["customizable"]
+        ):
+            score += 18
+
+        # ====================================================
+        # PRODUCT IDENTITY
+        # ====================================================
+
+        if "incense" in source_concepts:
+
+            if (
+                evidence_semantic
+                & concept_groups["incense"]
+            ):
+                score += 35
+            else:
+                score -= 35
+
+        if "holder" in source_concepts:
+
+            if (
+                evidence_semantic
+                & concept_groups["holder"]
+            ):
+                score += 35
+            else:
+                score -= 30
+
+        # ====================================================
+        # MATERIAL
+        # ====================================================
+
+        if "ceramic" in source_concepts:
+
+            if (
+                evidence_semantic
+                & concept_groups["ceramic"]
+            ):
+                score += 15
+
+        # ====================================================
+        # SHAPE
+        # ====================================================
+
+        if "wavy" in source_concepts:
+
+            if (
+                evidence_semantic
+                & concept_groups["wavy"]
+            ):
+                score += 15
+
+        # ====================================================
+        # COLOR
+        # ====================================================
+
+        if "blue" in source_concepts:
+
+            if (
+                evidence_semantic
+                & concept_groups["blue"]
+            ):
+                score += 8
+
+        # ====================================================
+        # EXTRA EXACT TERMS
+        # ====================================================
+
+        signal_words = {
+            token
+            for token in source_semantic
+            if token not in generic
+            and token not in {
+                "incense",
+                "joss",
+                "tütsü",
+                "tütsülük",
+
+                "holder",
+                "burner",
+                "brülör",
+                "tutucu",
+                "ashcatcher",
+
+                "ceramic",
+                "seramik",
+                "clay",
+                "kil",
+
+                "wavy",
+                "wave",
+                "ripple",
+                "scallop",
+                "dalgalı",
+                "dalga",
+            }
+        }
+
+        if signal_words:
+
+            exact_overlap = len(
+                signal_words
+                & evidence_semantic
+            )
+
+            score += min(
+                10,
+                exact_overlap * 3,
+            )
+
+            query_overlap = len(
+                signal_words
+                & query_semantic
+            )
+
+            score += min(
+                5,
+                query_overlap * 2,
+            )
+
+        # ====================================================
+        # WRONG PRODUCT PENALTY
+        # ====================================================
+
+        negative_terms = {
+            "mosquito",
+            "repellent",
+            "sivrisinek",
+            "kovucu",
+
+            "tea",
+            "teapot",
+            "çay",
+            "demlik",
+
+            "buddha",
+            "statue",
+            "heykel",
+
+            "vase",
+            "vazo",
+
+            "lamp",
+            "lantern",
+            "lamba",
+            "fener",
+
+            "diffuser",
+            "difüzör",
+
+            "candle",
+            "mum",
+
+            "wax",
+            "balmumu",
+
+            "essential",
+
+            "jewelry",
+            "takı",
+        }
+
+        negative_hits = (
+            set(
+                _tokenize(
+                    evidence_text
+                )
+            )
+            & negative_terms
         )
 
-        # ----------------------------------------------------
-        # TITLE MATCH
-        # ----------------------------------------------------
+        score -= min(
+            45,
+            len(negative_hits) * 20,
+        )
 
-        if supplier_words:
-
-            intersection = (
-                original_words
-                & supplier_words
-            )
-
-            score = int(
-                (
-                    len(intersection)
-                    / max(
-                        len(original_words),
-                        1,
-                    )
-                )
-                * 100
-            )
-
-            score = max(
-                50,
-                min(
-                    score,
-                    95,
+        supplier["match_score"] = max(
+            0,
+            min(
+                100,
+                int(
+                    round(score)
                 ),
-            )
+            ),
+        )
 
-        # ----------------------------------------------------
-        # SEARCH QUERY MATCH
-        # ----------------------------------------------------
-
-        else:
-
-            query_words = set(
-                _tokenize(
-                    supplier_query
-                )
-            )
-
-            intersection = (
-                original_words
-                & query_words
-            )
-
-            if intersection:
-
-                score = int(
-                    (
-                        len(intersection)
-                        / max(
-                            len(original_words),
-                            1,
-                        )
-                    )
-                    * 100
-                )
-
-                # Arama sorgusu zaten orijinal üründen
-                # üretildiği için sorgu eşleşmesine küçük
-                # bir güven tabanı ver, fakat artık herkese
-                # sabit 90 verme.
-                score = max(
-                    55,
-                    min(
-                        score,
-                        88,
-                    ),
-                )
-
-            else:
-
-                score = 45
+        final_score = supplier[
+            "match_score"
+        ]
 
         supplier[
-            "match_score"
-        ] = score
+            "supplier_confidence"
+        ] = (
+            "high"
+            if final_score >= 70
+            else "medium"
+            if final_score >= 45
+            else "low"
+        )
 
     return sorted(
         suppliers,
@@ -1579,23 +2164,103 @@ def rank_suppliers(
         reverse=True,
     )
 
-
 # ============================================================
 # TOKENIZER
 # ============================================================
 
-def _tokenize(
-    text: str,
-) -> list[str]:
-
+def _tokenize(text: str) -> list[str]:
     return [
         word
         for word in re.findall(
-            r"[a-zA-Z0-9]+(?:\.[a-zA-Z0-9]+)*",
-            text.lower(),
+            r"[\w]+(?:[.'-][\w]+)*",
+            (text or "").lower(),
+            flags=re.UNICODE,
         )
         if len(word) >= 3
     ]
+
+
+def _semantic_tokens(
+    text: str,
+) -> set[str]:
+    """Normalize meaningful marketplace product terms."""
+
+    raw = set(
+        _tokenize(text)
+    )
+
+    normalized = set(raw)
+
+    aliases = {
+        "pillow": {"pillow", "pillowcase", "cushion", "yastık", "kırlent"},
+        "tshirt": {"t-shirt", "tshirt", "tee", "shirt", "tişört"},
+        "tote_bag": {"tote", "canvas", "bag", "bez", "çanta"},
+        "mug": {"mug", "cup", "kupa", "bardak"},
+        "phone_case": {"phone", "case", "cover", "iphone", "kılıf"},
+        "necklace": {"necklace", "pendant", "kolye"},
+        "bracelet": {"bracelet", "bileklik"},
+        "customizable": {"blank", "plain", "custom", "personalized", "personalised", "customizable", "customised", "sublimation", "printing", "printable"},
+        "incense": {
+            "incense",
+            "joss",
+            "tütsü",
+            "tütsülük",
+        },
+
+        "holder": {
+            "holder",
+            "tutucu",
+            "tütsülük",
+            "brülör",
+            "burner",
+            "ashcatcher",
+        },
+
+        "burner": {
+            "burner",
+            "brülör",
+        },
+
+        "ceramic": {
+            "ceramic",
+            "seramik",
+        },
+
+        "clay": {
+            "clay",
+            "kil",
+        },
+
+        "wavy": {
+            "wavy",
+            "wave",
+            "ripple",
+            "scallop",
+            "dalgalı",
+            "dalga",
+        },
+        "blue": {
+            "blue",
+            "navy",
+            "sky",
+            "mavi",
+            "lacivert",
+        },
+    }
+
+    for canonical, variants in aliases.items():
+
+        if raw & variants:
+
+            normalized.add(
+                canonical
+            )
+
+            normalized.update(
+                variants
+            )
+
+    return normalized
 
 
 # ============================================================
@@ -1696,7 +2361,7 @@ def _clean_url(
     # --------------------------------------------------------
 
     if not re.search(
-        r"aliexpress\.com/item/",
+        r"aliexpress\.[a-z.]+/item/",
         url,
         re.IGNORECASE,
     ):
